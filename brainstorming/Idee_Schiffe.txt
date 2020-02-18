@@ -1,0 +1,5 @@
+Beschreibung:
+
+APIs:
+http://api.shipfinder.com/#
+https://www.marinetraffic.com/de/ais-api-services
