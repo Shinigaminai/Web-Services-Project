@@ -2,5 +2,18 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 2.5rem;
+    background-color: pink;
+    padding: 0.2rem;
+
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#version {
+}
+
+#playtime {
+    flex-grow: 1;
 }
