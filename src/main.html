@@ -19,9 +19,17 @@
     <div id="play-menu" class="hidden">
         <input type="text" id="username-input" placeholder="Username"/>
         <script type="text/javascript">
-            document.getElementById('username-input').value = Math.floor(Math.random() * 10);
+            document.getElementById('username-input').value = Math.floor(Math.random() * 10000);
         </script>
         <button id="play-button">PLAY</button>
+    </div>
+
+    <div id="disconnect-modal" class="hidden">
+        <div>
+            <h2>Disconnected from Server </h2>
+            <hr />
+            <button id="reconnect-button">RECONNECT</button>
+        </div>
     </div>
 
     <footer>
