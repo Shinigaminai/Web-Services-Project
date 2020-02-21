@@ -1,0 +1,6 @@
+google maps:        https://developers.google.com/maps/documentation/javascript/tutorial?hl=de
+Karte:              https://leafletjs.com/
+Schiffeposition:    http://api.shipfinder.com/#
+Schiffeposition:    http://www.marinetraffic.com/de/ais-api-services
+
+Example io game:    https://github.com/vzhou842/example-.io-game
