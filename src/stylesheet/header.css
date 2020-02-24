@@ -2,6 +2,7 @@ header {
     background-color: grey;
     width: 100%;
     padding: 0.2rem;
+    flex: 0 1 auto;
 
     box-sizing: border-box;
     display: flex;

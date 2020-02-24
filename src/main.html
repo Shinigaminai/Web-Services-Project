@@ -14,14 +14,16 @@
         <h1>Mapklicker</h1>
     </header>
 
-    <canvas id="game-canvas"></canvas>
+    <div class="content-area">
+        <canvas id="game-canvas"></canvas>
 
-    <div id="play-menu" class="hidden">
-        <input type="text" id="username-input" placeholder="Username"/>
-        <script type="text/javascript">
-            document.getElementById('username-input').value = Math.floor(Math.random() * 10000);
-        </script>
-        <button id="play-button">PLAY</button>
+        <div id="play-menu" class="hidden">
+            <input type="text" id="username-input" placeholder="Username"/>
+            <script type="text/javascript">
+                document.getElementById('username-input').value = Math.floor(Math.random() * 10000);
+            </script>
+            <button id="play-button">PLAY</button>
+        </div>
     </div>
 
     <div id="disconnect-modal" class="hidden">
@@ -34,6 +36,9 @@
 
     <footer>
         <div id="playtime">Playtime: </div>
+        <div id="showX">X=</div>
+        <div id="showY">Y=</div>
+        <div class="space-between"></div>
         <div id="version">v.0.0.1</div>
     </footer>
 </html>
