@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Pokémon Arena</title>
+
+    <link rel="stylesheet" type="text/css" href="stylesheet/main.css">
+    <link rel="stylesheet" type="text/css" href="stylesheet/header.css">
+    <link rel="stylesheet" type="text/css" href="stylesheet/footer.css">
+</head>
+<body>
+<header>
+    <h1>Pokémon Arena</h1>
+</header>
+
+<div class="content-area">
+    <div id="play-menu" class="hidden">
+        <input type="text" id="username-input" placeholder="Username"/>
+        <script type="text/javascript">
+                document.getElementById('username-input').value = Math.floor(Math.random() * 10000);
+        </script>
+        <button id="play-button">PLAY</button>
+    </div>
+</div>
+
+<div id="disconnect-modal" class="hidden">
+    <div>
+        <h2>Disconnected from Server </h2>
+        <hr/>
+        <button id="reconnect-button">RECONNECT</button>
+    </div>
+</div>
+
+<footer>
+    <div id="playtime">Playtime:</div>
+    <div class="space-between"></div>
+    <div id="version">v.0.0.1</div>
+</footer>
+</html>
