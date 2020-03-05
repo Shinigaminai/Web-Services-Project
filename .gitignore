@@ -23,4 +23,16 @@
 hs_err_pid*
 
 /pocémonArena/target/
-/pokémonArena/target/
+/pokémonArena/target/surefire-reports/2020-03-05T16-37-08_032.dumpstream
+/pokémonArena/target/surefire-reports/2020-03-05T16-38-23_065.dumpstream
+/pokémonArena/target/surefire-reports/2020-03-05T17-39-52_855.dumpstream
+/pokémonArena/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+/pokémonArena/target/maven-status/maven-compiler-plugin/compile/null/createdFiles.lst
+/pokémonArena/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+/pokémonArena/target/quarkus/bootstrap/deployment.cp
+/pokémonArena/target/surefire-reports/GreetingResourceTest.txt
+/pokémonArena/target/classes/META-INF/resources/index.html
+/pokémonArena/target/maven-status/maven-compiler-plugin/compile/null/inputFiles.lst
+/pokémonArena/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+/pokémonArena/target/maven-archiver/pom.properties
+/pokémonArena/target/surefire-reports/TEST-GreetingResourceTest.xml
