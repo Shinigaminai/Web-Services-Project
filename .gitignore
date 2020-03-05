@@ -38,3 +38,4 @@ hs_err_pid*
 /pokémonArena/target/maven-archiver/pom.properties
 /pokémonArena/target/surefire-reports/TEST-GreetingResourceTest.xml
 /.idea/libraries/
+/pokémonArena/target/
