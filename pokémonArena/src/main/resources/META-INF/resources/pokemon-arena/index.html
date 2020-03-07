@@ -26,26 +26,28 @@
 </header>
 
 <div id="content-area">
-    <div id="subpage-area" style="visibility: hidden">
-        <div id="chat-area">
+    <div id="subpage-area" style="visibility: hidden" data-tab="0">
+        <div>
+            <div id="chat-area">
             <textarea class="col-md-8" id="chat">
             </textarea>
-            <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
-            <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+                <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
+                <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+            </div>
         </div>
         <div>fight</div>
         <div>pokédex</div>
     </div>
     <nav id="tabs-menu" style="visibility: hidden">
-        <a href="#chat">
+        <div class="tab-button">
             Chat
-        </a>
-        <a href="#arena">
+        </div>
+        <div class="tab-button">
             Arena
-        </a>
-        <a href="#pokédex">
+        </div>
+        <div class="tab-button">
             Pokédex
-        </a>
+        </div>
     </nav>
 </div>
 <div id="login-area" class="animated forward slideInUp">

@@ -6,13 +6,25 @@
     flex: 0 0 auto;
 }
 
+.tab-button {
+    padding: 0.5rem;
+}
+.tab-button:hover {
+    cursor: pointer;
+    background-color: lightblue;
+}
+
 #subpage-area {
     position: relative;
     flex-grow: 1;
+    white-space: nowrap;
+    -webkit-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
 }
 
 #subpage-area > * {
     width: 100%;
+    display: inline-block;
 }
 
 #subpage-area[data-tab='0'] {

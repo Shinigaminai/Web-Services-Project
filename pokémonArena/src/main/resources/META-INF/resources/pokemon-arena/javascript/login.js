@@ -8,13 +8,14 @@ var initLogin = function() {
         }
     });
 
+    $('.tab-button').click(function(e){
+        e.preventDefault();
+
+        var index = $(this).index();
+
+        $('#subpage-area').attr('data-tab', index);
+        console.log("set data-tab = ", index);
+    });
+
     $("#username-input").focus();
 };
-
-$('#tabs-menu a').on('click', function(e){
-    e.preventDefault();
-
-    var index = $(this).index();
-
-    $('#subpage-area').attr('data-tab', index);
-});
