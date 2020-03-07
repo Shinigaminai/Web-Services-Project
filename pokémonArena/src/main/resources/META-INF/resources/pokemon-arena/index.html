@@ -5,21 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Pokémon Arena</title>
 
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
     <link rel="stylesheet" type="text/css" href="stylesheet/main.css">
     <link rel="stylesheet" type="text/css" href="stylesheet/header.css">
     <link rel="stylesheet" type="text/css" href="stylesheet/footer.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
+    <script src="javascript/chat.js"></script>
+    <script src="javascript/login.js"></script>
+    <script src="javascript/dynamicLoad.js"></script>
+    <script src="javascript/animation.js"></script>
 </head>
 <body>
 <header>
     <h1>Pokémon Arena</h1>
 </header>
 
-<div class="content-area">
-    <div id="login-menu">
-        <input type="text" id="username-input" placeholder="your name"/>
-        <button id="connect-button">connect</button>
+<div id="content-area">
+    <div id="login-area" class="animated forward slideInUp">
+        <div id="login-menu">
+            <input type="text" id="username-input" placeholder="your name"/>
+            <button id="connect-button">connect</button>
+        </div>
     </div>
-    <div class="chat-area">
+    <div id="chat-area">
         <textarea class="col-md-8" id="chat">
         </textarea>
         <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
@@ -27,71 +39,10 @@
     </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
-
 <script type="text/javascript">
-      var connected = false;
-      var socket;
-
-      $( document ).ready(function() {
-          $("#connect-button").click(connect);
-          $("#send").click(sendMessage);
-
-          $("#username-input").keypress(function(event){
-              if(event.keyCode == 13 || event.which == 13) {
-                  connect();
-              }
-          });
-
-          $("#msg").keypress(function(event) {
-              if(event.keyCode == 13 || event.which == 13) {
-                  sendMessage();
-              }
-          });
-
-        $("#chat").change(function() {
-            scrollToBottom();
-          });
-
-          $("#username-input").focus();
-      });
-
-      var connect = function() {
-          if (! connected) {
-              var name = $("#username-input").val();
-              console.log("Val: " + name);
-              socket = new WebSocket("ws://" + location.host + "/chat/" + name);
-              socket.onopen = function() {
-                  connected = true;
-                  console.log("Connected to the web socket");
-                  $("#send").attr("disabled", false);
-                  $("#connect-button").attr("disabled", true);
-                  $("#username-input").attr("disabled", true);
-                  $("#msg").focus();
-                  $("#login-menu").attr("hidden", true);
-              };
-              socket.onmessage = function(m) {
-                  console.log("Got message: " + m.data);
-                  $("#chat").append(m.data + "\n");
-                  scrollToBottom();
-              };
-          }
-      };
-
-      var sendMessage = function() {
-          if (connected) {
-              var value = $("#msg").val();
-              console.log("Sending " + value);
-              socket.send(value);
-              $("#msg").val("");
-          }
-      };
-
-      var scrollToBottom = function () {
-        $('#chat').scrollTop($('#chat')[0].scrollHeight);
-      };
+    $( document).ready(function() {
+        initLogin();
+    });
 </script>
 <footer>
     <div id="playtime">Playtime:</div>
