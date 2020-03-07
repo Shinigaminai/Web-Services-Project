@@ -1,2 +1,4 @@
-/home/patrick/IdeaProjects/Web-Services-Project/pokémonArena/src/main/java/GreetingService.java
-/home/patrick/IdeaProjects/Web-Services-Project/pokémonArena/src/main/java/GreetingResource.java
+/home/patrick/IdeaProjects/Web-Services-Project/pokémonArena/src/main/java/greeting/GreetingService.java
+/home/patrick/IdeaProjects/Web-Services-Project/pokémonArena/src/main/java/ChatSocket.java
+/home/patrick/IdeaProjects/Web-Services-Project/pokémonArena/src/main/java/Sessions.java
+/home/patrick/IdeaProjects/Web-Services-Project/pokémonArena/src/main/java/greeting/GreetingResource.java
