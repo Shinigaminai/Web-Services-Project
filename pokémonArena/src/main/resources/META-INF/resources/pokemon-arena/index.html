@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="stylesheet/main.css">
     <link rel="stylesheet" type="text/css" href="stylesheet/header.css">
     <link rel="stylesheet" type="text/css" href="stylesheet/footer.css">
+    <link rel="stylesheet" type="text/css" href="stylesheet/tabs.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -25,17 +26,32 @@
 </header>
 
 <div id="content-area">
+    <nav id="tabs-menu" style="visibility: hidden">
+        <a href="#chat">
+            Tab 1
+        </a>
+        <a href="#fight">
+            Tab 2
+        </a>
+        <a href="#pokédex">
+            Tab 3
+        </a>
+    </nav>
+    <div id="subpage-area" style="visibility: hidden; animation-duration: 1s; animation-delay: 0.8s">
+        <div id="chat-area">
+            <textarea class="col-md-8" id="chat">
+            </textarea>
+            <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
+            <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+        </div>
+        <div>fight</div>
+        <div>pokédex</div>
+    </div>
     <div id="login-area" class="animated forward slideInUp">
         <div id="login-menu">
             <input type="text" id="username-input" placeholder="your name"/>
             <button id="connect-button">connect</button>
         </div>
-    </div>
-    <div id="chat-area">
-        <textarea class="col-md-8" id="chat">
-        </textarea>
-        <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
-        <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
     </div>
 </div>
 
