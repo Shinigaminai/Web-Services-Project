@@ -12,9 +12,9 @@ var connectToChat = function() {
             connected = true;
             console.log("Connected to the web socket");
             document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
-            document.getElementById("subpage-area").classList.add("animated", "forward", "fadeInBig");
+            document.getElementById("subpage-area").classList.add("animated", "forward", "fadeIn", "delay-2s");
             document.getElementById("subpage-area").style.visibility = 'visible';
-            document.getElementById("tabs-menu").classList.add("animated", "forward", "slideInDown");
+            document.getElementById("tabs-menu").classList.add("animated", "forward", "slideInUp", "delay-1s");
             document.getElementById("tabs-menu").style.visibility = 'visible';
             $("#send").attr("disabled", false);
             $("#connect-button").attr("disabled", true);

@@ -26,18 +26,7 @@
 </header>
 
 <div id="content-area">
-    <nav id="tabs-menu" style="visibility: hidden">
-        <a href="#chat">
-            Tab 1
-        </a>
-        <a href="#fight">
-            Tab 2
-        </a>
-        <a href="#pokédex">
-            Tab 3
-        </a>
-    </nav>
-    <div id="subpage-area" style="visibility: hidden; animation-duration: 1s; animation-delay: 0.8s">
+    <div id="subpage-area" style="visibility: hidden">
         <div id="chat-area">
             <textarea class="col-md-8" id="chat">
             </textarea>
@@ -47,11 +36,22 @@
         <div>fight</div>
         <div>pokédex</div>
     </div>
-    <div id="login-area" class="animated forward slideInUp">
-        <div id="login-menu">
-            <input type="text" id="username-input" placeholder="your name"/>
-            <button id="connect-button">connect</button>
-        </div>
+    <nav id="tabs-menu" style="visibility: hidden">
+        <a href="#chat">
+            Chat
+        </a>
+        <a href="#arena">
+            Arena
+        </a>
+        <a href="#pokédex">
+            Pokédex
+        </a>
+    </nav>
+</div>
+<div id="login-area" class="animated forward slideInUp">
+    <div id="login-menu">
+        <input type="text" id="username-input" placeholder="your name"/>
+        <button id="connect-button">connect</button>
     </div>
 </div>
 
@@ -59,10 +59,11 @@
     $( document).ready(function() {
         initLogin();
     });
-</script>
+</script><!--
 <footer>
     <div id="playtime">Playtime:</div>
     <div class="space-between"></div>
     <div id="version">v.0.0.1</div>
-</footer>
+</footer>-->
+</body>
 </html>
