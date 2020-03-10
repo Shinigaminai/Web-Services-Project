@@ -12,8 +12,8 @@ var connectToChat = function() {
             connected = true;
             console.log("Connected to the web socket");
             document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
-            document.getElementById("subpage-area").classList.add("animated", "forward", "fadeIn", "delay-2s");
-            document.getElementById("subpage-area").style.visibility = 'visible';
+            document.getElementById("tabs-area").classList.add("animated", "forward", "fadeIn", "delay-2s");
+            document.getElementById("tabs-area").style.visibility = 'visible';
             document.getElementById("tabs-menu").classList.add("animated", "forward", "slideInUp", "delay-1s");
             document.getElementById("tabs-menu").style.visibility = 'visible';
             $("#send").attr("disabled", false);
@@ -43,12 +43,15 @@ var scrollToChatBottom = function () {
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
 };
 
-$("#msg").keypress(function(event) {
-    if(event.keyCode == 13 || event.which == 13) {
-        sendMessage();
-    }
-});
+var initChat = function () {
+    $("#msg").keypress(function(event) {
+            console.log("writing in chat");
+        if(event.keyCode == 13 || event.which == 13) {
+            sendMessage();
+        }
+    });
 
-$("#chat").change(function() {
-    scrollToChatBottom();
-});
+    $("#chat").change(function() {
+        scrollToChatBottom();
+    });
+}

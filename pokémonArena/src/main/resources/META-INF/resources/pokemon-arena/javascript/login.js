@@ -13,7 +13,7 @@ var initLogin = function() {
 
         var index = $(this).index();
 
-        $('#subpage-area').attr('data-tab', index);
+        $('#tabs-area').attr('data-tab', index);
         console.log("set data-tab = ", index);
     });
 

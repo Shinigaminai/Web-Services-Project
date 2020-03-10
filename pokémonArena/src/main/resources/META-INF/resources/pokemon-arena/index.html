@@ -26,8 +26,8 @@
 </header>
 
 <div id="content-area">
-    <div data-tab="0" id="subpage-area" style="visibility: hidden">
-        <div>
+    <div data-tab="0" id="tabs-area" style="visibility: hidden">
+        <div id="chat-tab" class="tab">
             <div id="chat-area">
             <textarea class="col-md-8" id="chat">
             </textarea>
@@ -35,8 +35,10 @@
                 <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
             </div>
         </div>
-        <div>fight</div>
-        <div>pokédex</div>
+        <div id="arena-tab" class="tab">arena</div>
+        <div id="pokemon-tab" class="tab">pokédex
+
+        </div>
     </div>
     <nav id="tabs-menu" style="visibility: hidden">
         <div class="tab-button">
@@ -60,6 +62,7 @@
 <script type="text/javascript">
     $( document).ready(function() {
         initLogin();
+        initChat();
     });
 
 </script><!--

@@ -14,7 +14,7 @@
     background-color: lightblue;
 }
 
-#subpage-area {
+#tabs-area {
     position: relative;
     flex-grow: 1;
     white-space: nowrap;
@@ -22,17 +22,17 @@
     transition: all .3s ease-in-out;
 }
 
-#subpage-area > * {
+#tabs-area > * {
     width: 100%;
     display: inline-block;
 }
 
-#subpage-area[data-tab='0'] {
+#tabs-area[data-tab='0'] {
     left: 0%;
 }
-#subpage-area[data-tab='1'] {
+#tabs-area[data-tab='1'] {
     left: -100%;
 }
-#subpage-area[data-tab='2'] {
+#tabs-area[data-tab='2'] {
     left: -200%;
 }
