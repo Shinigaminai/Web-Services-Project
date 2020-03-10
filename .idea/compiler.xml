@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="pokémonArena" />
+        <module name="pokémonContainer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="pokémonArena" target="1.8" />
+      <module name="pokémonContainer" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
