@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Web-Services-Project.iml" filepath="$PROJECT_DIR$/Web-Services-Project.iml" />
       <module fileurl="file://$PROJECT_DIR$/pokémonArena/pokémonArena.iml" filepath="$PROJECT_DIR$/pokémonArena/pokémonArena.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pokémonContainer/pokémonContainer.iml" filepath="$PROJECT_DIR$/pokémonContainer/pokémonContainer.iml" />
     </modules>
   </component>
 </project>
