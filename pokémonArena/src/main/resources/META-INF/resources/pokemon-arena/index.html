@@ -2,15 +2,15 @@
 <html lang="de">
 <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Pokémon Arena</title>
 
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="stylesheet/main.css">
-    <link rel="stylesheet" type="text/css" href="stylesheet/header.css">
-    <link rel="stylesheet" type="text/css" href="stylesheet/footer.css">
-    <link rel="stylesheet" type="text/css" href="stylesheet/tabs.css">
+    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+    <link href="stylesheet/main.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/header.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/footer.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/tabs.css" rel="stylesheet" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -26,13 +26,13 @@
 </header>
 
 <div id="content-area">
-    <div id="subpage-area" style="visibility: hidden" data-tab="0">
+    <div data-tab="0" id="subpage-area" style="visibility: hidden">
         <div>
             <div id="chat-area">
             <textarea class="col-md-8" id="chat">
             </textarea>
-                <input class="col-md-6" id="msg" type="text" placeholder="enter your message">
-                <button class="col-md-1 btn btn-primary" id="send" type="button" disabled>send</button>
+                <input class="col-md-6" id="msg" placeholder="enter your message" type="text">
+                <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
             </div>
         </div>
         <div>fight</div>
@@ -50,9 +50,9 @@
         </div>
     </nav>
 </div>
-<div id="login-area" class="animated forward slideInUp">
+<div class="animated forward slideInUp" id="login-area">
     <div id="login-menu">
-        <input type="text" id="username-input" placeholder="your name"/>
+        <input id="username-input" placeholder="your name" type="text"/>
         <button id="connect-button">connect</button>
     </div>
 </div>
@@ -61,6 +61,7 @@
     $( document).ready(function() {
         initLogin();
     });
+
 </script><!--
 <footer>
     <div id="playtime">Playtime:</div>

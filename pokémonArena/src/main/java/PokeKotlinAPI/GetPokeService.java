@@ -12,10 +12,10 @@ import java.util.Map;
 @ApplicationScoped
 public class GetPokeService {
     private PokeApi pokeApi;
-    private Map <Integer, Pokemon> savedPokemonMap;
-    private Map <Integer, PokemonSpecies> savedPokemonSpeciesMap;
+    private Map<Integer, Pokemon> savedPokemonMap;
+    private Map<Integer, PokemonSpecies> savedPokemonSpeciesMap;
 
-    public GetPokeService(){
+    public GetPokeService() {
         pokeApi = new PokeApiClient();
         savedPokemonMap = new HashMap<>();
         savedPokemonSpeciesMap = new HashMap<>();
@@ -27,10 +27,9 @@ public class GetPokeService {
     }
 
     public Pokemon getPokemon(int id) {
-        if(savedPokemonMap.containsKey(id)){
+        if (savedPokemonMap.containsKey(id)) {
             return savedPokemonMap.get(id);
-        }
-        else {
+        } else {
             Pokemon pokemon = pokeApi.getPokemon(id);
             savedPokemonMap.put(id, pokemon);
             return pokemon;
@@ -38,10 +37,9 @@ public class GetPokeService {
     }
 
     public PokemonSpecies getPokemonSpecies(int id) {
-        if(savedPokemonSpeciesMap.containsKey(id)){
+        if (savedPokemonSpeciesMap.containsKey(id)) {
             return savedPokemonSpeciesMap.get(id);
-        }
-        else {
+        } else {
             PokemonSpecies pokemonSpecies = pokeApi.getPokemonSpecies(id);
             savedPokemonSpeciesMap.put(id, pokemonSpecies);
             return pokemonSpecies;
