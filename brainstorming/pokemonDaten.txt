@@ -1,0 +1,17 @@
+Wichtige Pokemon Daten:
+- Typ (1 oder 2)
+- Sprite
+- Name
+- Mögliche Attacken (davon müssen 4 Ausgewählt werden)
+- HP (int)
+- Atk (int)
+- S. Atk (int)
+- Def (int)
+- S. Def (int)
+- Init (int)
+
+Attacken Werte:
+- Damage (int oder null)
+- Genauigkeit (int oder null)
+- Spezialeffekt (int oder null)
+- Typ (Wenn Typ=Pokemon Typ dann Damage +100%)
