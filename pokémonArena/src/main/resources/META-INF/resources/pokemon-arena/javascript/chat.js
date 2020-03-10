@@ -1,15 +1,15 @@
-var connected = false;
+var connectedToChat = false;
 var socket;
 
 var connectToChat = function() {
-    if (! connected) {
+    if (! connectedToChat) {
         var name = $("#username-input").val();
         console.log("Val: " + name);
         socket = new WebSocket("ws://" + location.host + "/chat/" + name);
         //TODO loading animation
         socket.onopen = function() {
             //TODO end loading animation
-            connected = true;
+            connectedToChat = true;
             console.log("Connected to the web socket");
             document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
             document.getElementById("tabs-area").classList.add("animated", "forward", "fadeIn", "delay-2s");
@@ -31,7 +31,7 @@ var connectToChat = function() {
 };
 
 var sendMessage = function() {
-    if (connected) {
+    if (connectedToChat) {
         var value = $("#msg").val();
         console.log("Sending " + value);
         socket.send(value);

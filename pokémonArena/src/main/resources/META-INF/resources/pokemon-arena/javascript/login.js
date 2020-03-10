@@ -1,5 +1,8 @@
 var initLogin = function() {
-    $("#connect-button").click(connectToChat);
+    $("#connect-button").click(function () {
+        connectToChat();
+        loadAllPokemon();
+    });
     $("#send").click(sendMessage);
 
     $("#username-input").keypress(function(event){

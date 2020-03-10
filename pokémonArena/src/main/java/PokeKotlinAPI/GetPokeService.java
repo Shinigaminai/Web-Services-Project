@@ -2,11 +2,14 @@ package PokeKotlinAPI;
 
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
+import me.sargunvohra.lib.pokekotlin.model.Pokedex;
 import me.sargunvohra.lib.pokekotlin.model.Pokemon;
+import me.sargunvohra.lib.pokekotlin.model.PokemonEntry;
 import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
@@ -14,16 +17,27 @@ public class GetPokeService {
     private PokeApi pokeApi;
     private Map<Integer, Pokemon> savedPokemonMap;
     private Map<Integer, PokemonSpecies> savedPokemonSpeciesMap;
+    private Map<Integer, Pokedex> savedPokedex;
 
     public GetPokeService() {
         pokeApi = new PokeApiClient();
         savedPokemonMap = new HashMap<>();
         savedPokemonSpeciesMap = new HashMap<>();
+        savedPokedex = new HashMap<>();
     }
 
-    public String greeting(String name) {
-        System.out.println(name);
-        return "hello " + name;
+    public Pokedex getPokedex(int id) {
+        if(savedPokedex.containsKey(id)) {
+            return savedPokedex.get(id);
+        } else {
+            Pokedex pokedex = pokeApi.getPokedex(id);
+            savedPokedex.put(id, pokedex);
+            return pokedex;
+        }
+    }
+
+    public List<PokemonEntry> getPokemonList(){
+        return getPokedex(1).getPokemonEntries();
     }
 
     public Pokemon getPokemon(int id) {

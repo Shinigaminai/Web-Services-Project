@@ -9,30 +9,32 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/pokeData")
-public class PokeKotlinResource {
+public class GetPokeResource {
 
     @Inject
     GetPokeService service;
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/pokedex/{id}")
+    public String getPokedex(@PathParam int id) { return service.getPokedex(id).toString();}
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/pokemonList")
+    public String getPokemonList() { return service.getPokemonList().toString();}
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemonSpecies/{id}")
     public String getPokemonSpecies(@PathParam int id) {
         return service.getPokemonSpecies(id).toString();
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemon/{id}")
     public String getPokemon(@PathParam int id) {
         return service.getPokemon(id).toString();
     }
-
-
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String hello() {
-        return "hello";
-    }
-
 }
