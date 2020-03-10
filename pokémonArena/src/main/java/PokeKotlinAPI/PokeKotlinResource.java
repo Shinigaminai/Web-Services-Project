@@ -1,6 +1,5 @@
 package PokeKotlinAPI;
 
-
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
@@ -9,12 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-
-
-
-
 @Path("/pokeData")
-public class PokeKotlinClient {
+public class PokeKotlinResource {
 
     @Inject
     GetPokeService service;
@@ -32,7 +27,6 @@ public class PokeKotlinClient {
     public String getPokemon(@PathParam int id) {
         return service.getPokemon(id).toString();
     }
-
 
 
     @GET
