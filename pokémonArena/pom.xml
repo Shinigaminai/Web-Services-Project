@@ -49,15 +49,21 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-undertow-websockets</artifactId>
         </dependency>
-        <!-- For  PokeKotlinAPI -->
+        <!-- For PokeKotlinAPI -->
         <dependency>
             <groupId>me.sargunvohra.lib</groupId>
             <artifactId>pokekotlin</artifactId>
             <version>2.3.0</version>
             <type>jar</type>
         </dependency>
+        <!-- Java Object to JSON -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.10.0.pr2</version>
+        </dependency>
     </dependencies>
-    <!-- For  PokeKotlinAPI -->
+    <!-- For PokeKotlinAPI -->
     <repositories>
         <repository>
             <id>central</id>

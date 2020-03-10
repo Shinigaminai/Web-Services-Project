@@ -37,6 +37,7 @@ public class GetPokeService {
     }
 
     public List<PokemonEntry> getPokemonList(){
+        //TODO sammeln aller pokemon von allen Pokedex
         return getPokedex(1).getPokemonEntries();
     }
 
@@ -59,5 +60,4 @@ public class GetPokeService {
             return pokemonSpecies;
         }
     }
-
 }

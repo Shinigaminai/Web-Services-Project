@@ -1,5 +1,6 @@
 package PokeKotlinAPI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
@@ -17,24 +18,32 @@ public class GetPokeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokedex/{id}")
-    public String getPokedex(@PathParam int id) { return service.getPokedex(id).toString();}
+    public String getPokedex(@PathParam int id) { return toJSON(service.getPokedex(id));}
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemonList")
-    public String getPokemonList() { return service.getPokemonList().toString();}
+    public String getPokemonList() { return toJSON(service.getPokemonList());}
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemonSpecies/{id}")
-    public String getPokemonSpecies(@PathParam int id) {
-        return service.getPokemonSpecies(id).toString();
-    }
+    public String getPokemonSpecies(@PathParam int id) { return toJSON(service.getPokemonSpecies(id));}
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemon/{id}")
-    public String getPokemon(@PathParam int id) {
-        return service.getPokemon(id).toString();
+    public String getPokemon(@PathParam int id) { return toJSON(service.getPokemon(id));}
+
+
+    public String toJSON(Object o) {
+        //Creating the ObjectMapper object
+        ObjectMapper mapper = new ObjectMapper();
+        //Converting the Object to JSONString
+        try {
+            return mapper.writeValueAsString(o);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
