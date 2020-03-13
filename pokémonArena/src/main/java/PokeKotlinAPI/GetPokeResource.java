@@ -22,11 +22,6 @@ public class GetPokeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/pokemonList")
-    public String getPokemonList() { return toJSON(service.getPokemonList());}
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemonSpecies/{id}")
     public String getPokemonSpecies(@PathParam int id) { return toJSON(service.getPokemonSpecies(id));}
 

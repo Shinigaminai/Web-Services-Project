@@ -2,10 +2,7 @@ package PokeKotlinAPI;
 
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
-import me.sargunvohra.lib.pokekotlin.model.Pokedex;
-import me.sargunvohra.lib.pokekotlin.model.Pokemon;
-import me.sargunvohra.lib.pokekotlin.model.PokemonEntry;
-import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
+import me.sargunvohra.lib.pokekotlin.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
@@ -34,11 +31,6 @@ public class GetPokeService {
             savedPokedex.put(id, pokedex);
             return pokedex;
         }
-    }
-
-    public List<PokemonEntry> getPokemonList(){
-        //TODO sammeln aller pokemon von allen Pokedex
-        return getPokedex(1).getPokemonEntries();
     }
 
     public Pokemon getPokemon(int id) {
