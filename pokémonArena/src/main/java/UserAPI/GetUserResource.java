@@ -1,6 +1,7 @@
-package PokeKotlinAPI;
+package UserAPI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
@@ -9,26 +10,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("/pokedata")
-public class GetPokeResource {
+@Path("/userdata")
+public class GetUserResource {
 
     @Inject
-    GetPokeService service;
+    GetUserService service;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/pokedex/{id}")
-    public String getPokedex(@PathParam int id) { return toJSON(service.getPokedex(id));}
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/pokemonspecies/{id}")
-    public String getPokemonSpecies(@PathParam int id) { return toJSON(service.getPokemonSpecies(id));}
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/pokemon/{id}")
-    public String getPokemon(@PathParam int id) { return toJSON(service.getPokemon(id));}
+    @Path("/user/{name}")
+    public String getUser(@PathParam String name) { return toJSON(service.getUser(name));}
 
 
     public String toJSON(Object o) {
