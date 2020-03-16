@@ -13,6 +13,20 @@ h1 {
   display: none !important;
 }
 
+button:aktive {
+    box-shadow: 0.1rem 0.1rem 0.1rem inset;
+}
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0.25rem 0.25rem 0.2rem #999;
+}
+button {
+    background-color: lightcoral;
+    border: none;
+    border-radius: 0.2rem;
+    box-shadow: 0.15rem 0.15rem 0.1rem #999;
+}
+
 #content-area {
     flex: 1 1 auto;
     overflow: hidden;
