@@ -1,0 +1,17 @@
+#pokemon-list {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+#pokemon-list > .entry {
+    box-shadow: 0.15rem 0.15rem 0.2rem #999;
+    padding: 0.2rem;
+    margin: 0.4rem;
+    border-radius: 0.2rem;
+    min-width: 15rem;
+    max-width: 20rem;
+}
+
+.entry > .head {
+    text-align: center;
+}

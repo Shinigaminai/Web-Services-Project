@@ -11,6 +11,7 @@
     <link href="stylesheet/header.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/footer.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/tabs.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/pokemonTab.css" rel="stylesheet" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -35,27 +36,27 @@
                 <input class="col-md-6" id="msg" placeholder="enter your message" type="text">
                 <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
             </div>
-        </div>
-        <div id="arena-tab" class="tab">arena</div>
-        <div id="pokemon-tab" class="tab">
+        </div><!--
+        --><div id="arena-tab" class="tab">arena</div><!--
+        --><div id="pokemon-tab" class="tab">
             <div class="tab-header">Pokemon</div>
             <div id="pokemon-list">
 
             </div>
         </div>
     </div>
-    <nav id="tabs-menu" style="visibility: hidden">
-        <div class="tab-button">
-            Chat
-        </div>
-        <div class="tab-button">
-            Arena
-        </div>
-        <div class="tab-button">
-            Pokédex
-        </div>
-    </nav>
 </div>
+<nav id="tabs-menu" style="visibility: hidden">
+    <div class="tab-button">
+        Chat
+    </div>
+    <div class="tab-button">
+        Arena
+    </div>
+    <div class="tab-button">
+        Pokédex
+    </div>
+</nav>
 <div class="animated forward slideInUp" id="login-area">
     <div id="login-menu">
         <input id="username-input" placeholder="your name" type="text"/>
