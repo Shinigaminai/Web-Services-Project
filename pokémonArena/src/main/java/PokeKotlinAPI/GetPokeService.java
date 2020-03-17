@@ -22,6 +22,7 @@ public class GetPokeService {
         savedPokemonMap = new HashMap<>();
         savedPokemonSpeciesMap = new HashMap<>();
         savedPokedex = new HashMap<>();
+        savedTypes = new HashMap<>();
     }
 
     public Pokedex getPokedex(int id) {
