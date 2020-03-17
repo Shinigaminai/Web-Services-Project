@@ -15,6 +15,7 @@ public class GetPokeService {
     private Map<Integer, Pokemon> savedPokemonMap;
     private Map<Integer, PokemonSpecies> savedPokemonSpeciesMap;
     private Map<Integer, Pokedex> savedPokedex;
+    private Map<Integer, Type> savedTypes;
 
     public GetPokeService() {
         pokeApi = new PokeApiClient();
@@ -50,6 +51,16 @@ public class GetPokeService {
             PokemonSpecies pokemonSpecies = pokeApi.getPokemonSpecies(id);
             savedPokemonSpeciesMap.put(id, pokemonSpecies);
             return pokemonSpecies;
+        }
+    }
+
+    public Type getType(int id) {
+        if (savedTypes.containsKey(id)) {
+            return savedTypes.get(id);
+        } else {
+            Type type = pokeApi.getType(id);
+            savedTypes.put(id, type);
+            return type;
         }
     }
 }

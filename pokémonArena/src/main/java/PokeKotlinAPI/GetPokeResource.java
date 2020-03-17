@@ -30,6 +30,11 @@ public class GetPokeResource {
     @Path("/pokemon/{id}")
     public String getPokemon(@PathParam int id) { return toJSON(service.getPokemon(id));}
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/type/{id}")
+    public String getType(@PathParam int id) { return toJSON(service.getType(id));}
+
 
     public String toJSON(Object o) {
         //Creating the ObjectMapper object
