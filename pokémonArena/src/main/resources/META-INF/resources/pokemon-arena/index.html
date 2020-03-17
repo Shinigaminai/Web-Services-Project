@@ -4,14 +4,16 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Pokémon Arena</title>
+    <link rel="shortcut icon" type="image/x-icon" href="svgs/favicon.svg">
 
-    <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">
+    <!--<link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
     <link href="stylesheet/main.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/header.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/footer.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/tabs.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/pokemonTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/chatTab.css" rel="stylesheet" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -30,19 +32,19 @@
 <div id="content-area">
     <div data-tab="0" id="tabs-area" style="visibility: hidden">
         <div id="chat-tab" class="tab">
+            <div class="tab-header">Global Chat</div>
             <div id="chat-area">
-            <textarea class="col-md-8" id="chat">
-            </textarea>
+                <textarea class="col-md-8" id="chat"></textarea>
                 <input class="col-md-6" id="msg" placeholder="enter your message" type="text">
                 <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
             </div>
         </div><!--
-        --><div id="arena-tab" class="tab">arena</div><!--
-        --><div id="pokemon-tab" class="tab">
+     --><div id="arena-tab" class="tab">
+            <div class="tab-header">Arena</div>
+        </div><!--
+     --><div id="pokemon-tab" class="tab">
             <div class="tab-header">Pokemon</div>
-            <div id="pokemon-list">
-
-            </div>
+            <div id="pokemon-list"></div>
         </div>
     </div>
 </div>

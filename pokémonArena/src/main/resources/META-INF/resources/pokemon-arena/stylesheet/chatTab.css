@@ -1,0 +1,16 @@
+#chat-tab {
+}
+
+#chat-area {
+    display: flex;
+    flex-direction: column;
+    max-width: 50rem;
+    margin: auto;
+}
+
+#chat {
+    resize: none;
+    overflow: hidden;
+    min-height: 300px;
+    max-height: 300px;
+}
