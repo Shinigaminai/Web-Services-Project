@@ -23,6 +23,7 @@
     <script src="javascript/dynamicLoad.js"></script>
     <script src="javascript/animation.js"></script>
     <script src="javascript/pokemonDatabase.js"></script>
+    <script src="javascript/arena.js"></script>
 </head>
 <body>
 <header>
@@ -41,6 +42,7 @@
         </div><!--
      --><div id="arena-tab" class="tab">
             <div class="tab-header">Arena</div>
+            <button id="readyToFight">ready to fight</button>
         </div><!--
      --><div id="pokemon-tab" class="tab">
             <div class="tab-header">Pokemon</div>
@@ -70,6 +72,7 @@
     $( document).ready(function() {
         initLogin();
         initChat();
+        initArena();
     });
 
 </script><!--

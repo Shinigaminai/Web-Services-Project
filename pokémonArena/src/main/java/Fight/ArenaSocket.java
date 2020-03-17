@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ApplicationScoped
-@ServerEndpoint("/Arena/{username}")
+@ServerEndpoint("/arena/{username}")
 
 public class ArenaSocket {
     private static final Logger LOG = Logger.getLogger(ArenaSocket.class);
