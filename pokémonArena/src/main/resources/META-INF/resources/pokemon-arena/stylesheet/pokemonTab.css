@@ -5,11 +5,12 @@
     display: flex;
     flex-flow: row wrap;
     padding: 2rem;
+    justify-content: center;
 }
 
 #pokemon-list > .entry {
     box-shadow: 0.15rem 0.15rem 0.2rem #999;
-    padding: 0.2rem;
+    padding: 0.4rem;
     margin: 0.4rem;
     border-radius: 0.2rem;
     min-width: 15rem;
@@ -17,5 +18,37 @@
 }
 
 .entry > .head {
-    text-align: center;
+    display: flex;
+    flex-flow: row nowrap;
+    text-align: left;
+}
+.entry > .head > div:nth-of-type(1) {
+    flex: 1 1 auto;
+}
+.entry > .head > div:nth-of-type(2) {
+    padding-right: 1rem;
+}
+.pokemonEntry-typesArea > img {
+    height: 1em;
+}
+
+.entry > img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.entry > .stats {
+    display: flex;
+    flex-flow: column nowrap;
+}
+.entry > .stats > .statEntry {
+    display: flex;
+    flex-flow: row nowrap;
+}
+.stats > .statEntry > div:nth-of-type(1) {
+    flex: 1 1 auto;
+}
+.stats > .statEntry > div:nth-of-type(2) {
+    padding-right: 1rem;
 }

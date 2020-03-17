@@ -21,12 +21,14 @@ button:aktive {
 button:hover {
     transform: scale(1.1);
     box-shadow: 0.25rem 0.25rem 0.2rem #999;
+    cursor: pointer
 }
 button {
     background-color: lightcoral;
     border: none;
     border-radius: 0.2rem;
     box-shadow: 0.15rem 0.15rem 0.1rem #999;
+    padding: 0.2rem;
 }
 
 #content-area {
