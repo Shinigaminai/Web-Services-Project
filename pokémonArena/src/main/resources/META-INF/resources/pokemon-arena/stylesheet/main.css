@@ -73,15 +73,3 @@ button {
 #login-menu input:hover {
   outline: none;
 }
-
-#chat-area {
-    display: flex;
-    flex-direction: column;
-}
-
-#chat {
-    resize: none;
-    overflow: hidden;
-    min-height: 300px;
-    max-height: 300px;
-}

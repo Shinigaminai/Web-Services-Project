@@ -1,6 +1,10 @@
+#pokemon-tab {
+}
+
 #pokemon-list {
     display: flex;
     flex-flow: row wrap;
+    padding: 2rem;
 }
 
 #pokemon-list > .entry {
