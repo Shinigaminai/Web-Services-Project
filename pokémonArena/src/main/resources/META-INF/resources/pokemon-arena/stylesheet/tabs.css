@@ -22,18 +22,18 @@
 #tabs-area {
     position: relative;
     flex-grow: 1;
-    white-space: nowrap;
+    display: flex;
     -webkit-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
-    overflow-y: initial;
     height: 100%;
 }
 
 #tabs-area > * {
     width: 100%;
     height: 100%;
-    display: inline-table;
+    display: inline-block;
     overflow: auto;
+    flex: 0 0 auto;
 }
 
 #tabs-area[data-tab='0'] {
