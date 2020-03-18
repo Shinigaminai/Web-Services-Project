@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -10,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ApplicationScoped
 @ServerEndpoint("/chat/{username}")
 public class ChatSocket {
+    ObjectMapper mapper = new ObjectMapper();
 
     private static final Logger LOG = Logger.getLogger(ChatSocket.class);
 
@@ -18,27 +20,30 @@ public class ChatSocket {
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
         sessions.put(username, session);
+        broadcast(createMessage("userconnect", Map.of("user",username, "action", "joined")));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
         sessions.remove(username);
-        broadcast("User " + username + " left");
+        broadcast(createMessage("userconnect", Map.of("user",username, "action", "left")));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
         sessions.remove(username);
         LOG.error("onError", throwable);
-        broadcast("User " + username + " left on error: " + throwable);
+        broadcast(createMessage("userconnect", Map.of("user",username, "action", "left")));
     }
 
     @OnMessage
     public void onMessage(String message, @PathParam("username") String username) {
         if (message.equalsIgnoreCase("_ready_")) {
-            broadcast("User " + username + " joined");
+            //broadcast("User " + username + " joined");
         } else {
-            broadcast(">> " + username + ": " + message);
+            // no interpretation necessary
+            //TODO sender could be fake
+            broadcast(message);
         }
     }
 
@@ -50,5 +55,13 @@ public class ChatSocket {
                 }
             });
         });
+    }
+
+    private String createMessage(String event, Map<String, String> arguments) {
+        try {
+            return "{\"event\":\""+ event +"\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

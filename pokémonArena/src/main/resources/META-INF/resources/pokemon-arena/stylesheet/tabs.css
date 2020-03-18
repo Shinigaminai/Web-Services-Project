@@ -15,7 +15,6 @@
 }
 
 #tabs-menu {
-    /*grid-row: 3;*/
     background-color: lightcoral;
 }
 
@@ -31,7 +30,9 @@
 #tabs-area > * {
     width: 100%;
     height: 100%;
-    display: inline-block;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
     overflow: auto;
     flex: 0 0 auto;
 }

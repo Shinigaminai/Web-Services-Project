@@ -4,13 +4,22 @@
 #chat-area {
     display: flex;
     flex-direction: column;
-    max-width: 50rem;
-    margin: auto;
+    max-width: 40rem;
+    padding: 2rem;
+    flex: 1;
 }
 
 #chat {
-    resize: none;
     overflow: hidden;
-    min-height: 300px;
-    max-height: 300px;
+    flex: 1;
+}
+
+.my-message {
+    text-align: right;
+}
+.connect-message {
+    text-align: center;
+}
+.status-message {
+    text-align: center;
 }

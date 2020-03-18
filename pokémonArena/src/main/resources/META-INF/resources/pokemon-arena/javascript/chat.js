@@ -1,14 +1,16 @@
 var connectedToChat = false;
-var socket;
+var socketChat;
 
 var connectToChat = function() {
     if (! connectedToChat) {
         var name = $("#username-input").val();
-        console.log("Val: " + name);
-        socket = new WebSocket("ws://" + location.host + "/chat/" + name);
-        //TODO loading animation
-        socket.onopen = function() {
-            //TODO end loading animation
+        console.log("Username: " + name);
+        socketChat = new FancyWebSocket("ws://" + location.host + "/chat/" + name);
+        //TODO start connnection animation
+
+        // bind to server events
+        socketChat.bind('open', function(data){
+            //TODO end connection animation
             connectedToChat = true;
             console.log("Connected to the web socket");
             document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
@@ -21,20 +23,50 @@ var connectToChat = function() {
             $("#username-input").attr("disabled", true);
             $("#msg").focus();
             $("#login-menu").attr("hidden", true);
-        };
-        socket.onmessage = function(m) {
-            console.log("Got message: " + m.data);
-            $("#chat").append(m.data + "\n");
-            scrollToChatBottom();
-        };
+        });
+
+        socketChat.bind('close', function() {
+            recievedChatStatus('Connection closed by server');
+        });
+
+        socketChat.bind('message', recievedChatMessage);
+        socketChat.bind('userconnect', recievedChatUserconnect);
     }
 };
+
+var recievedChatUserconnect = function(message) {
+    var entry = document.createElement("DIV");
+    entry.innerHTML = "User " + message.user + " " + message.action;
+    console.log("User " + message.user + " " + message.action);
+    entry.classList.add("connect-message");
+    document.getElementById("chat").appendChild(entry);
+}
+
+var recievedChatStatus = function(message) {
+    var entry = document.createElement("DIV");
+    entry.innerHTML = message;
+    entry.classList.add("status-message");
+    document.getElementById("chat").appendChild(entry);
+}
+
+var recievedChatMessage = function (message) {
+    var entry = document.createElement("DIV");
+    var name = $("#username-input").val();
+    if(message.sender == name) {
+        entry.classList.add("my-message");
+        entry.innerHTML = message.message;
+    } else {
+        entry.innerHTML = message.sender + ": " + message.message;
+    }
+    document.getElementById("chat").appendChild(entry);
+}
 
 var sendMessage = function() {
     if (connectedToChat) {
         var value = $("#msg").val();
         console.log("Sending " + value);
-        socket.send(value);
+        var name = $("#username-input").val();
+        socketChat.send('message', {sender: name, message: value});
         $("#msg").val("");
     }
 };
@@ -43,9 +75,8 @@ var scrollToChatBottom = function () {
     $('#chat').scrollTop($('#chat')[0].scrollHeight);
 };
 
-var initChat = function () {
+jQuery(function () {
     $("#msg").keypress(function(event) {
-            console.log("writing in chat");
         if(event.keyCode == 13 || event.which == 13) {
             sendMessage();
         }
@@ -54,4 +85,4 @@ var initChat = function () {
     $("#chat").change(function() {
         scrollToChatBottom();
     });
-}
+});

@@ -1,4 +1,4 @@
-var initLogin = function() {
+jQuery(function() {
     $("#connect-button").click(function () {
         connectToChat();
         loadAllPokemon();
@@ -18,8 +18,9 @@ var initLogin = function() {
         var index = $(this).index();
 
         $('#tabs-area').attr('data-tab', index);
+        $('#tabs-menu').attr('data-tab', index);
         console.log("set data-tab = ", index);
     });
 
     $("#username-input").focus();
-};
+});

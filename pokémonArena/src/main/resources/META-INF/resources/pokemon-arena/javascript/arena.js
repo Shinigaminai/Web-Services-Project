@@ -1,7 +1,7 @@
 var connectedToArena = false;
 var socketArena;
 
-var initArena = function() {
+jQuery(function() {
     $("#readyToFight").click(function () {
         if (! connectedToArena) {
             var name = $("#username-input").val();
@@ -20,4 +20,4 @@ var initArena = function() {
             };
         }
     });
-}
+});

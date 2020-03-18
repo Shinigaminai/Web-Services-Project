@@ -18,10 +18,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
+    <script src="javascript/fancyWebsocket.js"></script>
     <script src="javascript/chat.js"></script>
     <script src="javascript/login.js"></script>
-    <script src="javascript/dynamicLoad.js"></script>
-    <script src="javascript/animation.js"></script>
     <script src="javascript/pokemonDatabase.js"></script>
     <script src="javascript/arena.js"></script>
 </head>
@@ -31,13 +30,17 @@
 </header>
 
 <div id="content-area">
-    <div data-tab="0" id="tabs-area" style="visibility: hidden">
+    <div id="tabs-area" style="visibility: hidden" data-tab="0">
         <div id="chat-tab" class="tab">
             <div class="tab-header">Global Chat</div>
-            <div id="chat-area">
-                <textarea class="col-md-8" id="chat"></textarea>
-                <input class="col-md-6" id="msg" placeholder="enter your message" type="text">
-                <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
+            <div style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: center; flex: 1">
+                <div id="chat-area">
+                    <div id="chat"></div>
+                    <div style="display: flex">
+                        <input id="msg" placeholder="enter your message" type="text" style="flex: 1 1 auto">
+                        <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
+                    </div>
+                </div>
             </div>
         </div><!--
      --><div id="arena-tab" class="tab">
@@ -50,7 +53,7 @@
         </div>
     </div>
 </div>
-<nav id="tabs-menu" style="visibility: hidden">
+<nav id="tabs-menu" style="visibility: hidden" data-tab="0">
     <div class="tab-button">
         Chat
     </div>
@@ -67,19 +70,5 @@
         <button id="connect-button">connect</button>
     </div>
 </div>
-
-<script type="text/javascript">
-    $( document).ready(function() {
-        initLogin();
-        initChat();
-        initArena();
-    });
-
-</script><!--
-<footer>
-    <div id="playtime">Playtime:</div>
-    <div class="space-between"></div>
-    <div id="version">v.0.0.1</div>
-</footer>-->
 </body>
 </html>
