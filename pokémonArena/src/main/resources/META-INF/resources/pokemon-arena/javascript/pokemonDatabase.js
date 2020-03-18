@@ -21,6 +21,7 @@ var createPokemonEntry = function( pokemon ) {
     var head = document.createElement("DIV");
     var sprite = document.createElement("IMG");
     var stats = document.createElement("DIV");
+    var add = document.createElement("BUTTON");
     head.classList.add("head");     //head
     var name = document.createElement("DIV");
     var types = document.createElement("DIV");
@@ -32,7 +33,14 @@ var createPokemonEntry = function( pokemon ) {
     entry.appendChild(head);
     sprite.src = pokemon.sprites.frontDefault;  //sprite
     sprite.alt = "Sprite";
-    entry.appendChild(sprite);
+    add.setAttribute("onclick", "addToTeam("+pokemon.id+")");  //addToTeam button
+    add.innerHTML = "+ add to team";
+    add.title = "add this pokémon to your team";
+    var spriteAddDiv = document.createElement("DIV");
+    spriteAddDiv.appendChild(sprite);
+    spriteAddDiv.appendChild(add);
+    spriteAddDiv.classList.add("pokemonSpriteAddDiv");
+    entry.appendChild(spriteAddDiv);
     stats.classList.add("stats");   //stats
     pokemon.stats.forEach ( createStatEntry, stats );
     entry.appendChild(stats);
@@ -58,6 +66,7 @@ var createTypeEntry = function( type ) {
     var entry = document.createElement("IMG");
     entry.alt = type.type.name;
     entry.src = "svgs/types/" + type.type.name +".svg";
+    entry.title = type.type.name;
     entry.style.order = type.type.id;
     this.appendChild(entry);
 }
@@ -81,4 +90,9 @@ var getPokemon = function ( id, callback) {
       .fail(function() {
         alert( "failed to load pokemon" );
       });
+}
+
+var addToTeam = function (id) {
+    //TODO
+    console.log("add to team "+id);
 }

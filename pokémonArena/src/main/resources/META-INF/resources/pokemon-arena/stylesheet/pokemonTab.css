@@ -9,12 +9,27 @@
 }
 
 #pokemon-list > .entry {
-    box-shadow: 0.15rem 0.15rem 0.2rem #999;
-    padding: 0.4rem;
+    box-shadow: 0.1rem 0.1rem 0.4rem dimgrey;
+    padding: 0.8rem;
     margin: 0.4rem;
     border-radius: 0.2rem;
-    min-width: 15rem;
-    max-width: 20rem;
+    min-width: 12rem;
+    background-color: sienna;
+}
+#pokemon-list > .entry:hover {
+    transform: scale(1.2);
+}
+
+.pokemonSpriteAddDiv {
+    display: flex;
+    align-items: center;
+}
+.pokemonSpriteAddDiv > button {
+    display: none;
+    height: min-content;
+}
+.entry:hover > .pokemonSpriteAddDiv > button {
+    display: block;
 }
 
 .entry > .head {
@@ -25,14 +40,12 @@
 .entry > .head > div:nth-of-type(1) {
     flex: 1 1 auto;
 }
-.entry > .head > div:nth-of-type(2) {
-    padding-right: 1rem;
-}
 .pokemonEntry-typesArea > img {
     height: 1em;
+    padding: 0.1rem;
 }
 
-.entry > img {
+.pokemonSpriteAddDiv > img {
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -48,7 +61,4 @@
 }
 .stats > .statEntry > div:nth-of-type(1) {
     flex: 1 1 auto;
-}
-.stats > .statEntry > div:nth-of-type(2) {
-    padding-right: 1rem;
 }
