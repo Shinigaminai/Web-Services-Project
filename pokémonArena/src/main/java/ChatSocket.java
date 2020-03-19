@@ -20,12 +20,14 @@ public class ChatSocket {
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
         sessions.put(username, session);
+        System.out.println("User connect: " + username);
         broadcast(createMessage("userconnect", Map.of("user",username, "action", "joined")));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
         sessions.remove(username);
+        System.out.println("User disconnect: " + username);
         broadcast(createMessage("userconnect", Map.of("user",username, "action", "left")));
     }
 

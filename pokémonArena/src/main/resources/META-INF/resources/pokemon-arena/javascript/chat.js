@@ -27,38 +27,59 @@ var connectToChat = function() {
 
         socketChat.bind('close', function() {
             recievedChatStatus('Connection closed by server');
+            scrollToChatBottom();
         });
 
         socketChat.bind('message', recievedChatMessage);
+        socketChat.bind('message', scrollToChatBottom);
         socketChat.bind('userconnect', recievedChatUserconnect);
+        socketChat.bind('userconnect', scrollToChatBottom);
     }
 };
 
 var recievedChatUserconnect = function(message) {
-    var entry = document.createElement("DIV");
-    entry.innerHTML = "User " + message.user + " " + message.action;
     console.log("User " + message.user + " " + message.action);
+    var entry = document.createElement("DIV");
+    var inner = document.createElement("SPAN");
+    inner.innerHTML = "User " + message.user + " " + message.action;
+    entry.appendChild(inner);
     entry.classList.add("connect-message");
     document.getElementById("chat").appendChild(entry);
 }
 
 var recievedChatStatus = function(message) {
     var entry = document.createElement("DIV");
-    entry.innerHTML = message;
+    var inner = document.createElement("SPAN");
+    inner.innerHTML = message;
+    entry.appendChild(inner);
     entry.classList.add("status-message");
     document.getElementById("chat").appendChild(entry);
 }
 
 var recievedChatMessage = function (message) {
-    var entry = document.createElement("DIV");
+    var entry = createMessageElement(message);
     var name = $("#username-input").val();
     if(message.sender == name) {
-        entry.classList.add("my-message");
-        entry.innerHTML = message.message;
+        entry.classList.add("out-message");
     } else {
-        entry.innerHTML = message.sender + ": " + message.message;
+        entry.classList.add("in-message");
     }
     document.getElementById("chat").appendChild(entry);
+}
+
+var createMessageElement = function(m) {
+    var entry = document.createElement("DIV");
+    var bubble = document.createElement("SPAN")
+    var sender = document.createElement("SPAN");
+    var message = document.createElement("SPAN");
+    sender.classList.add("sender");
+    message.classList.add("message");
+    sender.innerHTML = m.sender + ":";
+    message.innerHTML = m.message;
+    bubble.appendChild(sender);
+    bubble.appendChild(message);
+    entry.appendChild(bubble);
+    return entry;
 }
 
 var sendMessage = function() {

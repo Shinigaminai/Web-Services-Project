@@ -6,6 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    background-color: antiquewhite;
 }
 h1 {
     margin: 0;
@@ -15,9 +16,6 @@ h1 {
   display: none !important;
 }
 
-button:aktive {
-    box-shadow: 0.1rem 0.1rem 0.1rem inset;
-}
 button:hover {
     transform: scale(1.1);
     box-shadow: 0.25rem 0.25rem 0.2rem #999;
