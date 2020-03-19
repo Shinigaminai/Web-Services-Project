@@ -94,5 +94,28 @@ var getPokemon = function ( id, callback) {
 
 var addToTeam = function (id) {
     //TODO
+    var teamlist = [];
+    if(id in teamlist) {
+        alert("Dieses Pokémon ist bereits in deinem Team");
+    } else {
+        if(teamlist.length > 5) {
+            alert("Dein Pokémon-Team ist voll");
+        } else {
+            getPokemon(id, function(pokemon) {
+                createTeamEntry(pokemon);
+            });
+        }
+    }
     console.log("add to team "+id);
+}
+
+var createTeamEntry = function (pokemon) {
+    var entry = document.createElement("DIV");
+    var name = document.createElement("DIV");
+    var types = document.createElement("DIV");
+    name.innerHTML = pokemon.name;
+    pokemon.types.forEach( createTypeEntry, types );
+    entry.appendChild(name);
+    entry.appendChild(types);
+    document.getElementById("pokemon-team").appendChild(entry);
 }
