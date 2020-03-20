@@ -19,7 +19,7 @@ var connectToChat = function() {
             document.getElementById("tabs-menu").classList.add("animated", "forward", "slideInUp", "delay-1s");
             document.getElementById("tabs-menu").style.visibility = 'visible';
             $("#send").attr("disabled", false);
-            $("#connect-button").attr("disabled", true);
+            $("#login-button").attr("disabled", true);
             $("#username-input").attr("disabled", true);
             $("#msg").focus();
             $("#login-menu").attr("hidden", true);

@@ -1,16 +1,18 @@
+var username;
+var userid;
+
 jQuery(function() {
-    $("#connect-button").click(function () {
-        connectToChat();
-        loadAllPokemon();
+    $("#login-button").click(function () {
+        login();
     });
-    $("#send").click(sendMessage);
 
     $("#username-input").keypress(function(event){
         if(event.keyCode == 13 || event.which == 13) {
-            connectToChat();
-            loadAllPokemon();
+            login();
         }
     });
+
+    $("#send").click(sendMessage);
 
     $('.tab-button').click(function(e){
         e.preventDefault();
@@ -24,3 +26,34 @@ jQuery(function() {
 
     $("#username-input").focus();
 });
+
+var login = function() {
+    connectToChat();
+    loadAllPokemon();
+    username = $("#username-input").val();
+    userid = getUserId(name);
+    if(userid == false) {
+        userid = registerUser(name);
+    }
+    console.log("User ID for " + name + " is " + id);
+    loadPokemonTeam();
+}
+
+var getUserId = function(name) {
+    $.get("http://" + location.host + "/users/" + name, function(m){
+        return m.id;
+    })
+    .fail(function() {
+        return false;
+    });
+}
+
+var registerUser = function(name) {
+    $.post("http://" + location.host + "/users/" + name, function(m){
+        console.log("Registered as new user");
+        return m.id;
+    })
+    .fail(function() {
+        return false;
+    });
+}

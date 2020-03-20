@@ -117,7 +117,20 @@ var addToTeam = function (id) {
 var createTeamEntry = function (pokemon) {
     var entry = document.createElement("DIV");
     head = createHeadEntry(pokemon);
-    entry.appendChild(head);
     entry.classList.add("list-entry");
+    var removeButton = document.createElement("BUTTON");
+    removeButton.setAttribute("onclick", "removeFromTeam("+pokemon.id+")");  //addToTeam button
+    removeButton.innerHTML = "remove";
+    removeButton.title = "remove this pokémon from your team";
+    removeButton.classList.add("remove-button");
+    head.appendChild(removeButton);
+    entry.appendChild(head);
     document.getElementById("pokemon-team-list").appendChild(entry);
+}
+
+var loadPokemonTeam = function() {
+    var team = loadTeam(userid);
+    team.pokemon.forEach(function() {
+        //
+    });
 }
