@@ -1,14 +1,21 @@
-#pokemon-tab {
-}
-
-#pokemon-list {
+#pokemon-tab .list {
     display: flex;
-    flex-flow: row wrap;
     padding: 2rem;
     justify-content: center;
 }
+#pokemon-team {
+    padding: 2rem 2rem 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+#pokemon-team-list {
+    flex-flow: column wrap;
+}
+#pokemon-list {
+    flex-flow: row wrap;
+}
 
-#pokemon-list > .entry {
+.list-entry {
     box-shadow: 0.1rem 0.1rem 0.4rem dimgrey;
     padding: 0.8rem;
     margin: 0.4rem;
@@ -16,7 +23,7 @@
     min-width: 12rem;
     background-color: sienna;
 }
-#pokemon-list > .entry:hover {
+.list-entry:hover {
     transform: scale(1.2);
 }
 
@@ -28,17 +35,21 @@
     display: none;
     height: min-content;
 }
-.entry:hover > .pokemonSpriteAddDiv > button {
+.list-entry:hover > .pokemonSpriteAddDiv > button {
     display: block;
 }
 
-.entry > .head {
+.list-entry > .head {
     display: flex;
     flex-flow: row nowrap;
     text-align: left;
+    align-items: center;
 }
-.entry > .head > div:nth-of-type(1) {
+.list-entry > .head > div:nth-of-type(1) {
     flex: 1 1 auto;
+}
+.pokemonEntry-typesArea {
+    display: contents;
 }
 .pokemonEntry-typesArea > img {
     height: 1em;
@@ -51,11 +62,11 @@
     margin-right: auto;
 }
 
-.entry > .stats {
+.list-entry > .stats {
     display: flex;
     flex-flow: column nowrap;
 }
-.entry > .stats > .statEntry {
+.list-entry > .stats > .statEntry {
     display: flex;
     flex-flow: row nowrap;
 }

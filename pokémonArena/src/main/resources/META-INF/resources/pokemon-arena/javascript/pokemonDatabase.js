@@ -18,18 +18,10 @@ var fillPokemonList = function( pokemonList ) {
 
 var createPokemonEntry = function( pokemon ) {
     var entry = document.createElement("DIV");
-    var head = document.createElement("DIV");
     var sprite = document.createElement("IMG");
     var stats = document.createElement("DIV");
     var add = document.createElement("BUTTON");
-    head.classList.add("head");     //head
-    var name = document.createElement("DIV");
-    var types = document.createElement("DIV");
-    name.innerHTML = pokemon.name;
-    head.appendChild(name);
-    pokemon.types.forEach( createTypeEntry, types );
-    types.classList.add("pokemonEntry-typesArea");
-    head.appendChild(types);
+    head = createHeadEntry(pokemon);
     entry.appendChild(head);
     sprite.src = pokemon.sprites.frontDefault;  //sprite
     sprite.alt = "Sprite";
@@ -44,7 +36,7 @@ var createPokemonEntry = function( pokemon ) {
     stats.classList.add("stats");   //stats
     pokemon.stats.forEach ( createStatEntry, stats );
     entry.appendChild(stats);
-    entry.classList.add("entry");   //entry
+    entry.classList.add("list-entry");   //entry
     entry.style.order = pokemon.order;
     document.getElementById("pokemon-list").appendChild(entry);
 }
@@ -69,6 +61,19 @@ var createTypeEntry = function( type ) {
     entry.title = type.type.name;
     entry.style.order = type.type.id;
     this.appendChild(entry);
+}
+
+var createHeadEntry = function( pokemon ) {
+    var head = document.createElement("DIV");
+    head.classList.add("head");
+    var name = document.createElement("DIV");
+    var types = document.createElement("DIV");
+    name.innerHTML = pokemon.name;
+    head.appendChild(name);
+    pokemon.types.forEach( createTypeEntry, types );
+    types.classList.add("pokemonEntry-typesArea");
+    head.appendChild(types);
+    return head;
 }
 
 var getPokedex = function ( id, callback) {
@@ -111,11 +116,8 @@ var addToTeam = function (id) {
 
 var createTeamEntry = function (pokemon) {
     var entry = document.createElement("DIV");
-    var name = document.createElement("DIV");
-    var types = document.createElement("DIV");
-    name.innerHTML = pokemon.name;
-    pokemon.types.forEach( createTypeEntry, types );
-    entry.appendChild(name);
-    entry.appendChild(types);
-    document.getElementById("pokemon-team").appendChild(entry);
+    head = createHeadEntry(pokemon);
+    entry.appendChild(head);
+    entry.classList.add("list-entry");
+    document.getElementById("pokemon-team-list").appendChild(entry);
 }
