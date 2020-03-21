@@ -1,5 +1,5 @@
-var username;
-var userid;
+var currentUserName;
+var currentUserId;
 
 jQuery(function() {
     $("#login-button").click(function () {
@@ -30,12 +30,12 @@ jQuery(function() {
 var login = function() {
     connectToChat();
     loadAllPokemon();
-    username = $("#username-input").val();
-    userid = getUserId(name);
-    if(userid == false) {
-        userid = registerUser(name);
+    currentUserName = $("#username-input").val();
+    currentUserId = getUserId(name);
+    if(currentUserId == false) {
+        currentUserId = registerUser(name);
     }
-    console.log("User ID for " + name + " is " + id);
+    console.log("User ID for " + currentUserName + " is " + currentUserId);
     loadPokemonTeam();
 }
 
