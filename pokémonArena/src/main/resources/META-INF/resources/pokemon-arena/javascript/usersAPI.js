@@ -24,10 +24,13 @@ var setUser = function(name, callback) {
     $.post("http://" + location.host + "/users/", {"name": name}, callback);
 }
 
-var setUserTeamPokemon = function(teamid, pokemonid, callback) {
-    $.post("http://" + location.host + "/users/team/" + teamid, {"pokemonid": pokemonid}, callback);
+var addUserTeamPokemon = function(teamid, pokemonid, callback) {
+    $.post("http://" + location.host + "/users/team/" + teamid, {"pokemonid": pokemonid, aktion: addPokemon}, callback);
+}
+var removeUserTeamPokemon = function(teamid, pokemonid, callback) {
+    $.post("http://" + location.host + "/users/team/" + teamid, {"pokemonid": pokemonid, aktion: removePokemon}, callback);
 }
 
-var setUserPokemonAttacks = function(id, attacks, callback) {
-    $.post("http://" + location.host + "/users/pokemon/" + id, {"attacks": attacks}, callback);
+var setUserPokemonAttacks = function(pokemonEntryId, attacks, callback) {
+    $.post("http://" + location.host + "/users/pokemon/" + pokemonEntryId, {"attacks": attacks}, callback);
 }

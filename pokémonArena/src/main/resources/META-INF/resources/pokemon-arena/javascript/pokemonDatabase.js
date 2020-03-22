@@ -1,6 +1,18 @@
 var root = "pokedata";
 var element = $("#pokemon-list");
 
+var loadPokemonTeam = function() {
+    getUserTeams(currentUserId, function(teams) {
+        getUserTeam(teams[0], function(pokemonEntries) {
+            for(pokemonEntry in pokemonEntries) {
+                getPokemon(pokemonEntry.pokemonId, function(pokemon) {
+                    createTeamEntry(pokemon, teamlist[teamnumber]);
+                });
+            }
+        });
+    });
+}
+
 var loadAllPokemon = function() {
     console.log("load pokemon list");
     getPokedex(2, function(pokedex) {
@@ -77,32 +89,53 @@ var createHeadEntry = function( pokemon ) {
 }
 
 var addToTeam = function (id) {
-    //TODO
-    var teamlist = [];
-    if(id in teamlist) {
-        alert("Dieses Pokémon ist bereits in deinem Team");
-    } else {
-        if(teamlist.length > 5) {
-            alert("Dein Pokémon-Team ist voll");
+    console.log("[i] add to team "+id);
+    var teamnumber = 0;
+    getUserTeams(currentUserId, function(userteams){
+        if (userteams == null) {
+            console.log("[E] Teams konnten nicht geladen werden");
         } else {
-            getPokemon(id, function(pokemon) {
-                createTeamEntry(pokemon);
+            getUserTeam(userteams[teamnumber], function(teamlist){
+                if (teamlist == null) {
+                    console.log("[E] Pokémon in Team konnten nicht geladen werden");
+                }
+                if (checkPokemonInTeamlist(id, teamlist)) {
+                    alert("[!] Dieses Pokémon ist bereits in deinem Team");
+                } else if (teamlist.length > 5) {
+                    alert("[!] Dein Pokémon-Team ist voll");
+                } else {
+                    getPokemon(id, function(pokemon) {
+                        console.log("[i] creating team entry for team " + team + " and pokemon " + pokemon.id);
+                        addUserTeamPokemon(team, pokemon.id, function(m) {
+                            createTeamEntry(pokemon, teamlist[teamnumber], m.entryId);
+                        });
+                    });
+                }
             });
         }
-    }
-    console.log("add to team "+id);
+    });
 }
 
-var createTeamEntry = function (pokemon) {
+var createTeamEntry = function (pokemon, team, entryId) {
     var entry = document.createElement("DIV");
     head = createHeadEntry(pokemon);
     entry.classList.add("list-entry");
     var removeButton = document.createElement("BUTTON");
-    removeButton.setAttribute("onclick", "removeFromTeam("+pokemon.id+")");  //addToTeam button
+    removeButton.setAttribute("onclick", "removeFromTeam(this, team, "+entryId+")");  //addToTeam button
     removeButton.innerHTML = "remove";
     removeButton.title = "remove this pokémon from your team";
     removeButton.classList.add("remove-button");
     head.appendChild(removeButton);
     entry.appendChild(head);
     document.getElementById("pokemon-team-list").appendChild(entry);
+}
+
+var removeFromTeam = function ( buttonElement, teamId, pokemonEntryId ) {
+    removeUserTeamPokemon(teamId, pokemonEntryId, function(m) {
+        if(m.task = "success") {
+            buttonElement.parentElement.parentElement.remove();
+        } else {
+            alert("could not remove pokemon from team");
+        }
+    });
 }
