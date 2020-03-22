@@ -1,0 +1,8 @@
+@Post   /users/                 //send: {"name":"name"}                             //return: {"name":"name", "id":"123"}
+@Get    /users/{name}                                                               //return: {"name":"name", "id":"123"}
+@Get    /users/teams/{userid}                                                       //return: ["123", "23"]                                 // Array der teamEintragIds
+@Get    /users/team/{teamid}                                                        //return: [{"pokemonId":"1", "entryId":"123"}, ...]     // Array der pokemonIds + pokemonEintragId
+@Post   /users/team/{teamid}    //send: {"pokemonId":"1", "aktion":"addPokemon"}    //return: {"pokemonId":"1", "entryId":"123"}
+                                //send: {"entryId":"23", "aktion":"removePokemon"}  //return: {"task", "success"} oder "fail"
+@Get    /users/pokemon/{entryid}                                                    //return: {"attacks": ["3","4","2","5"], ...}           // Array mit den Stats und werten des Pokemon
+@Post   /users/pokemon/{entryid}     //send: {"attacks": ["3","4","2","5"]}         //return: {"attacks": [..], ..other-stats.. }
