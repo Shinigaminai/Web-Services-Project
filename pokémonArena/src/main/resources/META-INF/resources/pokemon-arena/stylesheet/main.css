@@ -16,17 +16,21 @@ h1 {
   display: none !important;
 }
 
-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0.25rem 0.25rem 0.2rem #999;
-    cursor: pointer
-}
 button {
     background-color: lightcoral;
     border: none;
     border-radius: 0.2rem;
-    box-shadow: 0.15rem 0.15rem 0.1rem #999;
+    box-shadow: 0.1rem 0.15rem 0.1rem #444;
     padding: 0.2rem;
+}
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0.17rem 0.17rem 0.25rem #555;
+    cursor: pointer;
+}
+button:active {
+    transform: scale(0.95);
+    box-shadow: 0.08rem 0.08rem 0.08rem #353535;
 }
 
 #content-area {
