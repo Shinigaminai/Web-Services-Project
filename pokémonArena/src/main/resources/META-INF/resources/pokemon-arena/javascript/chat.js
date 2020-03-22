@@ -6,11 +6,9 @@ var connectToChat = function() {
         var name = $("#username-input").val();
         console.log("Username: " + name);
         socketChat = new FancyWebSocket("ws://" + location.host + "/chat/" + name);
-        //TODO start connnection animation
 
         // bind to server events
-        socketChat.bind('open', function(data){
-            //TODO end connection animation
+        socketChat.bind('open', function(){
             connectedToChat = true;
             console.log("Connected to the web socket");
             document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
@@ -26,19 +24,19 @@ var connectToChat = function() {
         });
 
         socketChat.bind('close', function() {
-            recievedChatStatus('Connection closed by server');
+            receivedChatStatus('Connection closed by server');
             scrollToChatBottom();
         });
 
-        socketChat.bind('message', recievedChatMessage);
+        socketChat.bind('message', receivedChatMessage);
         socketChat.bind('message', scrollToChatBottom);
-        socketChat.bind('userconnect', recievedChatUserconnect);
+        socketChat.bind('userconnect', receivedChatUserconnect);
         socketChat.bind('userconnect', scrollToChatBottom);
     }
 };
 
-var recievedChatUserconnect = function(message) {
-    console.log("User " + message.user + " " + message.action);
+var receivedChatUserconnect = function(message) {
+    console.log("[i] User " + message.user + " " + message.action + " [chat]");
     var entry = document.createElement("DIV");
     var inner = document.createElement("SPAN");
     inner.innerHTML = "User " + message.user + " " + message.action;
@@ -47,7 +45,7 @@ var recievedChatUserconnect = function(message) {
     document.getElementById("chat").appendChild(entry);
 }
 
-var recievedChatStatus = function(message) {
+var receivedChatStatus = function(message) {
     var entry = document.createElement("DIV");
     var inner = document.createElement("SPAN");
     inner.innerHTML = message;
@@ -56,7 +54,7 @@ var recievedChatStatus = function(message) {
     document.getElementById("chat").appendChild(entry);
 }
 
-var recievedChatMessage = function (message) {
+var receivedChatMessage = function (message) {
     var entry = createMessageElement(message);
     var name = $("#username-input").val();
     if(message.sender == name) {

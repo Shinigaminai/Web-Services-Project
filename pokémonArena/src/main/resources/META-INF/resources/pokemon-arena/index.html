@@ -11,8 +11,9 @@
     <link href="stylesheet/main.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/header.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/tabs.css" rel="stylesheet" type="text/css">
-    <link href="stylesheet/pokemonTab.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/chatTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/arenaTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/pokemonTab.css" rel="stylesheet" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -46,7 +47,14 @@
             </div>
         </div><!--
      --><div id="arena-tab" class="tab">
-            <button id="readyToFight">ready to fight</button>
+            <div style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: center; flex: 1">
+                <div id="challenge-area">
+                    <div id="challenge-list-container">
+                        <div id="challenge-list"></div>
+                    </div>
+                    <button id="readyToFight">ready to fight</button>
+                </div>
+            </div>
         </div><!--
      --><div id="pokemon-tab" class="tab">
             <div id="pokemon-team">

@@ -1,0 +1,32 @@
+#challenge-area {
+    display: flex;
+    flex-direction: column;
+    max-width: 40rem;
+    padding: 0.2rem;
+    flex: 1;
+    box-shadow: 0.3rem 0.3rem 0.5rem;
+    margin: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #db6b6bb0;
+}
+
+#challenge-list-container {
+    flex: 1 1 0;
+    position: relative;
+}
+
+#challenge-list {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    flex: 1;
+    display: none;
+}
+
+.hidden {
+    visibility: hidden;
+}
