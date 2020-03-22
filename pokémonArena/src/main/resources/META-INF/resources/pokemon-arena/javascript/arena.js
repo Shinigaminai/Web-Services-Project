@@ -3,7 +3,9 @@ var socketArena;
 
 jQuery(function() {
     $("#readyToFight").click(function () {
+        document.getElementById("readyToFight").classList.add("loading");
         if (connectedToArena) {
+            document.getElementById("readyToFight").classList.remove("loading");
             connectedToArena = false;
             socketArena = null;
             document.getElementById("challenge-list").classList.add("hidden");
@@ -14,6 +16,7 @@ jQuery(function() {
             socketArena = new FancyWebSocket("ws://" + location.host + "/arena/" + name);
 
             socketArena.bind('open', function(data) {
+                document.getElementById("readyToFight").classList.remove("loading");
                 document.getElementById("readyToFight").innerHTML = "cancel";
                 connectedToArena = true;
                 document.getElementById("challenge-list").classList.remove("hidden");
