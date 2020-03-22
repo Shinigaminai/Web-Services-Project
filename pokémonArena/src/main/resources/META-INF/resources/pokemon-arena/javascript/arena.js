@@ -32,19 +32,10 @@ jQuery(function() {
 
 var receivedArenaUserconnect = function(data) {
     console.log("[i] User " + data.user + " " + data.action + " [arena]");
-    if (data.action == "joined") {
-        var entry = document.createElement("DIV");
-        var name = document.createElement("SPAN");
-        var challengeButton = document.createElement("BUTTON");
-        challengeButton.innerHTML = "challenge";
-        challengeButton.setAttribute("onclick", "challenge(" + data.user +")");
-        name.innerHTML = data.user;
-        entry.name = "challenger-" + data.user;
-        entry.appendChild(name);
-        entry.appendChild(challengeButton);
-        document.getElementById("challenger-list").appendChild(entry);
+    if (data.action == "joined" && data.user != currentUserName) {
+        addChallenger(data.user);
     } else if (data.action == "left") {
-        document.getElementByName("challenger-" + data.user).remove();
+        removeChallenger(data.user);
     } else {
         console.log("[E] unknown userconnect action [arena]");
     }
@@ -52,4 +43,22 @@ var receivedArenaUserconnect = function(data) {
 
 var receivedArenaChallenge = function(data) {
     alert("challenged by " + data.user);
+}
+
+var addChallenger = function(challenger) {
+    var entry = document.createElement("DIV");
+    var name = document.createElement("SPAN");
+    var challengeButton = document.createElement("BUTTON");
+    challengeButton.innerHTML = "challenge";
+    challengeButton.setAttribute("onclick", "challenge(" + challenger +")");
+    name.innerHTML = challenger;
+    entry.setAttribute("name", "challenger-" + challenger);
+    entry.appendChild(name);
+    entry.appendChild(challengeButton);
+    entry.classList.add("challenge-entry");
+    document.getElementById("challenge-list").appendChild(entry);
+}
+
+var removeChallenger = function(challenger) {
+    document.getElementByName("challenger-" + challenger).remove();
 }

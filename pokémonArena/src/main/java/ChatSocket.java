@@ -19,22 +19,22 @@ public class ChatSocket {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
+        System.out.println("[i][Chat] User connect: " + username);
         sessions.put(username, session);
-        System.out.println("User connect: " + username);
         broadcast(createMessage("userconnect", Map.of("user",username, "action", "joined")));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
+        System.out.println("[i][Arena] User disconnect: " + username);
         sessions.remove(username);
-        System.out.println("User disconnect: " + username);
         broadcast(createMessage("userconnect", Map.of("user",username, "action", "left")));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
+        System.out.println("[E][Arena] User error: " + username);
         sessions.remove(username);
-        LOG.error("onError", throwable);
         broadcast(createMessage("userconnect", Map.of("user",username, "action", "left")));
     }
 
