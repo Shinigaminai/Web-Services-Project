@@ -17,6 +17,7 @@ jQuery(function() {
                 document.getElementById("readyToFight").innerHTML = "cancel";
                 connectedToArena = true;
                 document.getElementById("challenge-list").classList.remove("hidden");
+                socketArena.send('getChallengers', {});
             });
             socketArena.bind('close', function(data) {
                 document.getElementById("readyToFight").innerHTML = "ready to fight";
@@ -32,12 +33,14 @@ jQuery(function() {
 
 var receivedArenaUserconnect = function(data) {
     console.log("[i] User " + data.user + " " + data.action + " [arena]");
-    if (data.action == "joined" && data.user != currentUserName) {
-        addChallenger(data.user);
-    } else if (data.action == "left") {
-        removeChallenger(data.user);
-    } else {
-        console.log("[E] unknown userconnect action [arena]");
+    if (data.user != currentUserName) {
+        if (data.action == "joined") {
+            addChallenger(data.user);
+        } else if (data.action == "left") {
+            removeChallenger(data.user);
+        } else {
+            console.log("[E] unknown userconnect action [arena]");
+        }
     }
 }
 

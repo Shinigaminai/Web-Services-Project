@@ -27,30 +27,21 @@ public class ArenaSocket {
     public void onOpen(Session session, @PathParam("username") String username) {
         System.out.println("[i][Arena] User connect: " + username);
         sessions.put(username, session);
-        JsonEvent event = new JsonEvent("userconnect", Map.of("user",username,"action","joined"));
-        try {
-            broadcast(mapper.writeValueAsString(event));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        broadcast(createMessage("userconnect", Map.of("user",username,"action","joined")));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
         System.out.println("[i][Arena] User disconnect: " + username);
         sessions.remove(username);
-        JsonEvent event = new JsonEvent("userconnect", Map.of("user",username,"action","left"));
-        try {
-            broadcast(mapper.writeValueAsString(event));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        broadcast(createMessage("userconnect", Map.of("user",username,"action","left")));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
         System.out.println("[E][Arena] User error: " + username);
         sessions.remove(username);
+        broadcast(createMessage("userconnect", Map.of("user",username,"action","left")));
         LOG.error("onError", throwable);
     }
 
@@ -59,8 +50,14 @@ public class ArenaSocket {
         System.out.println("ArenaSocket message by " + username + ": " + message);
         try {
             JsonEvent event = mapper.readValue(message, JsonEvent.class);
-            System.out.println("event: " + event.event);
-            System.out.println("data:  " + event.data);
+            System.out.println("event: " + event.getEvent());
+            System.out.println("data:  " + event.getData());
+            if(event.getEvent().equals("getChallengers")) {
+                System.out.println("load challengers");
+                sessions.keySet().forEach(user -> {
+                    send(username, createMessage("userconnect", Map.of("user",user, "action","joined")));
+                });
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -74,5 +71,21 @@ public class ArenaSocket {
                 }
             });
         });
+    }
+
+    private void send(String username, String message) {
+        sessions.get(username).getAsyncRemote().sendObject(message, result -> {
+            if (result.getException() != null) {
+                System.out.println("Unable to send message: " + result.getException());
+            }
+        });
+    }
+
+    private String createMessage(String event, Map<String, String> arguments) {
+        try {
+            return "{\"event\":\""+ event +"\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
