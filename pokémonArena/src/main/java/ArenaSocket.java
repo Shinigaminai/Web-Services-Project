@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vertx.core.json.Json;
 import org.jboss.logging.Logger;
 
 import javax.websocket.OnClose;
@@ -84,6 +85,14 @@ public class ArenaSocket {
     private String createMessage(String event, Map<String, String> arguments) {
         try {
             return "{\"event\":\""+ event +"\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String createMessage(JsonEvent event) {
+        try {
+            return mapper.writeValueAsString(event);
         } catch (Exception e) {
             return null;
         }
