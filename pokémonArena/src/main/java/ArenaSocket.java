@@ -67,8 +67,8 @@ public class ArenaSocket {
             if (event.getEvent().equals("answerChallenge")) {
                 System.out.println("Challenge answered");
                 String user = event.getData().get("to");
-                String answer = event.getData().get("answer");
-                send(user, createMessage("answerChallenge", Map.of("from", username, "answer",answer)));
+                String answer = event.getData().get("value");
+                send(user, createMessage("answerChallenge", Map.of("from", username, "value",answer)));
             }
             if (event.getEvent().equals("cancelChallenge")) {
                 System.out.println("Challenge canceled");
