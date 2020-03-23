@@ -58,6 +58,11 @@ public class ArenaSocket {
                 sessions.keySet().forEach(user -> {
                     send(username, createMessage("userconnect", Map.of("user",user, "action","joined")));
                 });
+            if(event.getEvent().equals("challenge")) {
+                    System.out.println("new Challenge");
+                    String user = event.getData().get("to");
+                   send(user, createMessage("challenge", Map.of("from",username)));
+               }
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
