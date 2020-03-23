@@ -1,43 +1,3 @@
-var connectedToArena = false;
-var socketArena;
-
-var challenging = null;
-var challengers = [];
-
-jQuery(function() {
-    $("#readyToFight").click(function () {
-        document.getElementById("readyToFight").classList.add("loading");
-        if (connectedToArena) {
-            document.getElementById("readyToFight").classList.remove("loading");
-            connectedToArena = false;
-            socketArena = null;
-            document.getElementById("challenge-list").classList.add("hidden");
-            document.getElementById("readyToFight").innerHTML = "ready to fight";
-            document.getElementById("challenge-list").innerHTML = "";
-        } else {
-            var name = $("#username-input").val();
-            socketArena = new FancyWebSocket("ws://" + location.host + "/arena/" + name);
-
-            socketArena.bind('open', function(data) {
-                document.getElementById("readyToFight").classList.remove("loading");
-                document.getElementById("readyToFight").innerHTML = "cancel";
-                connectedToArena = true;
-                document.getElementById("challenge-list").classList.remove("hidden");
-                socketArena.send('getChallengers', {});
-            });
-            socketArena.bind('close', function(data) {
-                document.getElementById("readyToFight").innerHTML = "ready to fight";
-                connectedToArena = false;
-                document.getElementById("challenge-list").classList.add("hidden");
-                alert("[!] Verbindung zu Arena Socket abgebrochen!");
-            });
-            socketArena.bind('userconnect', receivedArenaUserconnect);
-            socketArena.bind('challenge', receivedArenaChallenge);
-            socketArena.bind('cancelChallenge', receivedArenaChallengeCancel);
-            socketArena.bind('answerChallenge', receivedArenaChallengeAnswer);
-        }
-    });
-});
 
 var receivedArenaUserconnect = function(data) {
     console.log("[i] User " + data.user + " " + data.action + " [arena]");
@@ -51,7 +11,9 @@ var receivedArenaUserconnect = function(data) {
         }
     }
     if (data.user == challenging) {
-        cancelChallenge(challenging);
+        challenging = null;
+        document.getElementById('challenging-overlay').classList.add('hidden');
+        showNotification("Challenged user left");
     }
     if (data.user in challengers) {
         const index = challengers.indexOf(user);
@@ -65,6 +27,31 @@ var receivedArenaChallenge = function(data) {
     challengers.push(data.from);
     document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.add("hidden");
     document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.remove("hidden");
+}
+
+var receivedArenaChallengeCancel = function(data) {
+    const index = challengers.indexOf(data.from);
+    if (index > -1) {
+        challengers.splice(index, 1);
+    }
+    document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.remove("hidden");
+    document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.add("hidden");
+}
+
+var receivedArenaChallengeAnswer = function(data) {
+    if(data.from == challenging) {
+        console.log("challenge answer: " + data.value);
+        challenging = null;
+        document.getElementById('challenging-overlay').classList.add('hidden');
+        if(data.value == 'decline') {
+            showNotification("Challenge declined", 2000);
+        } else {
+            showNotification("Challenge accepted", 2000);
+            //TODO start fight
+        }
+    } else {
+        console.log("Challenge answer from user who wasn't challenged: " + data.from);
+    }
 }
 
 var addChallenger = function(challenger) {
@@ -92,6 +79,7 @@ var addChallenger = function(challenger) {
     entry.classList.add("challenge-entry");
     document.getElementById("challenge-list").appendChild(entry);
 }
+
 
 var removeChallenger = function(challenger) {
     document.getElementsByName("challenger-" + challenger).forEach( function (element) {
@@ -129,29 +117,4 @@ var cancelChallenge = function(user) {
     socketArena.send('cancelChallenge', {"to": user});
     challenging = null;
     document.getElementById('challenging-overlay').classList.add('hidden');
-}
-
-var receivedArenaChallengeCancel = function(data) {
-    const index = challengers.indexOf(data.from);
-    if (index > -1) {
-        challengers.splice(index, 1);
-    }
-    document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.remove("hidden");
-    document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.add("hidden");
-}
-
-var receivedArenaChallengeAnswer = function(data) {
-    if(data.from == challenging) {
-        console.log("challenge answer: " + data.value);
-        challenging = null;
-        document.getElementById('challenging-overlay').classList.add('hidden');
-        if(data.value == 'decline') {
-            showNotification("Challenge declined", 2000);
-        } else {
-            showNotification("Challenge accepted", 2000);
-            //TODO start fight
-        }
-    } else {
-        console.log("Challenge answer from user who wasn't challenged: " + data.from);
-    }
 }

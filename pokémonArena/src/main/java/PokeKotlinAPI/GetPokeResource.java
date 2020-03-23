@@ -18,22 +18,30 @@ public class GetPokeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokedex/{id}")
-    public String getPokedex(@PathParam int id) { return toJSON(service.getPokedex(id));}
+    public String getPokedex(@PathParam int id) {
+        return toJSON(service.getPokedex(id));
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemonspecies/{id}")
-    public String getPokemonSpecies(@PathParam int id) { return toJSON(service.getPokemonSpecies(id));}
+    public String getPokemonSpecies(@PathParam int id) {
+        return toJSON(service.getPokemonSpecies(id));
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/pokemon/{id}")
-    public String getPokemon(@PathParam int id) { return toJSON(service.getPokemon(id));}
+    public String getPokemon(@PathParam int id) {
+        return toJSON(service.getPokemon(id));
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/type/{id}")
-    public String getType(@PathParam int id) { return toJSON(service.getType(id));}
+    public String getType(@PathParam int id) {
+        return toJSON(service.getType(id));
+    }
 
 
     public String toJSON(Object o) {

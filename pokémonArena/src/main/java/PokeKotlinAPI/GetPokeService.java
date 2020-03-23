@@ -2,11 +2,13 @@ package PokeKotlinAPI;
 
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
-import me.sargunvohra.lib.pokekotlin.model.*;
+import me.sargunvohra.lib.pokekotlin.model.Pokedex;
+import me.sargunvohra.lib.pokekotlin.model.Pokemon;
+import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
+import me.sargunvohra.lib.pokekotlin.model.Type;
 
 import javax.enterprise.context.ApplicationScoped;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
@@ -26,7 +28,7 @@ public class GetPokeService {
     }
 
     public Pokedex getPokedex(int id) {
-        if(savedPokedex.containsKey(id)) {
+        if (savedPokedex.containsKey(id)) {
             return savedPokedex.get(id);
         } else {
             Pokedex pokedex = pokeApi.getPokedex(id);

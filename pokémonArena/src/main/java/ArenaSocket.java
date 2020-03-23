@@ -1,18 +1,12 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.vertx.core.json.Json;
 import org.jboss.logging.Logger;
-
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.PathParam;
-import java.util.*;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.HashMap;
 import java.util.Map;
 
 @ApplicationScoped
@@ -20,29 +14,28 @@ import java.util.Map;
 
 public class ArenaSocket {
     private static final Logger LOG = Logger.getLogger(ArenaSocket.class);
-    private ObjectMapper mapper = new ObjectMapper();
-
     Map<String, Session> sessions = new HashMap<>();      // only temporary users necessary
+    private ObjectMapper mapper = new ObjectMapper();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
         System.out.println("[i][Arena] User connect: " + username);
         sessions.put(username, session);
-        broadcast(createMessage("userconnect", Map.of("user",username,"action","joined")));
+        broadcast(createMessage("userconnect", Map.of("user", username, "action", "joined")));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
         System.out.println("[i][Arena] User disconnect: " + username);
         sessions.remove(username);
-        broadcast(createMessage("userconnect", Map.of("user",username,"action","left")));
+        broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
-        System.out.println("[E][Arena] User error: " + username);
+        System.out.println("[E][Arena] User error [" + username + "] : " + throwable.toString());
         sessions.remove(username);
-        broadcast(createMessage("userconnect", Map.of("user",username,"action","left")));
+        broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
         LOG.error("onError", throwable);
     }
 
@@ -51,8 +44,8 @@ public class ArenaSocket {
         System.out.println("ArenaSocket message by " + username + ": " + message);
         try {
             JsonEvent event = mapper.readValue(message, JsonEvent.class);
-            System.out.println("event: " + event.getEvent());
-            System.out.println("data:  " + event.getData());
+            //System.out.println("event: " + event.getEvent());
+            //System.out.println("data:  " + event.getData());
             if (event.getEvent().equals("getChallengers")) {
                 System.out.println("load challengers");
                 sessions.keySet().forEach(user -> {
@@ -68,7 +61,7 @@ public class ArenaSocket {
                 System.out.println("Challenge answered");
                 String user = event.getData().get("to");
                 String answer = event.getData().get("value");
-                send(user, createMessage("answerChallenge", Map.of("from", username, "value",answer)));
+                send(user, createMessage("answerChallenge", Map.of("from", username, "value", answer)));
             }
             if (event.getEvent().equals("cancelChallenge")) {
                 System.out.println("Challenge canceled");
@@ -91,16 +84,20 @@ public class ArenaSocket {
     }
 
     private void send(String username, String message) {
-        sessions.get(username).getAsyncRemote().sendObject(message, result -> {
-            if (result.getException() != null) {
-                System.out.println("Unable to send message: " + result.getException());
-            }
-        });
+        if (sessions.get(username) != null) {
+            sessions.get(username).getAsyncRemote().sendObject(message, result -> {
+                if (result.getException() != null) {
+                    System.out.println("Unable to send message: " + result.getException());
+                }
+            });
+        } else {
+            System.out.println("tried to send message to non existant user " + username + ": " + message);
+        }
     }
 
     private String createMessage(String event, Map<String, String> arguments) {
         try {
-            return "{\"event\":\""+ event +"\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
+            return "{\"event\":\"" + event + "\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
         } catch (Exception e) {
             return null;
         }

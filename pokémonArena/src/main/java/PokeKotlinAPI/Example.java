@@ -10,7 +10,7 @@ public class Example {
     public static void main(String[] args) {
         PokeApi pokeApi = new PokeApiClient();
         Pokemon bulbasaur = pokeApi.getPokemon(5);
-        Move move= pokeApi.getMove(5);
+        Move move = pokeApi.getMove(5);
         PokemonSpecies species = pokeApi.getPokemonSpecies(5);
         System.out.println(bulbasaur);
         System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------");

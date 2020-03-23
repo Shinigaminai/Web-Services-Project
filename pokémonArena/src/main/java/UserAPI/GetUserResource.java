@@ -1,7 +1,6 @@
 package UserAPI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.inject.Inject;
@@ -19,7 +18,9 @@ public class GetUserResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/user/{name}")
-    public String getUser(@PathParam String name) { return toJSON(service.getUser(name));}
+    public String getUser(@PathParam String name) {
+        return toJSON(service.getUser(name));
+    }
 
 
     public String toJSON(Object o) {
