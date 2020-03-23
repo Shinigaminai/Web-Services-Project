@@ -1,6 +1,9 @@
 var connectedToArena = false;
 var socketArena;
 
+var challenging = null;
+var challengers = [];
+
 jQuery(function() {
     $("#readyToFight").click(function () {
         document.getElementById("readyToFight").classList.add("loading");
@@ -45,26 +48,76 @@ var receivedArenaUserconnect = function(data) {
             console.log("[E] unknown userconnect action [arena]");
         }
     }
+    if (data.user == challenging) {
+        cancelChallenge(challenging);
+    }
+    if (data.user in challengers) {
+        const index = challengers.indexOf(user);
+        if (index > -1) {
+            challengers.splice(index, 1);
+        }
+    }
 }
 
 var receivedArenaChallenge = function(data) {
-    alert("challenged by " + data.user);
+    alert("challenged by " + data.from);
+    document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.add("hidden");
+    document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.remove("hidden");
 }
 
 var addChallenger = function(challenger) {
     var entry = document.createElement("DIV");
     var name = document.createElement("SPAN");
     var challengeButton = document.createElement("BUTTON");
+    var acceptButton = document.createElement("BUTTON");
+    var declineButton = document.createElement("BUTTON");
+    var answerChallengeArea = document.createElement("DIV");
+    acceptButton.innerHTML = "accept";
+    declineButton.innerHTML = "decline";
+    acceptButton.setAttribute("onclick", "answerChallenge('" + challenger + "', 'accept')");
+    acceptButton.setAttribute("onclick", "answerChallenge('" + challenger + "', 'decline')");
+    answerChallengeArea.appendChild(acceptButton);
+    answerChallengeArea.appendChild(declineButton);
+    answerChallengeArea.classList.add("answer-challenge-area", "hidden");
     challengeButton.innerHTML = "challenge";
-    challengeButton.setAttribute("onclick", "challenge(" + challenger +")");
+    challengeButton.setAttribute("onclick", "challenge('" + challenger +"')");
+    challengeButton.classList.add("challenge-button");
     name.innerHTML = challenger;
     entry.setAttribute("name", "challenger-" + challenger);
     entry.appendChild(name);
     entry.appendChild(challengeButton);
+    entry.appendChild(answerChallengeArea);
     entry.classList.add("challenge-entry");
     document.getElementById("challenge-list").appendChild(entry);
 }
 
 var removeChallenger = function(challenger) {
-    document.getElementByName("challenger-" + challenger).remove();
+    document.getElementsByName("challenger-" + challenger).forEach( function (element) {
+        element.remove();
+    });
+}
+
+var challenge = function(challenged) {
+    socketArena.send('challenge', {"to": challenged});
+    var buttons = document.getElementsByClassName("challenge-button");
+    for(var i = 0; i < buttons.length; i++) {
+        buttons.item(i).setAttribute("disabled",true);
+    }
+    challenging = challenged;
+}
+
+var challengeAnswer = function(user, value) {
+    socketArena.send('answerChallenge', {"to": user, "value": value});
+    document.getElementsByName("challenger-"+user)[0].childNodes[1].classList.remove("hidden");
+    document.getElementsByName("challenger-"+user)[0].childNodes[2].classList.add("hidden");
+    const index = challengers.indexOf(user);
+    if (index > -1) {
+        challengers.splice(index, 1);
+    }
+    if(value == 'accept') {
+        for(challenger in challengers) {
+            socketArena.send('answerChallenge', {"to": challenger, "value": "decline"});
+        }
+        challengers = [];
+    }
 }
