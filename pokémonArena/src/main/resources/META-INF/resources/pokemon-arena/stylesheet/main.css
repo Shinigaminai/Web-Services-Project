@@ -101,3 +101,16 @@ button.loading::before {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+#notification-banner {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 20%;
+    min-height: 10rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    background-color: bisque;
+}
