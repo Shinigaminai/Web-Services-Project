@@ -53,16 +53,16 @@ public class ArenaSocket {
             JsonEvent event = mapper.readValue(message, JsonEvent.class);
             System.out.println("event: " + event.getEvent());
             System.out.println("data:  " + event.getData());
-            if(event.getEvent().equals("getChallengers")) {
+            if (event.getEvent().equals("getChallengers")) {
                 System.out.println("load challengers");
                 sessions.keySet().forEach(user -> {
-                    send(username, createMessage("userconnect", Map.of("user",user, "action","joined")));
+                    send(username, createMessage("userconnect", Map.of("user", user, "action", "joined")));
                 });
-            if(event.getEvent().equals("challenge")) {
-                    System.out.println("new Challenge");
-                    String user = event.getData().get("to");
-                   send(user, createMessage("challenge", Map.of("from",username)));
-               }
+            }
+            if (event.getEvent().equals("challenge")) {
+                System.out.println("new Challenge");
+                String user = event.getData().get("to");
+                send(user, createMessage("challenge", Map.of("from", username)));
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
