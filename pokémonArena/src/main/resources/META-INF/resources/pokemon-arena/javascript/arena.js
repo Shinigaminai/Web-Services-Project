@@ -33,7 +33,8 @@ jQuery(function() {
             });
             socketArena.bind('userconnect', receivedArenaUserconnect);
             socketArena.bind('challenge', receivedArenaChallenge);
-            socketArena.bind('cancelChallenge', recievedArenaChallengeCancel);
+            socketArena.bind('cancelChallenge', receivedArenaChallengeCancel);
+            socketArena.bind('answerChallenge', receivedArenaChallengeAnswer);
         }
     });
 });
@@ -101,10 +102,6 @@ var removeChallenger = function(challenger) {
 var challenge = function(challenged) {
     console.log("challenging " + challenged);
     socketArena.send('challenge', {"to": challenged});
-    var buttons = document.getElementsByClassName("challenge-button");
-    for(var i = 0; i < buttons.length; i++) {
-        buttons.item(i).setAttribute("disabled", true);
-    }
     challenging = challenged;
     document.getElementById('challenging-cancel').setAttribute('onclick', 'cancelChallenge("'+challenged+'")');
     document.getElementById('challenging-title').innerHTML = challenged;
@@ -130,19 +127,31 @@ var answerChallenge = function(user, value) {
 var cancelChallenge = function(user) {
     console.log("cancel Challenge to " + user);
     socketArena.send('cancelChallenge', {"to": user});
-    var buttons = document.getElementsByClassName("challenge-button");
-    for(var i = 0; i < buttons.length; i++) {
-        buttons.item(i).removeAttribute("disabled");
-    }
     challenging = null;
     document.getElementById('challenging-overlay').classList.add('hidden');
 }
 
-var recievedArenaChallengeCancel = function(data) {
+var receivedArenaChallengeCancel = function(data) {
     const index = challengers.indexOf(data.from);
     if (index > -1) {
         challengers.splice(index, 1);
     }
     document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.remove("hidden");
     document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.add("hidden");
+}
+
+var receivedArenaChallengeAnswer = function(data) {
+    if(data.from == challenging) {
+        console.log("challenge answer: " + data.value);
+        challenging = null;
+        document.getElementById('challenging-overlay').classList.add('hidden');
+        if(data.value == 'decline') {
+            showNotification("Challenge declined", 2000);
+        } else {
+            showNotification("Challenge accepted", 2000);
+            //TODO start fight
+        }
+    } else {
+        console.log("Challenge answer from user who wasn't challenged: " + data.from);
+    }
 }

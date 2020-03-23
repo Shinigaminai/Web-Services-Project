@@ -57,3 +57,14 @@ var registerUser = function(name) {
         return false;
     });
 }
+
+var showNotification = function(message, timeInMilliseconds) {
+    $("#notification-banner").removeClass("fadeOut").addClass("fadeIn").css("display", "flex").html(message);
+
+    setTimeout(function(){
+        $('#notification-banner').removeClass('fadeIn').addClass('fadeOut');
+    },timeInMilliseconds);
+    setTimeout(function(){
+        $('#notification-banner').css("display", "none");
+    },timeInMilliseconds + 1000);
+}
