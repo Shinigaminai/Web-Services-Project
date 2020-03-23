@@ -64,6 +64,17 @@ public class ArenaSocket {
                 String user = event.getData().get("to");
                 send(user, createMessage("challenge", Map.of("from", username)));
             }
+            if (event.getEvent().equals("answerChallenge")) {
+                System.out.println("Challenge answered");
+                String user = event.getData().get("to");
+                String answer = event.getData().get("answer");
+                send(user, createMessage("answerChallenge", Map.of("from", username, "answer",answer)));
+            }
+            if (event.getEvent().equals("cancelChallenge")) {
+                System.out.println("Challenge canceled");
+                String user = event.getData().get("to");
+                send(user, createMessage("cancelChallenge", Map.of("from", username)));
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
