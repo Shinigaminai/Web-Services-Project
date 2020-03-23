@@ -38,3 +38,21 @@
 .hidden {
     visibility: hidden;
 }
+
+#challenging-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #51515182;
+    border-radius: 0.2rem;
+}
+
+challenging-title {
+    padding: 0.1em;
+    font: bold;
+}

@@ -33,6 +33,7 @@ jQuery(function() {
             });
             socketArena.bind('userconnect', receivedArenaUserconnect);
             socketArena.bind('challenge', receivedArenaChallenge);
+            socketArena.bind('cancelChallenge', recievedArenaChallengeCancel);
         }
     });
 });
@@ -60,7 +61,7 @@ var receivedArenaUserconnect = function(data) {
 }
 
 var receivedArenaChallenge = function(data) {
-    alert("challenged by " + data.from);
+    challengers.push(data.from);
     document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.add("hidden");
     document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.remove("hidden");
 }
@@ -75,7 +76,7 @@ var addChallenger = function(challenger) {
     acceptButton.innerHTML = "accept";
     declineButton.innerHTML = "decline";
     acceptButton.setAttribute("onclick", "answerChallenge('" + challenger + "', 'accept')");
-    acceptButton.setAttribute("onclick", "answerChallenge('" + challenger + "', 'decline')");
+    declineButton.setAttribute("onclick", "answerChallenge('" + challenger + "', 'decline')");
     answerChallengeArea.appendChild(acceptButton);
     answerChallengeArea.appendChild(declineButton);
     answerChallengeArea.classList.add("answer-challenge-area", "hidden");
@@ -98,15 +99,19 @@ var removeChallenger = function(challenger) {
 }
 
 var challenge = function(challenged) {
+    console.log("challenging " + challenged);
     socketArena.send('challenge', {"to": challenged});
     var buttons = document.getElementsByClassName("challenge-button");
     for(var i = 0; i < buttons.length; i++) {
-        buttons.item(i).setAttribute("disabled",true);
+        buttons.item(i).setAttribute("disabled", true);
     }
     challenging = challenged;
+    document.getElementById('challenging-cancel').setAttribute('onclick', 'cancelChallenge("'+challenged+'")');
+    document.getElementById('challenging-title').innerHTML = challenged;
+    document.getElementById('challenging-overlay').classList.remove('hidden');
 }
 
-var challengeAnswer = function(user, value) {
+var answerChallenge = function(user, value) {
     socketArena.send('answerChallenge', {"to": user, "value": value});
     document.getElementsByName("challenger-"+user)[0].childNodes[1].classList.remove("hidden");
     document.getElementsByName("challenger-"+user)[0].childNodes[2].classList.add("hidden");
@@ -120,4 +125,24 @@ var challengeAnswer = function(user, value) {
         }
         challengers = [];
     }
+}
+
+var cancelChallenge = function(user) {
+    console.log("cancel Challenge to " + user);
+    socketArena.send('cancelChallenge', {"to": user});
+    var buttons = document.getElementsByClassName("challenge-button");
+    for(var i = 0; i < buttons.length; i++) {
+        buttons.item(i).removeAttribute("disabled");
+    }
+    challenging = null;
+    document.getElementById('challenging-overlay').classList.add('hidden');
+}
+
+var recievedArenaChallengeCancel = function(data) {
+    const index = challengers.indexOf(data.from);
+    if (index > -1) {
+        challengers.splice(index, 1);
+    }
+    document.getElementsByName("challenger-"+data.from)[0].childNodes[1].classList.remove("hidden");
+    document.getElementsByName("challenger-"+data.from)[0].childNodes[2].classList.add("hidden");
 }
