@@ -1,14 +1,18 @@
 package UserAPI.UserAPI;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "PokeTeam")
-//@NamedQuery(name = "PokeTeam.findAll",
-   //     query = "SELECT p FROM PokeTeam p ORDER BY p.pokeTeamID",
-   //     hints = @QueryHint(name = "org.hibernate.cacheable", value = "true") )
+@NamedQuery(name = "PokeTeam.findAll",
+        query = "SELECT p FROM PokeTeam p ORDER BY p.pokeTeamID")
 @Cacheable
 public class PokeTeam {
 
@@ -21,11 +25,14 @@ public class PokeTeam {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pokeTeamSequence")
     private Integer pokeTeamID;
 
+    @JsonIgnore
      @ManyToOne
      @JoinColumn(name = "userID")
+
      private Users user;
 
-     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pokeTeam")
+
+     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pokeTeam")
      private List<Pokemon> pokemonList = new ArrayList<>();
 
     public PokeTeam(){

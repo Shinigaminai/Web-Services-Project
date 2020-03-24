@@ -30,7 +30,6 @@ public class UserManageResource {
 
     //EntityManagerFactory emf = Persistence.createEntityManagerFactory("PokemonPersistence");
 
-
     @Inject
     @PersistenceContext
     EntityManager entityManager;
@@ -52,10 +51,20 @@ public class UserManageResource {
     }
 
     @GET
+    @Path("poketeam/{pokeTeamID}")
+    public PokeTeam getPokeTeam(@PathParam Integer pokeTeamID) {
+        PokeTeam pokeTeam = entityManager.find(PokeTeam.class, pokeTeamID);
+        if (pokeTeam == null) {
+            throw new WebApplicationException("PokeTeam with'pokeTeamID' " + pokeTeamID + " does not exist.", 404);
+        }
+
+        return pokeTeam;
+    }
+
+    @GET
     @Path("{userID}/poketeam")
-    public PokeTeam getPokeTeam(@PathParam Integer userID) {
-        PokeTeam pokeTeam;
-        pokeTeam = entityManager.find(PokeTeam.class, userID);
+    public PokeTeam getPokeTeamFromUser(@PathParam Integer userID) {
+        PokeTeam pokeTeam = entityManager.find(PokeTeam.class, userID);
         if (pokeTeam == null) {
             throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
         }
@@ -76,7 +85,6 @@ public class UserManageResource {
                                                     .getResultList();
 
         return pokeTeam.getPokemonList();
-
     }
         /*
          //some parameters to your method
@@ -120,12 +128,16 @@ public class UserManageResource {
         userFresh.setName(user.getName());
 
         entityManager.persist(userFresh);
+        entityManager.flush();
 
-        PokeTeam pokeTeam = new PokeTeam();
-        pokeTeam.setUser(userFresh);
-        entityManager.persist(pokeTeam);
 
-        return Response.ok(pokeTeam).status(201).build();
+        user = entityManager.find(Users.class, userFresh.getUserID());
+        PokeTeam pokeTeamFresh = new PokeTeam();
+
+        pokeTeamFresh.setUser(user);
+        //user.getPokeTeamList().add(pokeTeamFresh);                                        //only the owning side needs to be set !!!--> Hibernate needs also to do something ;)lul
+        entityManager.persist(pokeTeamFresh);
+        return Response.ok(pokeTeamFresh).status(201).build();
     }
 
     @POST
@@ -134,16 +146,17 @@ public class UserManageResource {
     public Response createTeamForUser(@PathParam Integer userID) {
 
         Users user = entityManager.find(Users.class, userID);
+
         if(user == null){
             throw new WebApplicationException("User with 'userID' " + userID + " does not exist.", 404);
         }
 
-        PokeTeam pokeTeam = new PokeTeam();
-        user.getPokeTeamList().add(pokeTeam);
-        pokeTeam.setUser(user);
-        entityManager.persist(pokeTeam);
+        PokeTeam pokeTeamFresh = new PokeTeam();
+        pokeTeamFresh.setUser(user);
+        //user.getPokeTeamList().add(pokeTeamFresh);
+        entityManager.persist(pokeTeamFresh);
 
-        return Response.ok(pokeTeam).status(201).build();
+        return Response.ok(pokeTeamFresh).status(201).build();
     }
 
     @POST
@@ -159,16 +172,16 @@ public class UserManageResource {
 
         PokeTeam pokeTeam = entityManager.find(PokeTeam.class, teamID);
 
-        Users user = pokeTeam.getUser();
-
         if(pokeTeam == null){
-            throw new WebApplicationException("User with 'userID' " + user.getUserID() + " has no poke team with the 'pokeTeamID'" + teamID +".", 404);
+            throw new WebApplicationException("PokeTeam with 'pokeTeamID' " + teamID + " does not exist.", 404);
         }
+
+        //Users user = pokeTeam.getUser();
 
         Pokemon pokemonFresh = new Pokemon();
         pokemonFresh.setPokeTeam(pokeTeam);
         pokemonFresh.setInternID(pokemon.getInternID());
-        pokeTeam.getPokemonList().add(pokemonFresh);
+        //pokeTeam.getPokemonList().add(pokemonFresh);
         entityManager.persist(pokemonFresh);
 
 

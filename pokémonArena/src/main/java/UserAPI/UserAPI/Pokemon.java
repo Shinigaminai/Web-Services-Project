@@ -1,5 +1,8 @@
 package UserAPI.UserAPI;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -26,7 +29,8 @@ public class Pokemon {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pokemonSequence")
     private Integer pokemonID;
 
-     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+     @ManyToOne
      @JoinColumn(name = "pokeTeamID")
      private PokeTeam pokeTeam;
 
