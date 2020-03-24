@@ -1,4 +1,4 @@
-package UserAPI;
+package UserAPI.OldStuff;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;

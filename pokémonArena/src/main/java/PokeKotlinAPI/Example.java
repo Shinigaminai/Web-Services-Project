@@ -6,7 +6,8 @@ import me.sargunvohra.lib.pokekotlin.model.Move;
 import me.sargunvohra.lib.pokekotlin.model.Pokemon;
 import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
 
-public class Example {
+public class
+Example {
     public static void main(String[] args) {
         PokeApi pokeApi = new PokeApiClient();
         Pokemon bulbasaur = pokeApi.getPokemon(5);
