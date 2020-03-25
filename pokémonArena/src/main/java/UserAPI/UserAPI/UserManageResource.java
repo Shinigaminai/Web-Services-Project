@@ -9,6 +9,9 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -32,7 +35,7 @@ public class UserManageResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String get() {
+    public String getAllUsers() {
         return toJSON(entityManager.createNamedQuery("Users.findAll", Users.class)
                 .getResultList()
                 .toArray(new Users[0])
@@ -53,7 +56,7 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
-    public String getSingle(@PathParam String userName) {
+    public String getSingleUserByName(@PathParam String userName) {
         Users entity = entityManager.createNamedQuery("Users.findByName", Users.class)
                 .setParameter("name",userName)
                 .getSingleResult();
@@ -63,10 +66,25 @@ public class UserManageResource {
         return toJSON(entity);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("teams/{userID}")
+    public String getPokeTeamFromUser(@PathParam Integer userID) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<PokeTeam> cq = cb.createQuery(PokeTeam.class);
+        Root<PokeTeam> rootEntry = cq.from(PokeTeam.class);
+        cq.select(rootEntry).where(cb.equal(rootEntry.get("user").get("userID"),userID));
+        List <PokeTeam> pokeTeamList = entityManager.createQuery(cq).getResultList();
+        if (pokeTeamList.size() == 0) {
+            throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
+        }
+        return toJSON(pokeTeamList);
+    }
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("poketeam/{pokeTeamID}")
+    @Path("team/{pokeTeamID}")
     public String getPokeTeam(@PathParam Integer pokeTeamID) {
         PokeTeam pokeTeam = entityManager.find(PokeTeam.class, pokeTeamID);
         if (pokeTeam == null) {
@@ -76,17 +94,7 @@ public class UserManageResource {
         return toJSON(pokeTeam);
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("{userID}/poketeam")
-    public String getPokeTeamFromUser(@PathParam Integer userID) {
-        PokeTeam pokeTeam = entityManager.find(PokeTeam.class, userID);
-        if (pokeTeam == null) {
-            throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
-        }
 
-        return toJSON(pokeTeam);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
