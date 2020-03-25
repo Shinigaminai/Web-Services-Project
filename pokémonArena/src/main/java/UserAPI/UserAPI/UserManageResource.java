@@ -1,5 +1,6 @@
 package UserAPI.UserAPI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
@@ -10,6 +11,7 @@ import javax.json.JsonObjectBuilder;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -24,67 +26,82 @@ public class UserManageResource {
 
     private static final Logger LOGGER = Logger.getLogger(UserManageResource.class.getName());
 
-    //private Map<String, String> properties=new HashMap<String,String>();
-    //properties
-
-
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("PokemonPersistence");
-
     @Inject
     @PersistenceContext
     EntityManager entityManager;
 
     @GET
-    public Users[] get() {
-        return entityManager.createNamedQuery("Users.findAll", Users.class)
-                .getResultList().toArray(new Users[0]);
+    @Produces(MediaType.APPLICATION_JSON)
+    public String get() {
+        return toJSON(entityManager.createNamedQuery("Users.findAll", Users.class)
+                .getResultList()
+                .toArray(new Users[0])
+        );
     }
 
-    @GET
+    /*@GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{userID}")
-    public Users getSingle(@PathParam Integer userID) {
+    public String getSingle(@PathParam Integer userID) {
         Users entity = entityManager.find(Users.class, userID);
         if (entity == null) {
             throw new WebApplicationException("User with id of " + userID + " does not exist.", 404);
         }
-        return entity;
-    }
+        return toJSON(entity);
+    }*/
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{userName}")
+    public String getSingle(@PathParam String userName) {
+        Users entity = entityManager.createNamedQuery("Users.findByName", Users.class)
+                .setParameter("name",userName)
+                .getSingleResult();
+        if (entity == null) {
+            throw new WebApplicationException("User with name '" + userName + "' does not exist.", 404);
+        }
+        return toJSON(entity);
+    }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("poketeam/{pokeTeamID}")
-    public PokeTeam getPokeTeam(@PathParam Integer pokeTeamID) {
+    public String getPokeTeam(@PathParam Integer pokeTeamID) {
         PokeTeam pokeTeam = entityManager.find(PokeTeam.class, pokeTeamID);
         if (pokeTeam == null) {
             throw new WebApplicationException("PokeTeam with'pokeTeamID' " + pokeTeamID + " does not exist.", 404);
         }
 
-        return pokeTeam;
+        return toJSON(pokeTeam);
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{userID}/poketeam")
-    public PokeTeam getPokeTeamFromUser(@PathParam Integer userID) {
+    public String getPokeTeamFromUser(@PathParam Integer userID) {
         PokeTeam pokeTeam = entityManager.find(PokeTeam.class, userID);
         if (pokeTeam == null) {
             throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
         }
 
-        return pokeTeam;
+        return toJSON(pokeTeam);
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("{userID}/pokemonOfTeam")
-    public List<Pokemon> getPokemonOfTeam(@PathParam Integer userID) {
+    public String getPokemonOfTeam(@PathParam Integer userID) {
 
         PokeTeam pokeTeam = entityManager.find(PokeTeam.class, userID);
         if (pokeTeam == null) {
             throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
         }
-        List <Pokemon> pokemonList = entityManager.createNamedQuery("Pokemon.findByPokeTeamID", Pokemon.class)
-                                                    .setParameter("ptID", pokeTeam.getPokeTeamID())
-                                                    .getResultList();
+        //List <Pokemon> pokemonList = entityManager.createNamedQuery("Pokemon.findByPokeTeamID", Pokemon.class)
+        //                                            .setParameter("ptID", pokeTeam.getPokeTeamID())
+        //                                            .getResultList();
 
-        return pokeTeam.getPokemonList();
+        return toJSON(pokeTeam.getPokemonList());
     }
         /*
          //some parameters to your method
@@ -135,7 +152,7 @@ public class UserManageResource {
         PokeTeam pokeTeamFresh = new PokeTeam();
 
         pokeTeamFresh.setUser(user);
-        //user.getPokeTeamList().add(pokeTeamFresh);                                        //only the owning side needs to be set !!!--> Hibernate needs also to do something ;)lul
+        //user.getPokeTeamList().add(pokeTeamFresh);                                        //only the owning side needs to be set !!!--> Hibernate also needs to do something ;)lul
         entityManager.persist(pokeTeamFresh);
         return Response.ok(pokeTeamFresh).status(201).build();
     }
@@ -266,5 +283,19 @@ public class UserManageResource {
                     .build();
         }
 
+    }
+
+
+
+
+    public String toJSON(Object o) {
+        //Creating the ObjectMapper object
+        ObjectMapper mapper = new ObjectMapper();
+        //Converting the Object to JSONString
+        try {
+            return mapper.writeValueAsString(o);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

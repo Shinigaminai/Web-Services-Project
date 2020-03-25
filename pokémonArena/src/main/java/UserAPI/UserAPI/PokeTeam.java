@@ -25,15 +25,15 @@ public class PokeTeam {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pokeTeamSequence")
     private Integer pokeTeamID;
 
-    @JsonIgnore
+     @JsonManagedReference
      @ManyToOne
      @JoinColumn(name = "userID")
-
      private Users user;
 
-
-     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pokeTeam")
-     private List<Pokemon> pokemonList = new ArrayList<>();
+     //@JsonIgnore
+     @JsonBackReference
+     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "pokeTeam")
+     private List<Pokemon> pokemonList;
 
     public PokeTeam(){
 

@@ -1,5 +1,7 @@
 package UserAPI.UserAPI;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -11,8 +13,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "Users")
-@NamedQuery(name = "Users.findAll",
-      query = "SELECT u FROM Users u ORDER BY u.name")
+@NamedQueries({
+        @NamedQuery(name = "Users.findAll",
+                query = "SELECT u FROM Users u ORDER BY u.name"),
+        @NamedQuery(name = "Users.findByName",
+                query = "SELECT u FROM Users u WHERE u.name LIKE :name ORDER BY u.name")
+})
+
 @Cacheable
 public class Users {
 
@@ -27,9 +34,10 @@ public class Users {
 
      //@OneToOne(mappedBy = "User", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
      //private PokeTeam pokeTeam;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<PokeTeam> pokeTeamList = new ArrayList<>();
+    //@JsonIgnore
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
+    private List<PokeTeam> pokeTeamList;
 
     @Column(length = 40, unique = true)
     private String name;

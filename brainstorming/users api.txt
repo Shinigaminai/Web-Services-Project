@@ -1,4 +1,4 @@
-@Post   /users/                 //send: {"name":"name"}                             //return: {"name":"name", "id":"123"}
+@Post   /users/                 //send: {"name":"name"}                             //return: {"name":"name", "id":"123"}                   //--with attached pokeTeam
 @Get    /users/{name}                                                               //return: {"name":"name", "id":"123"}
 @Get    /users/teams/{userid}                                                       //return: ["123", "23"]                                 // Array der teamEintragIds
 @Get    /users/team/{teamid}                                                        //return: [{"pokemonId":"1", "entryId":"123"}, ...]     // Array der pokemonIds + pokemonEintragId

@@ -2,6 +2,7 @@ package UserAPI.UserAPI;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -29,7 +30,7 @@ public class Pokemon {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pokemonSequence")
     private Integer pokemonID;
 
-    @JsonIgnore
+    @JsonManagedReference
      @ManyToOne
      @JoinColumn(name = "pokeTeamID")
      private PokeTeam pokeTeam;
