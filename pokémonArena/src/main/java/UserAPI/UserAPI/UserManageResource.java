@@ -18,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-import java.util.List;
+import java.util.*;
 
 
 @Path("users")
@@ -78,7 +78,12 @@ public class UserManageResource {
         if (pokeTeamList.size() == 0) {
             throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
         }
-        return toJSON(pokeTeamList);
+        List <Integer> pokeTeamIDList = new ArrayList<>();
+        for (PokeTeam pt :
+                pokeTeamList) {
+            pokeTeamIDList.add(pt.getPokeTeamID());
+        }
+        return toJSON(pokeTeamIDList);
     }
 
 
@@ -91,7 +96,36 @@ public class UserManageResource {
             throw new WebApplicationException("PokeTeam with'pokeTeamID' " + pokeTeamID + " does not exist.", 404);
         }
 
-        return toJSON(pokeTeam);
+        //List<Map<Map<String,Integer>,Map<String,Integer>>> outputSetList = new ArrayList<>();
+        List<Map<Integer,Integer>> outputSetList = new ArrayList<>();
+        Map <Integer, Integer> idMap = new HashMap<>();
+        Integer pokemonID;
+        Integer entryID;
+
+        List<Pokemon> pokemonList = pokeTeam.getPokemonList();
+        List<Pokemon> pShortList = new ArrayList<>();
+
+        for (Pokemon pokemon:pokemonList
+        ) {
+            Pokemon pShort = new Pokemon();
+            pShort.setPokemonID(pokemon.getPokemonID());
+            pShort.setEntryID(pokemon.getEntryID());
+            pShortList.add(pShort);
+
+            /*pokemonID = pokemon.getPokemonID();
+            entryID = pokemon.getEntryID();
+            idMap.put(pokemonID,entryID);
+            outputSetList.add(idMap);*/
+
+            /*Map<String,Integer> entryIDMap = new HashMap<>();
+            Map<String,Integer> pokemonIDMap = new HashMap<>();
+            Map<Map<String,Integer>,Map<String,Integer>> completeMap = new HashMap<>();
+            pokemonIDMap.put("pokemonID",pokemon.getPokemonID());
+            entryIDMap.put("entryID",pokemon.getEntryID());
+            completeMap.put(pokemonIDMap,entryIDMap);
+            outputSetList.add(completeMap);                                                             // Soooo ein Krampf ey....*/
+        }
+        return toJSON(pShortList);
     }
 
 
@@ -109,7 +143,9 @@ public class UserManageResource {
         //                                            .setParameter("ptID", pokeTeam.getPokeTeamID())
         //                                            .getResultList();
 
-        return toJSON(pokeTeam.getPokemonList());
+
+
+        return toJSON(null); //TODO
     }
         /*
          //some parameters to your method
@@ -162,7 +198,7 @@ public class UserManageResource {
         pokeTeamFresh.setUser(user);
         //user.getPokeTeamList().add(pokeTeamFresh);                                        //only the owning side needs to be set !!!--> Hibernate also needs to do something ;)lul
         entityManager.persist(pokeTeamFresh);
-        return Response.ok(pokeTeamFresh).status(201).build();
+        return Response.ok(user).status(201).build();
     }
 
     @POST
@@ -187,12 +223,12 @@ public class UserManageResource {
     @POST
     @Path("addPokemonToTeam/{teamID}")
     @Transactional
-    public Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have internID set!
-        if (pokemon.getInternID() == null) {
-            throw new WebApplicationException("internID of Pokemon wasn't set on request.", 422);
+    public Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have pokemonID set!
+        if (pokemon.getPokemonID() == null) {
+            throw new WebApplicationException("pokemonID of Pokemon wasn't set on request.", 422);
         }
-        if (pokemon.getPokemonID() != null) {
-            throw new WebApplicationException("pokemonID was invalidly set on request.", 422);
+        if (pokemon.getEntryID() != null) {
+            throw new WebApplicationException("entryID was invalidly set on request.", 422);
         }
 
         PokeTeam pokeTeam = entityManager.find(PokeTeam.class, teamID);
@@ -204,13 +240,12 @@ public class UserManageResource {
         //Users user = pokeTeam.getUser();
 
         Pokemon pokemonFresh = new Pokemon();
+        pokemonFresh.setPokemonID(pokemon.getPokemonID());
         pokemonFresh.setPokeTeam(pokeTeam);
-        pokemonFresh.setInternID(pokemon.getInternID());
-        //pokeTeam.getPokemonList().add(pokemonFresh);
         entityManager.persist(pokemonFresh);
 
 
-        return Response.ok(pokemon).status(201).build();
+        return Response.ok(toJSON(pokemonFresh)).status(201).build();
     }
 
 
@@ -257,10 +292,22 @@ public class UserManageResource {
     @DELETE
     @Path("{id}")
     @Transactional
-    public Response delete(@PathParam Integer id) {
+    public Response deleteUser(@PathParam Integer id) {
         Users entity = entityManager.getReference(Users.class, id);
         if (entity == null) {
             throw new WebApplicationException("Fruit with id of " + id + " does not exist.", 404);
+        }
+        entityManager.remove(entity);
+        return Response.status(204).build();
+    }
+
+    @DELETE
+    @Path("/pokemon/{entryID}")
+    @Transactional
+    public Response deletePokemon(@PathParam Integer entryID) {
+        Pokemon entity = entityManager.getReference(Pokemon.class, entryID);
+        if (entity == null) {
+            throw new WebApplicationException("Fruit with entryID of " + entryID + " does not exist.", 404);
         }
         entityManager.remove(entity);
         return Response.status(204).build();

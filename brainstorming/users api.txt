@@ -1,8 +1,17 @@
-@Post   /users/                 //send: {"name":"name"}                             //return: {"name":"name", "id":"123"}                   //--with attached pokeTeam
-@Get    /users/{name}                                                               //return: {"name":"name", "id":"123"}
-@Get    /users/teams/{userid}                                                       //return: ["123", "23"]                                 // Array der teamEintragIds
-@Get    /users/team/{teamid}                                                        //return: [{"pokemonId":"1", "entryId":"123"}, ...]     // Array der pokemonIds + pokemonEintragId
-@Post   /users/team/{teamid}    //send: {"pokemonId":"1", "aktion":"addPokemon"}    //return: {"pokemonId":"1", "entryId":"123"}
-                                //send: {"entryId":"23", "aktion":"removePokemon"}  //return: {"task", "success"} oder "fail"
-@Get    /users/pokemon/{entryid}                                                    //return: {"attacks": ["3","4","2","5"], ...}           // Array mit den Stats und werten des Pokemon
-@Post   /users/pokemon/{entryid}     //send: {"attacks": ["3","4","2","5"]}         //return: {"attacks": [..], ..other-stats.. }
+@Post   /users/                             //send: {"name":"name"}                             //return: {"name":"name", "userID":"123"}                  //--in background pokeTeam for the new user gets created
+
+@Delete /users/{userid}                                                                         //return: HTTP-Status 204 with no Content    (if successful^^)  //user, with all teams and its pokemon are getting deleted
+
+@Get    /users/{name}                                                                           //return: {"name":"name", "userID":"123"}
+
+@Get    /users/teams/{userid}                                                                   //return: ["123", "23"]                                 // Array der pokeTeamIDs des Users mit der angegebenen userid
+
+@Get    /users/team/{teamid}                                                                    //return: [{"pokemonId":"1", "pokeTeam":"null", entryId":"123"}, ...]     // Array der pokemonIds + pokemonEintragId
+
+@Post   /users/addPokemonToTeam/{teamid}    //send: {"pokemonId":"1"}                           //return: {"entryID": 13, "pokeTeam": {"pokeTeamID": 2,"user": {"userID": 3,"name": "GeilerTyp"}},"pokemonID": 15}
+
+@Delete /users/pokemon/{entryid}                                                                //return: HTTP-Status 204 with no Content    (if successful^^)
+
+@Get    /users/pokemon/{entryid}                                                                //return: {"attacks": ["3","4","2","5"], ...}           // Array mit den Stats und Werten des Pokemon
+
+@Post   /users/pokemon/{entryid}            //send: {"attacks": ["3","4","2","5"]}         //return: {"attacks": [..], ..other-stats.. }
