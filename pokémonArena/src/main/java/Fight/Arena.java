@@ -1,3 +1,5 @@
+package Fight;
+
 import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.Map;
