@@ -8,6 +8,10 @@
 
 @Get    /users/team/{teamid}                                                                    //return: [{"pokemonId":"1", "pokeTeam":"null", entryId":"123"}, ...]     // Array der pokemonIds + pokemonEintragId
 
+@Post   /users/addTeam/{userid}                                                                 //return: {"pokeTeamID": 12,"user": {"userID": 2,"name": "BeschderMann"}}
+
+@Delete /users/team/{teamid}                                                                    //return: HTTP-Status 204 with no Content    (if successful^^)
+
 @Post   /users/addPokemonToTeam/{teamid}    //send: {"pokemonId":"1"}                           //return: {"entryID": 13, "pokeTeam": {"pokeTeamID": 2,"user": {"userID": 3,"name": "GeilerTyp"}},"pokemonID": 15}
 
 @Delete /users/pokemon/{entryid}                                                                //return: HTTP-Status 204 with no Content    (if successful^^)
