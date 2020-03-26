@@ -1,3 +1,4 @@
+var root = "pokedata";
 
 var getPokedex = function ( id, callback) {
     $.get("http://" + location.host + "/" + root + "/pokedex/" + id, callback)

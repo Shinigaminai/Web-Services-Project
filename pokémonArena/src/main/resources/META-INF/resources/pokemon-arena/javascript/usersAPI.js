@@ -1,4 +1,21 @@
 
+var getUserId = function(name, callbackSuccess, callbackFailure) {
+    $.get("http://" + location.host + "/users/" + name)
+        .done(callbackSuccess)
+        .fail(callbackFailure);
+}
+
+var registerUser = function(name, callbackSuccess, callbackFailure) {
+    $.ajax({
+        url: "http://" + location.host + "/users/",
+        type: "POST",
+        data: JSON.stringify({"name": name}),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+    }).done(callbackSuccess)
+      .fail(callbackFailure);
+}
+
 var getUserTeam = function(id, callback) {
     $.get("http://" + location.host + "/users/team/" + id, callback)
         .fail(function() {
@@ -20,17 +37,31 @@ var getUserPokemon = function(id, callback) {
         });
 }
 
-var setUser = function(name, callback) {
-    $.post("http://" + location.host + "/users/", {"name": name}, callback);
+var addUserTeamPokemon = function(teamid, pokemonid, callback) {
+    $.ajax({
+        url: "http://" + location.host + "/users/addPokemonToTeam/" + teamid,
+        type: "POST",
+        data: JSON.stringify({"pokemonID": pokemonid}),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+    }).done(callback)
 }
 
-var addUserTeamPokemon = function(teamid, pokemonid, callback) {
-    $.post("http://" + location.host + "/users/team/" + teamid, {"pokemonid": pokemonid, aktion: addPokemon}, callback);
-}
-var removeUserTeamPokemon = function(teamid, pokemonid, callback) {
-    $.post("http://" + location.host + "/users/team/" + teamid, {"pokemonid": pokemonid, aktion: removePokemon}, callback);
+var removeUserTeamPokemon = function(entryID, callback) {
+    $.ajax({
+        url: "http://" + location.host + "/users/pokemon/" + entryID,
+        type: "DELETE",
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+    }).done(callback)
 }
 
 var setUserPokemonAttacks = function(pokemonEntryId, attacks, callback) {
-    $.post("http://" + location.host + "/users/pokemon/" + pokemonEntryId, {"attacks": attacks}, callback);
+    $.ajax({
+        url: "http://" + location.host + "/users/attacksToPokemon/" + pokemonEntryId,
+        type: "POST",
+        data: JSON.stringify({"name": name}),
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+    }).done(callback)
 }

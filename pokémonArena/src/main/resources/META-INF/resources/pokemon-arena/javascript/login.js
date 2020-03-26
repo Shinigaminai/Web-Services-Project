@@ -28,37 +28,39 @@ jQuery(function() {
 });
 
 var login = function() {
+    currentUserName = $("#username-input").val();
+    if(currentUserName == "" || currentUserName == undefined) {
+        showNotification("Username ist leer");
+        return;
+    }
+    getUserId(currentUserName,
+        function(m) {
+            currentUserId = m.userID;
+            connectToServices();
+        },
+        function(m) {
+            registerUser(currentUserName,
+                function(m) {
+                    currentUserId = m.userID;
+                    showNotification("Neuer Benutzer angelegt");
+                    connectToServices();
+                },
+                function() {
+                    showNotification("Benutzer konnte nicht angelegt werden");
+                }
+            );
+        }
+    );
+}
+
+var connectToServices = function() {
+    console.log("User ID for " + currentUserName + " is " + currentUserId);
     connectToChat();
     loadAllPokemon();
-    currentUserName = $("#username-input").val();
-    currentUserId = getUserId(name);
-    if(currentUserId == false) {
-        currentUserId = registerUser(name);
-    }
-    console.log("User ID for " + currentUserName + " is " + currentUserId);
     loadPokemonTeam();
 }
 
-var getUserId = function(name) {
-    $.get("http://" + location.host + "/users/" + name, function(m){
-        return m.id;
-    })
-    .fail(function() {
-        return false;
-    });
-}
-
-var registerUser = function(name) {
-    $.post("http://" + location.host + "/users/" + name, function(m){
-        console.log("Registered as new user");
-        return m.id;
-    })
-    .fail(function() {
-        return false;
-    });
-}
-
-var showNotification = function(message, timeInMilliseconds) {
+var showNotification = function(message, timeInMilliseconds = 2000) {
     $("#notification-banner").removeClass("fadeOut").addClass("fadeIn").css("display", "flex").html(message);
 
     setTimeout(function(){

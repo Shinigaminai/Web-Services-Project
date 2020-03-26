@@ -1,15 +1,19 @@
-var root = "pokedata";
 var element = $("#pokemon-list");
 
 var loadPokemonTeam = function() {
     getUserTeams(currentUserId, function(teams) {
         getUserTeam(teams[0], function(pokemonEntries) {
-            for(pokemonEntry in pokemonEntries) {
-                getPokemon(pokemonEntry.pokemonId, function(pokemon) {
-                    createTeamEntry(pokemon, teamlist[teamnumber]);
-                });
+            for(i in pokemonEntries) {
+                loadPokemonTeamEntry(pokemonEntries[i]);
             }
         });
+    });
+}
+
+var loadPokemonTeamEntry = function (entry) {
+    getPokemon(entry.pokemonID, function(pokemon) {
+        console.log("pokemonEntry: "+ entry.entryID);
+        createTeamEntry(pokemon, entry.entryID);
     });
 }
 
@@ -89,13 +93,13 @@ var createHeadEntry = function( pokemon ) {
 }
 
 var addToTeam = function (id) {
-    console.log("[i] add to team "+id);
     var teamnumber = 0;
-    getUserTeams(currentUserId, function(userteams){
+    getUserTeams(currentUserId, function(userteams) {
         if (userteams == null) {
             console.log("[E] Teams konnten nicht geladen werden");
         } else {
-            getUserTeam(userteams[teamnumber], function(teamlist){
+            var teamId = userteams[teamnumber];
+            getUserTeam(teamId, function(teamlist){
                 if (teamlist == null) {
                     console.log("[E] Pokémon in Team konnten nicht geladen werden");
                 }
@@ -105,9 +109,9 @@ var addToTeam = function (id) {
                     alert("[!] Dein Pokémon-Team ist voll");
                 } else {
                     getPokemon(id, function(pokemon) {
-                        console.log("[i] creating team entry for team " + team + " and pokemon " + pokemon.id);
-                        addUserTeamPokemon(team, pokemon.id, function(m) {
-                            createTeamEntry(pokemon, teamlist[teamnumber], m.entryId);
+                        addUserTeamPokemon(teamId, pokemon.id, function(m) {
+                            createTeamEntry(pokemon, m.entryID);
+                            console.log("[i] add "+m.entryID+" to team");
                         });
                     });
                 }
@@ -116,12 +120,12 @@ var addToTeam = function (id) {
     });
 }
 
-var createTeamEntry = function (pokemon, team, entryId) {
+var createTeamEntry = function (pokemon, entryId) {
     var entry = document.createElement("DIV");
     head = createHeadEntry(pokemon);
     entry.classList.add("list-entry");
     var removeButton = document.createElement("BUTTON");
-    removeButton.setAttribute("onclick", "removeFromTeam(this, team, "+entryId+")");  //addToTeam button
+    removeButton.setAttribute("onclick", "removeFromTeam(this, "+entryId+")");  //addToTeam button
     removeButton.innerHTML = "remove";
     removeButton.title = "remove this pokémon from your team";
     removeButton.classList.add("remove-button");
@@ -130,12 +134,18 @@ var createTeamEntry = function (pokemon, team, entryId) {
     document.getElementById("pokemon-team-list").appendChild(entry);
 }
 
-var removeFromTeam = function ( buttonElement, teamId, pokemonEntryId ) {
-    removeUserTeamPokemon(teamId, pokemonEntryId, function(m) {
-        if(m.task = "success") {
-            buttonElement.parentElement.parentElement.remove();
-        } else {
-            alert("could not remove pokemon from team");
-        }
+var removeFromTeam = function ( buttonElement, pokemonEntryId ) {
+    removeUserTeamPokemon(pokemonEntryId, function(m) {
+        console.log("[i] remove "+pokemonEntryId+" from team");
+        buttonElement.parentElement.parentElement.remove();
     });
+}
+
+var checkPokemonInTeamlist = function(pokemonId, entryIds) {
+    for(i in entryIds) {
+        if(entryIds[i].pokemonID == pokemonId) {
+            return true;
+        }
+    }
+    return false;
 }
