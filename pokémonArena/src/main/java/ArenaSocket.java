@@ -16,6 +16,7 @@ public class ArenaSocket {
     private static final Logger LOG = Logger.getLogger(ArenaSocket.class);
     Map<String, Session> sessions = new HashMap<>();      // only temporary users necessary
     private ObjectMapper mapper = new ObjectMapper();
+    Map<Integer,Arena> arenas = new HashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
@@ -62,6 +63,9 @@ public class ArenaSocket {
                 String user = event.getData().get("to");
                 String answer = event.getData().get("value");
                 send(user, createMessage("answerChallenge", Map.of("from", username, "value", answer)));
+                if(answer.equals("accept")){
+                    createRoom(user, username);
+                }
             }
             if (event.getEvent().equals("cancelChallenge")) {
                 System.out.println("Challenge canceled");
@@ -109,5 +113,16 @@ public class ArenaSocket {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private void createRoom(String user1, String user2){
+        Integer n = 1;
+        for(Map.Entry<Integer,Arena> a : arenas.entrySet()){
+            n++;
+        }
+        Arena arena = new Arena();
+        arena.sessions.put(user1,sessions.get(user1));
+        arena.sessions.put(user2,sessions.get(user2));
+        arenas.put(n,arena);
     }
 }
