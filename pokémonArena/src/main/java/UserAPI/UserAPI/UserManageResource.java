@@ -128,33 +128,26 @@ public class UserManageResource {
         return toJSON(pShortList);
     }
 
-        /*
-         //some parameters to your method
-    String param1 = "1";
-    String paramNull = null;
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("attacks/{entryID}")
+    public String getAttacksFromPokemon(@PathParam Integer entryID) {
 
-    CriteriaBuilder cBuilder = em.getCriteriaBuilder();
-    CriteriaQuery cQuery = cBuilder.createQuery();
-    Root<A> pokemonRoot = cQuery.from(A.class);
+        Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
 
-    //Constructing list of parameters
-    List<Predicate> predicates = new ArrayList<Predicate>();
+        if (pokemon == null) {
+            throw new WebApplicationException("Pokemon with'entryID' " + entryID + " does not exist.", 404);
+        }
 
-    //Adding predicates in case of parameter not being null
-    if (param1 != null) {
-        predicates.add(
-                cBuilder.equal(pokemonRoot.get("someAttribute"), param1));
+        List <Integer> attackNumberList = new ArrayList<>();
+
+        attackNumberList.add(pokemon.getAttackNumber1());
+        attackNumberList.add(pokemon.getAttackNumber2());
+        attackNumberList.add(pokemon.getAttackNumber3());
+        attackNumberList.add(pokemon.getAttackNumber4());
+
+        return toJSON(attackNumberList);
     }
-    if (paramNull != null) {
-        predicates.add(
-                cBuilder.equal(pokemonRoot.get("someOtherAttribute"), paramNull));
-    }
-    //query itself
-    cQuery.select(pokemonRoot)
-            .where(predicates.toArray(new Predicate[]{}));
-    //execute query and do something with result
-    em.createQuery(cQuery).getResultList();
-         */
 
     @POST
     @Transactional
@@ -217,13 +210,10 @@ public class UserManageResource {
             throw new WebApplicationException("PokeTeam with 'pokeTeamID' " + teamID + " does not exist.", 404);
         }
 
-        //Users user = pokeTeam.getUser();
-
         Pokemon pokemonFresh = new Pokemon();
         pokemonFresh.setPokemonID(pokemon.getPokemonID());
         pokemonFresh.setPokeTeam(pokeTeam);
         entityManager.persist(pokemonFresh);
-
 
         return Response.ok(toJSON(pokemonFresh)).status(201).build();
     }
@@ -231,7 +221,7 @@ public class UserManageResource {
     @PUT
     @Path("/id/{userID}")               //Gets UserName-Update from POST-Body
     @Transactional
-    public Users updateByID(@PathParam Integer userID, Users users) {
+    public String updateUserNameByID(@PathParam Integer userID, Users users) {
         if (users.getName() == null) {
             throw new WebApplicationException("Users' Name was not set on request.", 422);
         }
@@ -243,7 +233,29 @@ public class UserManageResource {
         }
 
         entity.setName(users.getName());
-        return entity;
+        return toJSON(entity);
+    }
+
+    @PUT
+    @Path("/attacksToPokemon/{entryID}")              //entryID of Pokemon
+    @Transactional
+    public String updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
+        if (attackArray.length == 0 || attackArray.length<4) {
+            throw new WebApplicationException("AttackArray was not set right on request.", 422);
+        }
+
+        Pokemon entity = entityManager.find(Pokemon.class, entryID);
+
+        if (entity == null) {
+            throw new WebApplicationException("Pokemon with entryID of " + entryID + " does not exist.", 404);
+        }
+
+        entity.setAttackNumber1(attackArray[0]);
+        entity.setAttackNumber2(attackArray[1]);
+        entity.setAttackNumber3(attackArray[2]);
+        entity.setAttackNumber4(attackArray[3]);
+
+        return toJSON(entity);
     }
 
     @DELETE

@@ -18,4 +18,5 @@
 
 @Get    /users/pokemon/{entryid}                                                                //return: {"attacks": ["3","4","2","5"], ...}           // Array mit den Stats und Werten des Pokemon
 
-@Post   /users/pokemon/{entryid}            //send: {"attacks": ["3","4","2","5"]}         //return: {"attacks": [..], ..other-stats.. }
+@Put   /users/attacksToPokemon/{entryid}            //send: [3,4,2,5]                           //return: {"entryID": 1,"pokeTeam": {"pokeTeamID": 2,"user": {"userID": 3,"name": "GeilerTyp"}},"pokemonID": 5865,
+                                                                                                              "attackNumber1": 99,"attackNumber2": 3,"attackNumber3": 5,"attackNumber4": 9}
