@@ -1,3 +1,5 @@
+package Fight;
+
 import java.util.Map;
 
 public class JsonEvent {

@@ -1,3 +1,5 @@
+package Fight;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
@@ -20,21 +22,21 @@ public class ArenaSocket {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
-        System.out.println("[i][Arena] User connect: " + username);
+        System.out.println("[i][Fight.Arena] User connect: " + username);
         sessions.put(username, session);
         broadcast(createMessage("userconnect", Map.of("user", username, "action", "joined")));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
-        System.out.println("[i][Arena] User disconnect: " + username);
+        System.out.println("[i][Fight.Arena] User disconnect: " + username);
         sessions.remove(username);
         broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
-        System.out.println("[E][Arena] User error [" + username + "] : " + throwable.toString());
+        System.out.println("[E][Fight.Arena] User error [" + username + "] : " + throwable.toString());
         sessions.remove(username);
         broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
         LOG.error("onError", throwable);
@@ -42,7 +44,7 @@ public class ArenaSocket {
 
     @OnMessage
     public void onMessage(String message, @PathParam("username") String username) {
-        System.out.println("ArenaSocket message by " + username + ": " + message);
+        System.out.println("Fight.ArenaSocket message by " + username + ": " + message);
         try {
             JsonEvent event = mapper.readValue(message, JsonEvent.class);
             //System.out.println("event: " + event.getEvent());
