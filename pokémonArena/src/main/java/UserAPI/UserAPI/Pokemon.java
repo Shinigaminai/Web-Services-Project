@@ -1,8 +1,10 @@
 package UserAPI.UserAPI;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Pokemon")
@@ -16,8 +18,6 @@ import javax.persistence.*;
 
 @Cacheable
 public class Pokemon {
-
-
 
     @Id
     @SequenceGenerator(
@@ -33,8 +33,21 @@ public class Pokemon {
      @JoinColumn(name = "pokeTeamID")
      private PokeTeam pokeTeam;
 
+
     @Column(length = 40)
     private Integer pokemonID;
+
+    @Column(length = 40)
+    private Integer attackNumber1;
+
+    @Column(length = 40)
+    private Integer attackNumber2;
+
+    @Column(length = 40)
+    private Integer attackNumber3;
+
+    @Column(length = 40)
+    private Integer attackNumber4;
 
     public Pokemon(){
 
@@ -66,5 +79,37 @@ public class Pokemon {
 
     public void setPokeTeam(PokeTeam pokeTeam) {
         this.pokeTeam = pokeTeam;
+    }
+
+    public Integer getAttackNumber1() {
+        return attackNumber1;
+    }
+
+    public void setAttackNumber1(Integer attackNumber1) {
+        this.attackNumber1 = attackNumber1;
+    }
+
+    public Integer getAttackNumber2() {
+        return attackNumber2;
+    }
+
+    public void setAttackNumber2(Integer attackNumber2) {
+        this.attackNumber2 = attackNumber2;
+    }
+
+    public Integer getAttackNumber3() {
+        return attackNumber3;
+    }
+
+    public void setAttackNumber3(Integer attackNumber3) {
+        this.attackNumber3 = attackNumber3;
+    }
+
+    public Integer getAttackNumber4() {
+        return attackNumber4;
+    }
+
+    public void setAttackNumber4(Integer attackNumber4) {
+        this.attackNumber4 = attackNumber4;
     }
 }
