@@ -14,11 +14,11 @@ import java.util.Map;
 @ApplicationScoped
 @ServerEndpoint("/arena/{username}")
 
-public class ArenaSocket {
+public class ArenaSocket extends Arena {
     private static final Logger LOG = Logger.getLogger(ArenaSocket.class);
-    Map<String, Session> sessions = new HashMap<>();      // only temporary users necessary
+    //Map<String, Session> sessions = new HashMap<>();      // only temporary users necessary
     private ObjectMapper mapper = new ObjectMapper();
-    Map<Integer,Arena> arenas = new HashMap<>();
+    Map<String,Arena> arenas = new HashMap<>();
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
@@ -79,28 +79,6 @@ public class ArenaSocket {
         }
     }
 
-    private void broadcast(String message) {
-        sessions.values().forEach(s -> {
-            s.getAsyncRemote().sendObject(message, result -> {
-                if (result.getException() != null) {
-                    System.out.println("Unable to send message: " + result.getException());
-                }
-            });
-        });
-    }
-
-    private void send(String username, String message) {
-        if (sessions.get(username) != null) {
-            sessions.get(username).getAsyncRemote().sendObject(message, result -> {
-                if (result.getException() != null) {
-                    System.out.println("Unable to send message: " + result.getException());
-                }
-            });
-        } else {
-            System.out.println("tried to send message to non existant user " + username + ": " + message);
-        }
-    }
-
     private String createMessage(String event, Map<String, String> arguments) {
         try {
             return "{\"event\":\"" + event + "\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
@@ -118,13 +96,13 @@ public class ArenaSocket {
     }
 
     private void createRoom(String user1, String user2){
-        Integer n = 1;
-        for(Map.Entry<Integer,Arena> a : arenas.entrySet()){
-            n++;
-        }
         Arena arena = new Arena();
+        String key = user1 + "-arena-" + user2;
         arena.sessions.put(user1,sessions.get(user1));
         arena.sessions.put(user2,sessions.get(user2));
-        arenas.put(n,arena);
+        arenas.put(key,arena);
+        String message = createMessage("assignedArena", Map.of("arena",key));
+        arena.send(user1, message);
+        arena.send(user2, message);
     }
 }
