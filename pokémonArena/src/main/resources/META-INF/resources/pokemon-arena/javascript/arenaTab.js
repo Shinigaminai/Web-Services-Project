@@ -6,6 +6,8 @@ var receivedArenaUserconnect = function(data) {
             addChallenger(data.user);
         } else if (data.action == "left") {
             removeChallenger(data.user);
+        } else if (data.action == "arena") {
+            removeChallenger(data.user);
         } else {
             console.log("[E] unknown userconnect action [arena]");
         }

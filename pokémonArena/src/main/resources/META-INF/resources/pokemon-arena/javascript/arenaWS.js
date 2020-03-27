@@ -35,6 +35,11 @@ jQuery(function() {
             socketArena.bind('challenge', receivedArenaChallenge);
             socketArena.bind('cancelChallenge', receivedArenaChallengeCancel);
             socketArena.bind('answerChallenge', receivedArenaChallengeAnswer);
+
+            socketArena.bind('assignedArena', function(data){setArena(data.arena);});
+            socketArena.bind('assignedArena', enterArena);
+            socketArena.bind('opponentInfo', receivedOpponentInfo);
+            socketArena.bind('selectPokemon', receivedSelectPokemon);
         }
     });
 });

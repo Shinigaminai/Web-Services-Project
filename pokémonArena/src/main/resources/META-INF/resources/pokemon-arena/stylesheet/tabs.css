@@ -16,6 +16,7 @@
 
 #tabs-menu {
     background-color: lightcoral;
+    z-index: 2;
 }
 
 #tabs-area {
