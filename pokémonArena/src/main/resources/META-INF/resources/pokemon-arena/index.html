@@ -14,6 +14,7 @@
     <link href="stylesheet/chatTab.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/arenaTab.css" rel="stylesheet" type="text/css">
     <link href="stylesheet/pokemonTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/arena.css" rel="stylesheet" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -26,9 +27,10 @@
     <script src="javascript/pokemonDatabase.js"></script>
     <script src="javascript/arenaWS.js"></script>
     <script src="javascript/arenaTab.js"></script>
+    <script src="javascript/arena.js"></script>
 </head>
 <body>
-<header>
+<header class="animated forward slideInDown">
     <h1>Pokémon Arena</h1>
 </header>
 
@@ -86,6 +88,9 @@
         Pokédex
     </div>
 </nav>
+<div id="arena-area" class="animated forward fadeOut" style="display: none">
+
+</div>
 <div class="animated forward slideInUp" id="login-area">
     <div id="login-menu">
         <input id="username-input" placeholder="your name" type="text"/>
