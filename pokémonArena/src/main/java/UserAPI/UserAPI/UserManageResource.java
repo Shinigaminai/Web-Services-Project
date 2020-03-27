@@ -96,36 +96,16 @@ public class UserManageResource {
             throw new WebApplicationException("PokeTeam with'pokeTeamID' " + pokeTeamID + " does not exist.", 404);
         }
 
-        //List<Map<Map<String,Integer>,Map<String,Integer>>> outputSetList = new ArrayList<>();
-        List<Map<Integer,Integer>> outputSetList = new ArrayList<>();
-        Map <Integer, Integer> idMap = new HashMap<>();
-        Integer pokemonID;
-        Integer entryID;
-
         List<Pokemon> pokemonList = pokeTeam.getPokemonList();
-        List<Pokemon> pShortList = new ArrayList<>();
+        List<Map<String,Integer>> outputSetList = new ArrayList<>();
 
-        for (Pokemon pokemon:pokemonList
-        ) {
-            Pokemon pShort = new Pokemon();
-            pShort.setPokemonID(pokemon.getPokemonID());
-            pShort.setEntryID(pokemon.getEntryID());
-            pShortList.add(pShort);
-
-            /*pokemonID = pokemon.getPokemonID();
-            entryID = pokemon.getEntryID();
-            idMap.put(pokemonID,entryID);
-            outputSetList.add(idMap);*/
-
-            /*Map<String,Integer> entryIDMap = new HashMap<>();
-            Map<String,Integer> pokemonIDMap = new HashMap<>();
-            Map<Map<String,Integer>,Map<String,Integer>> completeMap = new HashMap<>();
-            pokemonIDMap.put("pokemonID",pokemon.getPokemonID());
-            entryIDMap.put("entryID",pokemon.getEntryID());
-            completeMap.put(pokemonIDMap,entryIDMap);
-            outputSetList.add(completeMap);                                                             // Soooo ein Krampf ey....*/
+        for (Pokemon pokemon:pokemonList) {
+            Map <String, Integer> idMap = new HashMap<>();
+            idMap.put("pokemonID", pokemon.getPokemonID());
+            idMap.put("entryID", pokemon.getEntryID());
+            outputSetList.add(idMap);
         }
-        return toJSON(pShortList);
+        return toJSON(outputSetList);
     }
 
     @GET
