@@ -1,5 +1,6 @@
 package UserAPI.UserAPI;
 
+import Fight.UserManageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -31,11 +32,11 @@ public class UserManageResource {
 
     @Inject
     @PersistenceContext
-    EntityManager entityManager;
+    static EntityManager entityManager;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAllUsers() {
+    public static String getAllUsers() {
         return toJSON(entityManager.createNamedQuery("Users.findAll", Users.class)
                 .getResultList()
                 .toArray(new Users[0])
@@ -56,33 +57,16 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
-    public String getSingleUserByName(@PathParam String userName) {
-        Users entity = entityManager.createNamedQuery("Users.findByName", Users.class)
-                .setParameter("name",userName)
-                .getSingleResult();
-        if (entity == null) {
-            throw new WebApplicationException("User with name '" + userName + "' does not exist.", 404);
-        }
+    public static String getSingleUserByName(@PathParam String userName) {
+        Users entity = UserManageService.getSingleUserByName(userName);
         return toJSON(entity);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("teams/{userID}")
-    public String getPokeTeamFromUser(@PathParam Integer userID) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<PokeTeam> cq = cb.createQuery(PokeTeam.class);
-        Root<PokeTeam> rootEntry = cq.from(PokeTeam.class);
-        cq.select(rootEntry).where(cb.equal(rootEntry.get("user").get("userID"),userID));
-        List <PokeTeam> pokeTeamList = entityManager.createQuery(cq).getResultList();
-        if (pokeTeamList.size() == 0) {
-            throw new WebApplicationException("PokeTeam with ForeignKey 'userID' " + userID + " does not exist.", 404);
-        }
-        List <Integer> pokeTeamIDList = new ArrayList<>();
-        for (PokeTeam pt :
-                pokeTeamList) {
-            pokeTeamIDList.add(pt.getPokeTeamID());
-        }
+    public static String getPokeTeamFromUser(@PathParam Integer userID) {
+        List<Integer> pokeTeamIDList = UserManageService.getPokeTeamFromUser(userID);
         return toJSON(pokeTeamIDList);
     }
 
@@ -90,28 +74,15 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("team/{pokeTeamID}")
-    public String getPokeTeam(@PathParam Integer pokeTeamID) {
-        PokeTeam pokeTeam = entityManager.find(PokeTeam.class, pokeTeamID);
-        if (pokeTeam == null) {
-            throw new WebApplicationException("PokeTeam with'pokeTeamID' " + pokeTeamID + " does not exist.", 404);
-        }
-
-        List<Pokemon> pokemonList = pokeTeam.getPokemonList();
-        List<Map<String,Integer>> outputSetList = new ArrayList<>();
-
-        for (Pokemon pokemon:pokemonList) {
-            Map <String, Integer> idMap = new HashMap<>();
-            idMap.put("pokemonID", pokemon.getPokemonID());
-            idMap.put("entryID", pokemon.getEntryID());
-            outputSetList.add(idMap);
-        }
+    public static String getPokeTeam(@PathParam Integer pokeTeamID) {
+        List<Map<String,Integer>> outputSetList = UserManageService.getPokeTeam(pokeTeamID);
         return toJSON(outputSetList);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("attacks/{entryID}")
-    public String getAttacksFromPokemon(@PathParam Integer entryID) {
+    public static String getAttacksFromPokemon(@PathParam Integer entryID) {
 
         Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
 
@@ -131,7 +102,7 @@ public class UserManageResource {
 
     @POST
     @Transactional
-    public Response createUserWithTeam(Users user) {           //User name must be set... in POST-Body^^
+    public static Response createUserWithTeam(Users user) {           //User name must be set... in POST-Body^^
         if (user.getName() == null) {
             throw new WebApplicationException("Users' Name wasn't set on request.", 422);
         }
@@ -158,7 +129,7 @@ public class UserManageResource {
     @POST
     @Path("{userID}/addTeam")
     @Transactional
-    public Response createTeamForUser(@PathParam Integer userID) {
+    public static Response createTeamForUser(@PathParam Integer userID) {
 
         Users user = entityManager.find(Users.class, userID);
 
@@ -176,7 +147,7 @@ public class UserManageResource {
     @POST
     @Path("addPokemonToTeam/{teamID}")
     @Transactional
-    public Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have pokemonID set!
+    public static Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have pokemonID set!
         if (pokemon.getPokemonID() == null) {
             throw new WebApplicationException("pokemonID of Pokemon wasn't set on request.", 422);
         }
@@ -201,7 +172,7 @@ public class UserManageResource {
     @PUT
     @Path("/id/{userID}")               //Gets UserName-Update from POST-Body
     @Transactional
-    public String updateUserNameByID(@PathParam Integer userID, Users users) {
+    public static String updateUserNameByID(@PathParam Integer userID, Users users) {
         if (users.getName() == null) {
             throw new WebApplicationException("Users' Name was not set on request.", 422);
         }
@@ -219,7 +190,7 @@ public class UserManageResource {
     @PUT
     @Path("/attacksToPokemon/{entryID}")              //entryID of Pokemon
     @Transactional
-    public String updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
+    public static String updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
         if (attackArray.length == 0 || attackArray.length<4) {
             throw new WebApplicationException("AttackArray was not set right on request.", 422);
         }
@@ -241,7 +212,7 @@ public class UserManageResource {
     @DELETE
     @Path("{id}")
     @Transactional
-    public Response deleteUser(@PathParam Integer id) {
+    public static Response deleteUser(@PathParam Integer id) {
         Users entity = entityManager.getReference(Users.class, id);
         if (entity == null) {
             throw new WebApplicationException("User with id of " + id + " does not exist.", 404);
@@ -253,7 +224,7 @@ public class UserManageResource {
     @DELETE
     @Path("/pokemon/{entryID}")
     @Transactional
-    public Response deletePokemon(@PathParam Integer entryID) {
+    public static Response deletePokemon(@PathParam Integer entryID) {
         Pokemon entity = entityManager.getReference(Pokemon.class, entryID);
         if (entity == null) {
             throw new WebApplicationException("Pokemon with entryID of " + entryID + " does not exist.", 404);
@@ -265,7 +236,7 @@ public class UserManageResource {
     @DELETE
     @Path("/team/{teamID}")
     @Transactional
-    public Response deletePokeTeam(@PathParam Integer teamID) {
+    public static Response deletePokeTeam(@PathParam Integer teamID) {
         PokeTeam entity = entityManager.getReference(PokeTeam.class, teamID);
         if (entity == null) {
             throw new WebApplicationException("Team with teamID of " + teamID + " does not exist.", 404);
@@ -305,7 +276,7 @@ public class UserManageResource {
 
 
 
-    public String toJSON(Object o) {
+    public static String toJSON(Object o) {
         //Creating the ObjectMapper object
         ObjectMapper mapper = new ObjectMapper();
         //Converting the Object to JSONString

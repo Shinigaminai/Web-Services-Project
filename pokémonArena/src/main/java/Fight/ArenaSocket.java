@@ -2,6 +2,7 @@ package Fight;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vertx.ext.auth.User;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -9,6 +10,7 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
@@ -17,7 +19,6 @@ import java.util.Map;
 public class ArenaSocket extends Arena {
     private static final Logger LOG = Logger.getLogger(ArenaSocket.class);
     //Map<String, Session> sessions = new HashMap<>();      // only temporary users necessary
-    private ObjectMapper mapper = new ObjectMapper();
     Map<String,Arena> arenas = new HashMap<>();
 
     @OnOpen
@@ -74,26 +75,14 @@ public class ArenaSocket extends Arena {
                 String user = event.getData().get("to");
                 send(user, createMessage("cancelChallenge", Map.of("from", username)));
             }
+            if(event.getEvent().equals("selectPokemon")){
+                arenas.get(username).sendSelectPokemon(event,username);
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
-    private String createMessage(String event, Map<String, String> arguments) {
-        try {
-            return "{\"event\":\"" + event + "\",\"data\":" + mapper.writeValueAsString(arguments) + "}";
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private String createMessage(JsonEvent event) {
-        try {
-            return mapper.writeValueAsString(event);
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
     private void createRoom(String user1, String user2){
         Arena arena = new Arena();
@@ -104,5 +93,22 @@ public class ArenaSocket extends Arena {
         String message = createMessage("assignedArena", Map.of("arena",key));
         arena.send(user1, message);
         arena.send(user2, message);
+        sessions.remove(user1);
+        sessions.remove(user2);
+        broadcast(createMessage("userconnect", Map.of("user", user1, "action", "fight")));
+        broadcast(createMessage("userconnect", Map.of("user", user2, "action", "fight")));
+        sendOpponentInfo(user1);
+        sendOpponentInfo(user2);
+        Integer userI1 = UserManageService.getSingleUserByName(user1).getUserID();
+        Integer pokeTeam1 = UserManageService.getPokeTeamFromUser(userI1).get(0);
+        Integer userI2 = UserManageService.getSingleUserByName(user2).getUserID();
+        Integer pokeTeam2 = UserManageService.getPokeTeamFromUser(userI2).get(0);
+
+        for(Map<String,Integer> p : UserManageService.getPokeTeam(pokeTeam1)){
+         arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user1));
+        }
+        for(Map<String,Integer> p : UserManageService.getPokeTeam(pokeTeam2)){
+            arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user2));
+        }
     }
 }
