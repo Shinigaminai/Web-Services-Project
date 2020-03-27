@@ -13,8 +13,8 @@ import java.util.Map;
 
 @ApplicationScoped
 @ServerEndpoint("/arena/{username}")
-
 public class ArenaSocket extends Arena {
+
     private static final Logger LOG = Logger.getLogger(ArenaSocket.class);
     //Map<String, Session> sessions = new HashMap<>();      // only temporary users necessary
     Map<String,Arena> arenas = new HashMap<>();
@@ -97,15 +97,15 @@ public class ArenaSocket extends Arena {
         broadcast(createMessage("userconnect", Map.of("user", user2, "action", "fight")));
         sendOpponentInfo(user1);
         sendOpponentInfo(user2);
-        Integer userI1 = UserManageService.getSingleUserByName(user1).getUserID();
-        Integer pokeTeam1 = UserManageService.getPokeTeamFromUser(userI1).get(0);
-        Integer userI2 = UserManageService.getSingleUserByName(user2).getUserID();
-        Integer pokeTeam2 = UserManageService.getPokeTeamFromUser(userI2).get(0);
+        Integer userI1 = userManageService.getSingleUserByName(user1).getUserID();
+        Integer pokeTeam1 = userManageService.getPokeTeamFromUser(userI1).get(0);
+        Integer userI2 = userManageService.getSingleUserByName(user2).getUserID();
+        Integer pokeTeam2 = userManageService.getPokeTeamFromUser(userI2).get(0);
 
-        for(Map<String,Integer> p : UserManageService.getPokeTeam(pokeTeam1)){
+        for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam1)){
          arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user1));
         }
-        for(Map<String,Integer> p : UserManageService.getPokeTeam(pokeTeam2)){
+        for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam2)){
             arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user2));
         }
     }

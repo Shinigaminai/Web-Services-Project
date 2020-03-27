@@ -29,7 +29,9 @@ public class UserManageResource {
 
     @Inject
     @PersistenceContext
-    static EntityManager entityManager;
+    EntityManager entityManager;
+
+    @Inject
     UserManageService service;
 
     @GET

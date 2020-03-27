@@ -13,6 +13,7 @@ public class Arena {
     protected ObjectMapper mapper = new ObjectMapper();
     private Map<String,Pokemon> currentPkm = new HashMap<>(); //user, currentPkm
     protected Map<Integer,Pokemon> allPkm = new HashMap<>(); //entryID, Pokemon
+    protected UserManageService userManageService = new UserManageService();
 
     protected void send(String username, String message) {
         if (sessions.get(username) != null) {
@@ -57,7 +58,7 @@ public class Arena {
                 opponent = u;
             }
         }
-       Users user = UserManageService.getSingleUserByName(opponent);
+       Users user = userManageService.getSingleUserByName(opponent);
         send(username, createMessage("opponentInfo", Map.of("name",opponent,"userID", user.getUserID().toString(),
                 "teamID",user.getPokeTeamList().get(0).getPokeTeamID().toString())));
     }
