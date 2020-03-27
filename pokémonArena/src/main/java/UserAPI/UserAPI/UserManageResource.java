@@ -36,7 +36,7 @@ public class UserManageResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public static String getAllUsers() {
+    public String getAllUsers() {
         return toJSON(entityManager.createNamedQuery("Users.findAll", Users.class)
                 .getResultList()
                 .toArray(new Users[0])
@@ -57,7 +57,7 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
-    public static String getSingleUserByName(@PathParam String userName) {
+    public String getSingleUserByName(@PathParam String userName) {
         Users entity = UserManageService.getSingleUserByName(userName);
         return toJSON(entity);
     }
@@ -65,7 +65,7 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("teams/{userID}")
-    public static String getPokeTeamFromUser(@PathParam Integer userID) {
+    public String getPokeTeamFromUser(@PathParam Integer userID) {
         List<Integer> pokeTeamIDList = UserManageService.getPokeTeamFromUser(userID);
         return toJSON(pokeTeamIDList);
     }
@@ -74,7 +74,7 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("team/{pokeTeamID}")
-    public static String getPokeTeam(@PathParam Integer pokeTeamID) {
+    public String getPokeTeam(@PathParam Integer pokeTeamID) {
         List<Map<String,Integer>> outputSetList = UserManageService.getPokeTeam(pokeTeamID);
         return toJSON(outputSetList);
     }
@@ -82,7 +82,7 @@ public class UserManageResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("attacks/{entryID}")
-    public static String getAttacksFromPokemon(@PathParam Integer entryID) {
+    public String getAttacksFromPokemon(@PathParam Integer entryID) {
 
         Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
 
@@ -102,7 +102,7 @@ public class UserManageResource {
 
     @POST
     @Transactional
-    public static Response createUserWithTeam(Users user) {           //User name must be set... in POST-Body^^
+    public Response createUserWithTeam(Users user) {           //User name must be set... in POST-Body^^
         if (user.getName() == null) {
             throw new WebApplicationException("Users' Name wasn't set on request.", 422);
         }
@@ -129,7 +129,7 @@ public class UserManageResource {
     @POST
     @Path("{userID}/addTeam")
     @Transactional
-    public static Response createTeamForUser(@PathParam Integer userID) {
+    public Response createTeamForUser(@PathParam Integer userID) {
 
         Users user = entityManager.find(Users.class, userID);
 
@@ -147,7 +147,7 @@ public class UserManageResource {
     @POST
     @Path("addPokemonToTeam/{teamID}")
     @Transactional
-    public static Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have pokemonID set!
+    public Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have pokemonID set!
         if (pokemon.getPokemonID() == null) {
             throw new WebApplicationException("pokemonID of Pokemon wasn't set on request.", 422);
         }
@@ -172,7 +172,7 @@ public class UserManageResource {
     @PUT
     @Path("/id/{userID}")               //Gets UserName-Update from POST-Body
     @Transactional
-    public static String updateUserNameByID(@PathParam Integer userID, Users users) {
+    public String updateUserNameByID(@PathParam Integer userID, Users users) {
         if (users.getName() == null) {
             throw new WebApplicationException("Users' Name was not set on request.", 422);
         }
@@ -190,7 +190,7 @@ public class UserManageResource {
     @PUT
     @Path("/attacksToPokemon/{entryID}")              //entryID of Pokemon
     @Transactional
-    public static String updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
+    public String updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
         if (attackArray.length == 0 || attackArray.length<4) {
             throw new WebApplicationException("AttackArray was not set right on request.", 422);
         }
@@ -212,7 +212,7 @@ public class UserManageResource {
     @DELETE
     @Path("{id}")
     @Transactional
-    public static Response deleteUser(@PathParam Integer id) {
+    public Response deleteUser(@PathParam Integer id) {
         Users entity = entityManager.getReference(Users.class, id);
         if (entity == null) {
             throw new WebApplicationException("User with id of " + id + " does not exist.", 404);
@@ -224,7 +224,7 @@ public class UserManageResource {
     @DELETE
     @Path("/pokemon/{entryID}")
     @Transactional
-    public static Response deletePokemon(@PathParam Integer entryID) {
+    public Response deletePokemon(@PathParam Integer entryID) {
         Pokemon entity = entityManager.getReference(Pokemon.class, entryID);
         if (entity == null) {
             throw new WebApplicationException("Pokemon with entryID of " + entryID + " does not exist.", 404);
@@ -236,7 +236,7 @@ public class UserManageResource {
     @DELETE
     @Path("/team/{teamID}")
     @Transactional
-    public static Response deletePokeTeam(@PathParam Integer teamID) {
+    public Response deletePokeTeam(@PathParam Integer teamID) {
         PokeTeam entity = entityManager.getReference(PokeTeam.class, teamID);
         if (entity == null) {
             throw new WebApplicationException("Team with teamID of " + teamID + " does not exist.", 404);
@@ -247,7 +247,7 @@ public class UserManageResource {
 
 
     @Provider
-    public static class ErrorMapper implements ExceptionMapper<Exception> {
+    public class ErrorMapper implements ExceptionMapper<Exception> {
 
         @Override
         public Response toResponse(Exception exception) {
@@ -276,7 +276,7 @@ public class UserManageResource {
 
 
 
-    public static String toJSON(Object o) {
+    public String toJSON(Object o) {
         //Creating the ObjectMapper object
         ObjectMapper mapper = new ObjectMapper();
         //Converting the Object to JSONString
