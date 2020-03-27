@@ -1,6 +1,6 @@
 package UserAPI.UserAPI;
 
-import Fight.UserManageService;
+import PokeKotlinAPI.GetPokeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -10,9 +10,6 @@ import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +30,7 @@ public class UserManageResource {
     @Inject
     @PersistenceContext
     static EntityManager entityManager;
+    UserManageService service;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,7 +56,7 @@ public class UserManageResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
     public String getSingleUserByName(@PathParam String userName) {
-        Users entity = UserManageService.getSingleUserByName(userName);
+        Users entity = service.getSingleUserByName(userName);
         return toJSON(entity);
     }
 
@@ -66,7 +64,7 @@ public class UserManageResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("teams/{userID}")
     public String getPokeTeamFromUser(@PathParam Integer userID) {
-        List<Integer> pokeTeamIDList = UserManageService.getPokeTeamFromUser(userID);
+        List<Integer> pokeTeamIDList = service.getPokeTeamFromUser(userID);
         return toJSON(pokeTeamIDList);
     }
 
@@ -75,7 +73,7 @@ public class UserManageResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("team/{pokeTeamID}")
     public String getPokeTeam(@PathParam Integer pokeTeamID) {
-        List<Map<String,Integer>> outputSetList = UserManageService.getPokeTeam(pokeTeamID);
+        List<Map<String,Integer>> outputSetList = service.getPokeTeam(pokeTeamID);
         return toJSON(outputSetList);
     }
 
@@ -247,7 +245,7 @@ public class UserManageResource {
 
 
     @Provider
-    public class ErrorMapper implements ExceptionMapper<Exception> {
+    public static class ErrorMapper implements ExceptionMapper<Exception> {
 
         @Override
         public Response toResponse(Exception exception) {

@@ -1,10 +1,9 @@
 package Fight;
 
-import UserAPI.UserAPI.UserManageResource;
+import UserAPI.UserAPI.UserManageService;
 import UserAPI.UserAPI.Users;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.persistence.MapKey;
 import javax.websocket.Session;
 import java.util.HashMap;
 import java.util.Map;

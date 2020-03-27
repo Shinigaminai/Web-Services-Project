@@ -1,4 +1,4 @@
-package Fight;
+package UserAPI.UserAPI;
 
 import UserAPI.UserAPI.PokeTeam;
 import UserAPI.UserAPI.Pokemon;
