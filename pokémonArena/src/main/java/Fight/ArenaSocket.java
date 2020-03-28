@@ -76,6 +76,9 @@ public class ArenaSocket extends Arena {
             if(event.getEvent().equals("selectPokemon")){
                 arenas.get(username).sendSelectPokemon(event,username);
             }
+            if(event.getEvent().equals("selectMove")){
+                setCurrentMove(event.getData().get("move"),username);
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -103,11 +106,13 @@ public class ArenaSocket extends Arena {
         Integer pokeTeam2 = userManageService.getPokeTeamFromUser(userI2).get(0);
 
         for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam1)){
-         arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user1));
+         arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user1,p.get("pokemonID")));
         }
         for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam2)){
-            arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user2));
+            arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user2,p.get("pokemonID")));
         }
         arena.loadAllPokemonData();
+        arena.setFighter1(user1);
+        arena.setFighter2(user2);
     }
 }
