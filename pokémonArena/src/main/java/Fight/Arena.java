@@ -140,26 +140,12 @@ public class Arena {
             FirstLast.replace(Fighter1,"Last");
             executeMove(Fighter2);
             if(currentPkm.get(Fighter1).getCurrentHp()<=0){
-                send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-                send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
+                checkIfBeaten(Fighter1);
+                sendResult();
             } else {
                 executeMove(Fighter1);
-                if(currentPkm.get(Fighter2).getCurrentHp()<=0){
-                    send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                    send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                    send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-                    send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-                }
+                checkIfBeaten(Fighter2);
+                sendResult();
             }
 
         } else {
@@ -167,31 +153,18 @@ public class Arena {
             FirstLast.replace(Fighter2,"Last");
             executeMove(Fighter1);
             if(currentPkm.get(Fighter2).getCurrentHp()<=0){
-                send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-                send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                        "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
+                checkIfBeaten(Fighter2);
+                sendResult();
             } else {
                 executeMove(Fighter2);
-                if(currentPkm.get(Fighter1).getCurrentHp()<=0){
-                    send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                    send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-                    send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-                    send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                            "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-                }
+                checkIfBeaten(Fighter1);
+                sendResult();
             }
         }
         FirstLast = null;
         roundState=0;
     }
+
     private void executeMove(String user){
         Pokemon attacker = currentPkm.get(user);
         Pokemon defender = currentPkm.get(opponent.get(user));
@@ -227,8 +200,24 @@ public class Arena {
         }else{
 
         }
-
+        defender.setCurrentHp(defender.getCurrentHp()-damage);
         currentPkm.replace(user,attacker);
         currentPkm.replace(opponent.get(user),defender);
+    }
+
+    private void checkIfBeaten(String user){
+        send(Fighter1,createMessage("arenaResult",Map.of("winner",opponent.get(user))));
+        send(Fighter2,createMessage("arenaResult",Map.of("winner",opponent.get(user))));
+    }
+
+    private void sendResult(){
+        send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
+                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
+        send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
+                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
+        send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
+                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
+        send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
+                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
     }
 }

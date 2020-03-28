@@ -77,7 +77,7 @@ public class ArenaSocket extends Arena {
                 arenas.get(username).sendSelectPokemon(event,username);
             }
             if(event.getEvent().equals("selectMove")){
-                setCurrentMove(event.getData().get("move"),username);
+                arenas.get(username).setCurrentMove(event.getData().get("move"),username);
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -98,8 +98,8 @@ public class ArenaSocket extends Arena {
         sessions.remove(user2);
         broadcast(createMessage("userconnect", Map.of("user", user1, "action", "fight")));
         broadcast(createMessage("userconnect", Map.of("user", user2, "action", "fight")));
-        sendOpponentInfo(user1);
-        sendOpponentInfo(user2);
+        arena.sendOpponentInfo(user1);
+        arena.sendOpponentInfo(user2);
         Integer userI1 = userManageService.getSingleUserByName(user1).getUserID();
         Integer pokeTeam1 = userManageService.getPokeTeamFromUser(userI1).get(0);
         Integer userI2 = userManageService.getSingleUserByName(user2).getUserID();
