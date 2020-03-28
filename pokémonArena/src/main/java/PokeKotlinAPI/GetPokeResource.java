@@ -23,14 +23,14 @@ public class GetPokeResource {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)                       //name, category and id of pokemon
     @Path("/pokemonspecies/{id}")
     public String getPokemonSpecies(@PathParam int id) {
         return toJSON(service.getPokemonSpecies(id));
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)                   //Many information about a pokemon
     @Path("/pokemon/{id}")
     public String getPokemon(@PathParam int id) {
         return toJSON(service.getPokemon(id));
