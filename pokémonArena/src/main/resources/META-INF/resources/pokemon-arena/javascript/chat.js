@@ -15,10 +15,16 @@ var connectToChat = function(callback) {
 
         socketChat.bind('close', function() {
             receivedChatStatus('Connection closed by server');
+            connectedToChat = false;
+            socketChat = undefined;
             scrollToChatBottom();
         });
         socketChat.bind('okToConnect', callback);
-        socketChat.bind('blockedConnect', function(){showNotification('This user is already connected')});
+        socketChat.bind('blockedConnect', function(){
+            showNotification('This user is already connected');
+            connectedToChat = false;
+            socketChat = undefined;
+        });
 
         socketChat.bind('message', receivedChatMessage);
         socketChat.bind('message', scrollToChatBottom);
