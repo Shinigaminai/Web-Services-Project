@@ -33,7 +33,6 @@
 <header class="animated forward slideInDown">
     <h1>Pokémon Arena</h1>
 </header>
-
 <div id="content-area">
     <div id="tabs-area" style="visibility: hidden" data-tab="0">
         <div id="chat-tab" class="tab">
@@ -89,7 +88,30 @@
     </div>
 </nav>
 <div id="arena-area" class="animated forward fadeOut" style="display: none">
-
+    <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1; max-width: 40rem;">
+        <div id="fight-area"></div>
+        <div id="arena-options-area">
+            <div id="arena-option-tab">
+                <div id="defaultOption" class="tablink" onclick="openArenaOptionTab(event, 'arenaPokemonTab')">Pokémon</div>
+                <div class="tablink" onclick="openArenaOptionTab(event, 'arenaMovesTab')">Moves</div>
+                <div class="tablink" onclick="openArenaOptionTab(event, 'arenaEmojiTab')">Emoji</div>
+                <div class="tablink" onclick="openArenaOptionTab(event, 'arenaActionsTab')">X</div>
+            </div>
+            <!-- Tab content -->
+            <div id="arenaPokemonTab" class="tabcontent">
+                Pokemon not loaded correctly
+            </div>
+            <div id="arenaMovesTab" class="tabcontent">
+                moves not loaded correctly
+            </div>
+            <div id="arenaEmojiTab" class="tabcontent">
+                fuck emojis
+            </div>
+            <div id="arenaActionsTab" class="tabcontent">
+                <button onclick="surrender()">Aufgeben</button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="animated forward slideInUp" id="login-area">
     <div id="login-menu">

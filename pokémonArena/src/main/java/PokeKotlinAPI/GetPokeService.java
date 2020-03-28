@@ -2,12 +2,10 @@ package PokeKotlinAPI;
 
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
-import me.sargunvohra.lib.pokekotlin.model.Pokedex;
-import me.sargunvohra.lib.pokekotlin.model.Pokemon;
-import me.sargunvohra.lib.pokekotlin.model.PokemonSpecies;
-import me.sargunvohra.lib.pokekotlin.model.Type;
+import me.sargunvohra.lib.pokekotlin.model.*;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +16,7 @@ public class GetPokeService {
     private Map<Integer, PokemonSpecies> savedPokemonSpeciesMap;
     private Map<Integer, Pokedex> savedPokedex;
     private Map<Integer, Type> savedTypes;
+    private Map<Integer, Move> savedMoves;
 
     public GetPokeService() {
         pokeApi = new PokeApiClient();
@@ -25,6 +24,7 @@ public class GetPokeService {
         savedPokemonSpeciesMap = new HashMap<>();
         savedPokedex = new HashMap<>();
         savedTypes = new HashMap<>();
+        savedMoves = new HashMap<>();
     }
 
     public Pokedex getPokedex(int id) {
@@ -64,6 +64,16 @@ public class GetPokeService {
             Type type = pokeApi.getType(id);
             savedTypes.put(id, type);
             return type;
+        }
+    }
+
+    public Move getMove(int id) {
+        if (savedMoves.containsKey(id)) {
+            return savedMoves.get(id);
+        } else {
+            Move move = pokeApi.getMove(id);
+            savedMoves.put(id, move);
+            return move;
         }
     }
 }

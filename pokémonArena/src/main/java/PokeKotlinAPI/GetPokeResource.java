@@ -43,6 +43,12 @@ public class GetPokeResource {
         return toJSON(service.getType(id));
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/move/{id}")
+    public String getMove(@PathParam int id) {
+        return toJSON(service.getMove(id));
+    }
 
     public String toJSON(Object o) {
         //Creating the ObjectMapper object
