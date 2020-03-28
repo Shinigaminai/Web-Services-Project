@@ -17,9 +17,14 @@ public class ChatSocket {
 
     @OnOpen
     public void onOpen(Session session, @PathParam("username") String username) {
-        System.out.println("[i][Chat] User connect: " + username);
-        sessions.put(username, session);
-        broadcast(createMessage("userconnect", Map.of("user", username, "action", "joined")));
+        if(!sessions.containsKey(username)) {
+            send(session,"{\"event\":\"okToConnect\",\"data\":{}}");
+            System.out.println("[i][Chat] User connect: " + username);
+            sessions.put(username, session);
+            broadcast(createMessage("userconnect", Map.of("user", username, "action", "joined")));
+        } else {
+            send(session,"{\"event\":\"blockedConnect\",\"data\":{}}");
+        }
     }
 
     @OnClose
@@ -54,6 +59,14 @@ public class ChatSocket {
                     System.out.println("Unable to send message: " + result.getException());
                 }
             });
+        });
+    }
+
+    protected void send(Session session, String message) {
+        session.getAsyncRemote().sendObject(message, result -> {
+            if (result.getException() != null) {
+                System.out.println("Unable to send message: " + result.getException());
+            }
         });
     }
 

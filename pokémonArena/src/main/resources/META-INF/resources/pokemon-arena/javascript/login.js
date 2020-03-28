@@ -33,31 +33,50 @@ var login = function() {
         showNotification("Username ist leer");
         return;
     }
-    getUserId(currentUserName,
-        function(m) {
-            currentUserId = m.userID;
-            connectToServices();
-        },
-        function(m) {
-            registerUser(currentUserName,
-                function(m) {
-                    currentUserId = m.userID;
-                    showNotification("Neuer Benutzer angelegt");
-                    connectToServices();
-                },
-                function() {
-                    showNotification("Benutzer konnte nicht angelegt werden");
-                }
-            );
-        }
-    );
+    connectToChat(function(){
+        getUserId(currentUserName,
+            function(m) {
+                currentUserId = m.userID;
+                connectToServices();
+                loginAnimation();
+            },
+            function(m) {
+                registerUser(currentUserName,
+                    function(m) {
+                        currentUserId = m.userID;
+                        showNotification("Neuer Benutzer angelegt");
+                        connectToServices();
+                        loginAnimation();
+                    },
+                    function() {
+                        showNotification("Benutzer konnte nicht angelegt werden");
+                    }
+                );
+            }
+        );
+    });
 }
 
 var connectToServices = function() {
     console.log("User ID for " + currentUserName + " is " + currentUserId);
-    connectToChat();
     loadAllPokemon();
     loadPokemonTeam();
+}
+
+var loginAnimation = function() {
+    document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
+    document.getElementById("tabs-area").classList.add("animated", "forward", "fadeIn", "delay-2s");
+    document.getElementById("tabs-area").style.visibility = 'visible';
+    document.getElementById("tabs-menu").classList.add("animated", "forward", "slideInUp", "delay-1s");
+    document.getElementById("tabs-menu").style.visibility = 'visible';
+    setTimeout(function(){
+        $('#tabs-menu').removeClass("delay-1s");
+    }, 2000);
+    $("#send").attr("disabled", false);
+    $("#login-button").attr("disabled", true);
+    $("#username-input").attr("disabled", true);
+    $("#msg").focus();
+    $("#login-menu").attr("hidden", true);
 }
 
 var showNotification = function(message, timeInMilliseconds = 2000) {
