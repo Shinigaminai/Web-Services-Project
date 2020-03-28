@@ -83,20 +83,7 @@ public class UserManageResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("attacks/{entryID}")
     public String getAttacksFromPokemon(@PathParam Integer entryID) {
-
-        Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
-
-        if (pokemon == null) {
-            throw new WebApplicationException("Pokemon with'entryID' " + entryID + " does not exist.", 404);
-        }
-
-        List <Integer> attackNumberList = new ArrayList<>();
-
-        attackNumberList.add(pokemon.getAttackNumber1());
-        attackNumberList.add(pokemon.getAttackNumber2());
-        attackNumberList.add(pokemon.getAttackNumber3());
-        attackNumberList.add(pokemon.getAttackNumber4());
-
+        List <Integer> attackNumberList = service.getAttacksFromPokemon(entryID);
         return toJSON(attackNumberList);
     }
 

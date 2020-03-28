@@ -108,5 +108,6 @@ public class ArenaSocket extends Arena {
         for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam2)){
             arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user2));
         }
+        arena.loadAllPokemonData();
     }
 }

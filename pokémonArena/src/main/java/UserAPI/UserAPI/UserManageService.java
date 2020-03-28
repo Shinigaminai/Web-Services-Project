@@ -1,6 +1,7 @@
 package UserAPI.UserAPI;
 
 import org.jboss.logging.Logger;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -69,5 +70,23 @@ public class UserManageService {
             outputSetList.add(idMap);
         }
         return outputSetList;
+    }
+
+    public List<Integer> getAttacksFromPokemon(Integer entryID) {
+
+        Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
+
+        if (pokemon == null) {
+            throw new WebApplicationException("Pokemon with'entryID' " + entryID + " does not exist.", 404);
+        }
+
+        List <Integer> attackNumberList = new ArrayList<>();
+
+        attackNumberList.add(pokemon.getAttackNumber1());
+        attackNumberList.add(pokemon.getAttackNumber2());
+        attackNumberList.add(pokemon.getAttackNumber3());
+        attackNumberList.add(pokemon.getAttackNumber4());
+
+        return attackNumberList;
     }
 }

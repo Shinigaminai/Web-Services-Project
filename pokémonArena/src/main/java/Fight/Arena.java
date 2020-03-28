@@ -63,13 +63,22 @@ public class Arena {
                 "teamID",user.getPokeTeamList().get(0).getPokeTeamID().toString())));
     }
     protected void sendSelectPokemon(JsonEvent event, String from){
-        boolean accept;
+        boolean accept = true;
         Integer pkm = Integer.parseInt(event.getData().get("entryID"));
-        Pokemon pokemon = new Pokemon(pkm,from);
+        Pokemon pokemon = allPkm.get(pkm);
         if(allPkm.get(pkm) != null){
-
+            allPkm.replace(currentPkm.get(from).getEntryID(),currentPkm.get(from));
+        //TODO
         }
-        currentPkm.replace(from,pokemon);
-        send(from,createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","accept")));
+        if(accept){
+            currentPkm.replace(from,pokemon);
+            send(from,createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","accept")));
+        }
+    }
+    protected void loadAllPokemonData(){
+        allPkm.forEach((k,v)->{
+            v.setAttackIDList(userManageService.getAttacksFromPokemon(k));
+
+        });
     }
 }
