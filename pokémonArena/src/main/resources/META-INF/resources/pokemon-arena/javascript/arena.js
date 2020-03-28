@@ -8,10 +8,20 @@ var setArena = function(key) {
     arenaKey = key;
 }
 
+var openArenaOptionTab = function(evt, tabId) {
+    $(".tabcontent").css("display", "none");
+    $(".tablink").removeClass("active");
+    document.getElementById(tabId).style.display = "block";
+    evt.currentTarget.classList.add("active");
+}
+
 var enterArena = function() {
     $("#arena-area").removeClass("fadeOut").addClass("fadeIn").css("display", "flex");
     $("#tabs-menu").removeClass("slideInUp").addClass("slideOutDown");
     $("header").removeClass("slideInDown").addClass("slideOutUp");
+
+    $("#defaultOption").addClass("active");
+    $("#arenaPokemonTab").css("display", "block");
 }
 
 var leaveArena = function() {
@@ -42,4 +52,9 @@ var receivedSelectPokemon = function(data) {
     } else {
         console.log("[E] unknown selectPokemon status");
     }
+}
+
+var surrender = function() {
+    socketArena.send("surrender", {"name": currentUserName});
+    leaveArena();
 }

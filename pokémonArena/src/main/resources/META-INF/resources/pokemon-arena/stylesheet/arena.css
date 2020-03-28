@@ -7,4 +7,44 @@
     bottom: 0;
     z-index: 1;
     background-color: lightgrey;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    justify-content: center;
+    flex: 1
+}
+
+#fight-area {
+    flex: 1;
+    position: relative;
+}
+
+#arena-options-area {
+    padding: 0.2rem;
+    box-shadow: 0.3rem 0.3rem 0.5rem;
+    margin: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #db6b6bb0;
+}
+
+#arena-option-tab {
+    display: flex;
+    flex-flow: row;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    height: 5rem;
+}
+
+.tablink {
+    padding: 0.5rem;
+}
+.tablink:hover {
+    cursor: pointer;
+    background-color: crimson;
+}
+.tablink.active {
+    background-color: #bb1919;
 }
