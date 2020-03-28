@@ -37,6 +37,13 @@ var getUserPokemonAttacks = function(id, callback) {
         });
 }
 
+var getUserPokemon = function(id, callback) {
+    $.get("http://" + location.host + "/users/pokemon/" + id, callback)
+        .fail(function() {
+            alert( "[E] failed to load user pokemon" );
+        });
+}
+
 var addUserTeamPokemon = function(teamid, pokemonid, callback) {
     $.ajax({
         url: "http://" + location.host + "/users/addPokemonToTeam/" + teamid,

@@ -62,3 +62,29 @@ var surrender = function() {
     leaveArena();
     showNotification("Du hast aufgegeben");
 }
+
+var sendMyInfoToArena = function() {
+    getUserTeams(currentUserId, function(teams) {
+        getUserTeam(teams[0], function(pokemonEntries) {
+            socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId,
+                "teamID": teams[0], "team": pokemonEntries});
+            for(i in pokemonEntries) {
+                getUserPokemon(pokemonEntries[i].entryID, function(pokemon){
+                    sendPokemonInfoToArena(pokemon);
+                });
+            }
+        });
+    });
+}
+
+var sendPokemonInfoToArena = function(pokemon) {
+    let attacks = [];
+    attacks.push(pokemon.attackNumber1);
+    attacks.push(pokemon.attackNumber2);
+    attacks.push(pokemon.attackNumber3);
+    attacks.push(pokemon.attackNumber4);
+    socketArena.send("pokemonInfo", {"pokemonID": pokemon.pokemonID,
+                                     "entryID": pokemon.entryID,
+                                     "attacks": attacks
+    });
+}

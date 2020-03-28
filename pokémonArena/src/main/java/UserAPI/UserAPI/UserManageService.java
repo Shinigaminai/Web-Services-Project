@@ -80,6 +80,14 @@ public class UserManageService {
         return outputSetList;
     }
 
+    public Pokemon getPokemonInfos(Integer entryID) {
+        Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
+        if (pokemon == null) {
+            throw new WebApplicationException("Pokemon with'entryID' " + entryID + " does not exist.", 404);
+        }
+        return pokemon;
+    }
+
     public List<Integer> getAttacksFromPokemon(Integer entryID) {
 
         Pokemon pokemon = entityManager.find(Pokemon.class,entryID);
@@ -219,6 +227,4 @@ public class UserManageService {
         entityManager.remove(entity);
         return Response.status(204).build();
     }
-
-
 }
