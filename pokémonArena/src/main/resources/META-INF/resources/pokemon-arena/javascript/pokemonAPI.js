@@ -6,7 +6,7 @@ var getPokedex = function ( id, callback) {
         console.log( "loaded pokedex" );
       })
       .fail(function() {
-        alert( "failed to load pokedex" );
+        alert( "[E] failed to load pokedex: " + id );
       });
 }
 
@@ -17,6 +17,6 @@ var getPokemonSpecies = function ( id, callback) {
 var getPokemon = function ( id, callback) {
     $.get("http://" + location.host + "/" + root + "/pokemon/" + id, callback)
       .fail(function() {
-        alert( "failed to load pokemon" );
+        console.log( "[E] failed to load pokemon: " + id );
       });
 }

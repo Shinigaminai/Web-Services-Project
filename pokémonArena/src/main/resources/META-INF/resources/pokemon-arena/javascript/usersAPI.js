@@ -19,21 +19,21 @@ var registerUser = function(name, callbackSuccess, callbackFailure) {
 var getUserTeam = function(id, callback) {
     $.get("http://" + location.host + "/users/team/" + id, callback)
         .fail(function() {
-            alert( "failed to load team" );
+            alert( "[E] failed to load team" );
         });
 }
 
 var getUserTeams = function(id, callback) {
     $.get("http://" + location.host + "/users/teams/" + id, callback)
         .fail(function() {
-            alert( "failed to load teams" );
+            alert( "[E] failed to load teams" );
         });
 }
 
-var getUserPokemon = function(id, callback) {
-    $.get("http://" + location.host + "/users/pokemon/" + id, callback)
+var getUserPokemonAttacks = function(id, callback) {
+    $.get("http://" + location.host + "/users/attacks/" + id, callback)
         .fail(function() {
-            alert( "failed to load user pokemon" );
+            alert( "[E] failed to load user pokemon moves" );
         });
 }
 
@@ -57,10 +57,11 @@ var removeUserTeamPokemon = function(entryID, callback) {
 }
 
 var setUserPokemonAttacks = function(pokemonEntryId, attacks, callback) {
+    console.log("PUT moves: " + attacks);
     $.ajax({
         url: "http://" + location.host + "/users/attacksToPokemon/" + pokemonEntryId,
-        type: "POST",
-        data: JSON.stringify({"name": name}),
+        type: "PUT",
+        data: JSON.stringify(attacks),
         contentType:"application/json; charset=utf-8",
         dataType:"json",
     }).done(callback)
