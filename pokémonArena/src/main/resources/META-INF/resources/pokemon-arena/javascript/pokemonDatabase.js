@@ -79,7 +79,7 @@ var createTypeEntry = function( type ) {
     this.appendChild(entry);
 }
 
-var createHeadEntry = function( pokemon ) {
+var createHeadEntry = function( pokemon , entryID ) {
     var head = document.createElement("DIV");
     head.classList.add("head");
     var name = document.createElement("DIV");
@@ -122,7 +122,7 @@ var addToTeam = function (id) {
 
 var createTeamEntry = function (pokemon, entryId) {
     var entry = document.createElement("DIV");
-    head = createHeadEntry(pokemon);
+    head = createHeadEntry(pokemon, entryId);
     entry.classList.add("list-entry");
     var removeButton = document.createElement("BUTTON");
     removeButton.setAttribute("onclick", "removeFromTeam(this, "+entryId+")");  //addToTeam button
@@ -131,7 +131,11 @@ var createTeamEntry = function (pokemon, entryId) {
     removeButton.classList.add("remove-button");
     head.appendChild(removeButton);
     entry.appendChild(head);
-    document.getElementById("pokemon-team-list").appendChild(entry);
+    getUserPokemonAttacks(entryId, function(selectedMoves) {
+        var moves = createMovesSelect(pokemon.moves, entryId, selectedMoves);
+        entry.appendChild(moves);
+        document.getElementById("pokemon-team-list").appendChild(entry);
+    });
 }
 
 var removeFromTeam = function ( buttonElement, pokemonEntryId ) {
@@ -148,4 +152,53 @@ var checkPokemonInTeamlist = function(pokemonId, entryIds) {
         }
     }
     return false;
+}
+
+var createMovesSelect = function(moves, entryId, selectedMoves) {
+    if(selectedMoves[0] == null) { //set default values
+        selectedMoves = [];
+        selectedMoves.push(moves[0].move.id);
+        selectedMoves.push(moves[0].move.id);
+        selectedMoves.push(moves[0].move.id);
+        selectedMoves.push(moves[0].move.id);
+        setUserPokemonAttacks(entryId, selectedMoves);
+    }
+    var movesArea = document.createElement("DIV");
+    var movesSelect = document.createElement("SELECT");
+    movesSelect.setAttribute("onchange", "putPokemonMovesForPokemon("+entryId+")");
+    movesSelect.classList.add("pokemonMoveSelect");
+    movesSelect.name = "pokemon-" + entryId + "-move";
+    var move1 = movesSelect.cloneNode(true);
+    var move2 = movesSelect.cloneNode(true);
+    var move3 = movesSelect.cloneNode(true);
+    var move4 = movesSelect.cloneNode(true);
+    for(i in moves) {
+        move1.appendChild(createMovesSelectOption(moves[i].move, selectedMoves[0]));
+        move2.appendChild(createMovesSelectOption(moves[i].move, selectedMoves[1]));
+        move3.appendChild(createMovesSelectOption(moves[i].move, selectedMoves[2]));
+        move4.appendChild(createMovesSelectOption(moves[i].move, selectedMoves[3]));
+    }
+    movesArea.appendChild(move1);
+    movesArea.appendChild(move2);
+    movesArea.appendChild(move3);
+    movesArea.appendChild(move4);
+    return movesArea;
+}
+
+var createMovesSelectOption = function(move, select) {
+    var moveOption = document.createElement("OPTION");
+    moveOption.value = move.id;
+    moveOption.innerHTML = move.name;
+    if(move.id == select) {
+        moveOption.setAttribute("selected", true);
+    }
+    return moveOption;
+}
+
+var putPokemonMovesForPokemon = function(entryId) {
+    var l = [];
+    $("select[name='pokemon-"+entryId+"-move']").each(function(index){
+        l.push(this.value);
+    });
+    setUserPokemonAttacks(entryId, l);
 }

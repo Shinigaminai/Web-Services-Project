@@ -1,7 +1,7 @@
 var connectedToChat = false;
 var socketChat;
 
-var connectToChat = function() {
+var connectToChat = function(callback) {
     if (! connectedToChat) {
         var name = $("#username-input").val();
         console.log("Username: " + name);
@@ -11,24 +11,19 @@ var connectToChat = function() {
         socketChat.bind('open', function(){
             connectedToChat = true;
             console.log("Connected to the web socket");
-            document.getElementById("login-area").classList.add("slideOutDown");  // hide / remove login area
-            document.getElementById("tabs-area").classList.add("animated", "forward", "fadeIn", "delay-2s");
-            document.getElementById("tabs-area").style.visibility = 'visible';
-            document.getElementById("tabs-menu").classList.add("animated", "forward", "slideInUp", "delay-1s");
-            document.getElementById("tabs-menu").style.visibility = 'visible';
-            setTimeout(function(){
-                $('#tabs-menu').removeClass("delay-1s");
-            }, 2000);
-            $("#send").attr("disabled", false);
-            $("#login-button").attr("disabled", true);
-            $("#username-input").attr("disabled", true);
-            $("#msg").focus();
-            $("#login-menu").attr("hidden", true);
         });
 
         socketChat.bind('close', function() {
             receivedChatStatus('Connection closed by server');
+            connectedToChat = false;
+            socketChat = undefined;
             scrollToChatBottom();
+        });
+        socketChat.bind('okToConnect', callback);
+        socketChat.bind('blockedConnect', function(){
+            showNotification('This user is already connected');
+            connectedToChat = false;
+            socketChat = undefined;
         });
 
         socketChat.bind('message', receivedChatMessage);

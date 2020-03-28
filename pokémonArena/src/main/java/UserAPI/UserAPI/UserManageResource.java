@@ -36,200 +36,92 @@ public class UserManageResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getAllUsers() {
-        return toJSON(entityManager.createNamedQuery("Users.findAll", Users.class)
-                .getResultList()
-                .toArray(new Users[0])
-        );
+    public Response getAllUsers() {
+        return Response.ok(toJSON(service.getAllUsers())).status(200).build();
     }
-
-    /*@GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("{userID}")
-    public String getSingle(@PathParam Integer userID) {
-        Users entity = entityManager.find(Users.class, userID);
-        if (entity == null) {
-            throw new WebApplicationException("User with id of " + userID + " does not exist.", 404);
-        }
-        return toJSON(entity);
-    }*/
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{userName}")
-    public String getSingleUserByName(@PathParam String userName) {
-        Users entity = service.getSingleUserByName(userName);
-        return toJSON(entity);
+    public Response getSingleUserByName(@PathParam String userName) {
+        return Response.ok(toJSON(service.getSingleUserByName(userName))).status(200).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("teams/{userID}")
-    public String getPokeTeamFromUser(@PathParam Integer userID) {
-        List<Integer> pokeTeamIDList = service.getPokeTeamFromUser(userID);
-        return toJSON(pokeTeamIDList);
+    public Response getPokeTeamFromUser(@PathParam Integer userID) {
+        return Response.ok(toJSON(service.getPokeTeamFromUser(userID))).status(200).build();
     }
 
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("team/{pokeTeamID}")
-    public String getPokeTeam(@PathParam Integer pokeTeamID) {
-        List<Map<String,Integer>> outputSetList = service.getPokeTeam(pokeTeamID);
-        return toJSON(outputSetList);
+    public Response getPokeTeam(@PathParam Integer pokeTeamID) {
+        return Response.ok(toJSON(service.getPokeTeam(pokeTeamID))).status(200).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("attacks/{entryID}")
-    public String getAttacksFromPokemon(@PathParam Integer entryID) {
-        List <Integer> attackNumberList = service.getAttacksFromPokemon(entryID);
-        return toJSON(attackNumberList);
+    public Response getAttacksFromPokemon(@PathParam Integer entryID) {
+        return Response.ok(toJSON(service.getAttacksFromPokemon(entryID))).status(200).build();
     }
 
     @POST
     @Transactional
     public Response createUserWithTeam(Users user) {           //User name must be set... in POST-Body^^
-        if (user.getName() == null) {
-            throw new WebApplicationException("Users' Name wasn't set on request.", 422);
-        }
-        if (user.getUserID() != null) {
-            throw new WebApplicationException("Id was invalidly set on request.", 422);
-        }
-
-        Users userFresh = new Users();
-        userFresh.setName(user.getName());
-
-        entityManager.persist(userFresh);
-        entityManager.flush();
-
-
-        user = entityManager.find(Users.class, userFresh.getUserID());
-        PokeTeam pokeTeamFresh = new PokeTeam();
-
-        pokeTeamFresh.setUser(user);
-        //user.getPokeTeamList().add(pokeTeamFresh);                                        //only the owning side needs to be set !!!--> Hibernate also needs to do something ;)lul
-        entityManager.persist(pokeTeamFresh);
-        return Response.ok(user).status(201).build();
+        return Response.ok(toJSON(service.createUserWithTeam(user))).status(201).build();
     }
 
     @POST
     @Path("{userID}/addTeam")
     @Transactional
     public Response createTeamForUser(@PathParam Integer userID) {
-
-        Users user = entityManager.find(Users.class, userID);
-
-        if(user == null){
-            throw new WebApplicationException("User with 'userID' " + userID + " does not exist.", 404);
-        }
-
-        PokeTeam pokeTeamFresh = new PokeTeam();
-        pokeTeamFresh.setUser(user);
-        entityManager.persist(pokeTeamFresh);
-
-        return Response.ok(toJSON(pokeTeamFresh)).status(201).build();
+        return Response.ok(toJSON(service.createTeamForUser(userID))).status(201).build();
     }
 
     @POST
     @Path("addPokemonToTeam/{teamID}")
     @Transactional
     public Response addPokemonToTeam(@PathParam Integer teamID, Pokemon pokemon) {                  //Pokemon Object in POST-Body must have pokemonID set!
-        if (pokemon.getPokemonID() == null) {
-            throw new WebApplicationException("pokemonID of Pokemon wasn't set on request.", 422);
-        }
-        if (pokemon.getEntryID() != null) {
-            throw new WebApplicationException("entryID was invalidly set on request.", 422);
-        }
-
-        PokeTeam pokeTeam = entityManager.find(PokeTeam.class, teamID);
-
-        if(pokeTeam == null){
-            throw new WebApplicationException("PokeTeam with 'pokeTeamID' " + teamID + " does not exist.", 404);
-        }
-
-        Pokemon pokemonFresh = new Pokemon();
-        pokemonFresh.setPokemonID(pokemon.getPokemonID());
-        pokemonFresh.setPokeTeam(pokeTeam);
-        entityManager.persist(pokemonFresh);
-
-        return Response.ok(toJSON(pokemonFresh)).status(201).build();
+        return Response.ok(toJSON(service.addPokemonToTeam(teamID,pokemon))).status(201).build();
     }
 
     @PUT
     @Path("/id/{userID}")               //Gets UserName-Update from POST-Body
     @Transactional
-    public String updateUserNameByID(@PathParam Integer userID, Users users) {
-        if (users.getName() == null) {
-            throw new WebApplicationException("Users' Name was not set on request.", 422);
-        }
-
-        Users entity = entityManager.find(Users.class, userID);
-
-        if (entity == null) {
-            throw new WebApplicationException("User with userID of " + userID + " does not exist.", 404);
-        }
-
-        entity.setName(users.getName());
-        return toJSON(entity);
+    public Response updateUserNameByID(@PathParam Integer userID, Users users) {
+        return Response.ok(toJSON(service.updateUserNameByID(userID, users))).status(200).build();
     }
 
     @PUT
     @Path("/attacksToPokemon/{entryID}")              //entryID of Pokemon
     @Transactional
-    public String updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
-        if (attackArray.length == 0 || attackArray.length<4) {
-            throw new WebApplicationException("AttackArray was not set right on request.", 422);
-        }
-
-        Pokemon entity = entityManager.find(Pokemon.class, entryID);
-
-        if (entity == null) {
-            throw new WebApplicationException("Pokemon with entryID of " + entryID + " does not exist.", 404);
-        }
-
-        entity.setAttackNumber1(attackArray[0]);
-        entity.setAttackNumber2(attackArray[1]);
-        entity.setAttackNumber3(attackArray[2]);
-        entity.setAttackNumber4(attackArray[3]);
-
-        return toJSON(entity);
+    public Response updatePokemonAttack(@PathParam Integer entryID, Integer[] attackArray) {         //attackArray must contain 4 entries with attackNumbers
+        return Response.ok(toJSON(service.updatePokemonAttack(entryID, attackArray))).status(200).build();
     }
 
     @DELETE
     @Path("{id}")
     @Transactional
     public Response deleteUser(@PathParam Integer id) {
-        Users entity = entityManager.getReference(Users.class, id);
-        if (entity == null) {
-            throw new WebApplicationException("User with id of " + id + " does not exist.", 404);
-        }
-        entityManager.remove(entity);
-        return Response.status(204).build();
+        return service.deleteUser(id);
     }
 
     @DELETE
     @Path("/pokemon/{entryID}")
     @Transactional
     public Response deletePokemon(@PathParam Integer entryID) {
-        Pokemon entity = entityManager.getReference(Pokemon.class, entryID);
-        if (entity == null) {
-            throw new WebApplicationException("Pokemon with entryID of " + entryID + " does not exist.", 404);
-        }
-        entityManager.remove(entity);
-        return Response.status(204).build();
+        return service.deletePokemon(entryID);
     }
 
     @DELETE
     @Path("/team/{teamID}")
     @Transactional
     public Response deletePokeTeam(@PathParam Integer teamID) {
-        PokeTeam entity = entityManager.getReference(PokeTeam.class, teamID);
-        if (entity == null) {
-            throw new WebApplicationException("Team with teamID of " + teamID + " does not exist.", 404);
-        }
-        entityManager.remove(entity);
-        return Response.status(204).build();
+        return service.deletePokeTeam(teamID);
     }
 
 
@@ -257,10 +149,7 @@ public class UserManageResource {
                     .entity(entityBuilder.build())
                     .build();
         }
-
     }
-
-
 
 
     public String toJSON(Object o) {
