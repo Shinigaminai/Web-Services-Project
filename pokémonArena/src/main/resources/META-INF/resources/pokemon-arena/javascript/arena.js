@@ -37,7 +37,10 @@ var receivedOpponentInfo = function(data) {
     opponentName = data.name;
     opponentId = data.userID;
     opponentTeamId = data.teamID;
-    //TODO load other data;
+    getUserTeam(opponentTeamId, function(team) {
+        opponentTeam = team;
+        console.log("Opponent " + data.name + " with team " + team);
+    });
 }
 
 var receivedSelectPokemon = function(data) {
@@ -57,4 +60,5 @@ var receivedSelectPokemon = function(data) {
 var surrender = function() {
     socketArena.send("surrender", {"name": currentUserName});
     leaveArena();
+    showNotification("Du hast aufgegeben");
 }
