@@ -75,29 +75,27 @@ var surrender = function() {
 var sendMyInfoToArena = function() {
     getUserTeams(currentUserId, function(teams) {
         getUserTeam(teams[0], function(pokemonEntries) {
-            let team = [];
+            var myTeam = [];
             for(i in pokemonEntries) {
                 getUserPokemon(pokemonEntries[i].entryID, function(pokemon){
-                    sendPokemonInfoToArena(pokemon);
+                    let attacks = [];
+                    attacks.push(pokemon.attackNumber1);
+                    attacks.push(pokemon.attackNumber2);
+                    attacks.push(pokemon.attackNumber3);
+                    attacks.push(pokemon.attackNumber4);
+                    pokeInfos = {"pokemonID": pokemon.pokemonID, "entryID": pokemon.entryID, "attacks": attacks};
+                    myTeam.push(pokeInfos);
+                    if(myTeam.length >= pokemonEntries.length) {
+                        socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId, "team": myTeam });
+                    }
                 });
-                team.push(pokemonEntries[i].entryID);
             }
-            socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId,
-                "teamID": teams[0], "team": team});
         });
     });
 }
 
-var sendPokemonInfoToArena = function(pokemon) {
-    let attacks = [];
-    attacks.push(pokemon.attackNumber1);
-    attacks.push(pokemon.attackNumber2);
-    attacks.push(pokemon.attackNumber3);
-    attacks.push(pokemon.attackNumber4);
-    socketArena.send("pokemonInfo", {"pokemonID": pokemon.pokemonID,
-                                     "entryID": pokemon.entryID,
-                                     "attacks": attacks
-    });
+var packPokemonInfos = function(pokemon) {
+    return pokeInfos;
 }
 
 var createPokemonOptionField = function(userPokemon) {
