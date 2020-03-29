@@ -53,7 +53,7 @@
 
 .fighter::before {
     position: absolute;
-    bottom: 0;
+    bottom: 5%;
     height: 30%;
     width: 100%;
     border-radius: 50%;
@@ -106,8 +106,8 @@
 #fight-area img {
     position: absolute;
     bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 25%);
+    left: 0;
     image-rendering: pixelated;
+    image-rendering: crisp-edges;
     width: 100%;
 }
