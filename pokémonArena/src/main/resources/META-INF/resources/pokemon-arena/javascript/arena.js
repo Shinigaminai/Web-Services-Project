@@ -11,7 +11,7 @@ var setArena = function(key) {
 var openArenaOptionTab = function(evt, tabId) {
     $(".tabcontent").css("display", "none");
     $(".tablink").removeClass("active");
-    document.getElementById(tabId).style.display = "block";
+    document.getElementById(tabId).style.display = "flex";
     evt.currentTarget.classList.add("active");
 }
 
@@ -21,13 +21,14 @@ var enterArena = function() {
     $("header").removeClass("slideInDown").addClass("slideOutUp");
 
     $("#defaultOption").addClass("active");
-    $("#arenaPokemonTab").css("display", "block");
+    $("#arenaPokemonTab").css("display", "flex");
 
     getUserTeams(currentUserId, function(teams) {
         getUserTeam(teams[0], function(pokemonEntries) {
             let team = [];
             for(i in pokemonEntries) {
                 createPokemonOptionField(pokemonEntries[i]);
+                console.log("create pokemon option " + pokemonEntries[i].pokemonID);
             }
         });
     });
@@ -45,11 +46,7 @@ var leaveArena = function() {
 var receivedOpponentInfo = function(data) {
     opponentName = data.name;
     opponentId = data.userID;
-    opponentTeamId = data.teamID;
-    getUserTeam(opponentTeamId, function(team) {
-        opponentTeam = team;
-        console.log("Opponent " + data.name + " with team " + team);
-    });
+    opponentTeam = data.team;
 }
 
 var receivedSelectPokemon = function(data) {
@@ -86,16 +83,15 @@ var sendMyInfoToArena = function() {
                     pokeInfos = {"pokemonID": pokemon.pokemonID, "entryID": pokemon.entryID, "attacks": attacks};
                     myTeam.push(pokeInfos);
                     if(myTeam.length >= pokemonEntries.length) {
-                        socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId, "team": myTeam });
+                        socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId, "arena": arenaKey, "team": JSON.stringify(myTeam) });
                     }
                 });
             }
+            if(pokemonEntries.length == 0) {
+                socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId, "arena": arenaKey, "team": "[]" });
+            }
         });
     });
-}
-
-var packPokemonInfos = function(pokemon) {
-    return pokeInfos;
 }
 
 var createPokemonOptionField = function(userPokemon) {

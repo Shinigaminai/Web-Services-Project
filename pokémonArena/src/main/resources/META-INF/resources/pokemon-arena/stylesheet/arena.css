@@ -35,7 +35,9 @@
 .tabcontent {
     display: none;
     padding: 6px 12px;
-    height: 5rem;
+    height: 8rem;
+    flex-flow: row wrap;
+    overflow: auto;
 }
 
 .tablink {
@@ -59,18 +61,45 @@
     content: "";
 }
 
+.fighter {
+    padding-top: 55%;
+    width: 55%;
+}
+
 #fighter-me {
     position: absolute;
     left: 5%;
     bottom: 10%;
-    height: 60%;
-    width: 60%;
 }
 
 #fighter-opponent {
     position: absolute;
     right: 5%;
-    top: 15%;
-    height: 50%;
-    width: 40%;
+    bottom: 15%;
+    transform: scale(0.7);
+    transform-origin: right;
+}
+
+#arenaPokemonTab > div {
+  background-color: bisque;
+  border-radius: 0.2em;
+  text-align: center;
+}
+.optionCover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0%;
+  transition: 0.2s;
+  background-color: #a52a2ac7;
+  cursor: pointer;
+  border-radius: 0.2em;
+}
+.optionCover:hover {
+  opacity: 100%;
 }
