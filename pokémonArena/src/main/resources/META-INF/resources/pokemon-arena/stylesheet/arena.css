@@ -134,3 +134,15 @@
 .healthContainer > div:last-child {
     background-color: white;
 }
+#health-opponent {
+    position: absolute;
+    top: -1em;
+    right: 1em;
+    left: 1em;
+}
+#health-me {
+    position: absolute;
+    top: -1em;
+    left: 1em;
+    right: 1em;
+}

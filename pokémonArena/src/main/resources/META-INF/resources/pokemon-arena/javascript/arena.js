@@ -41,6 +41,10 @@ var leaveArena = function() {
     }, 1000);
     $("#tabs-menu").removeClass("slideOutDown").addClass("slideInUp");
     $("header").removeClass("slideOutUp").addClass("slideInDown");
+    document.getElementById("readyToFight").innerHTML = "ready to fight";
+    connectedToArena = false;
+    document.getElementById("challenge-list").classList.add("hidden");
+    socketArena = undefined;
 }
 
 var loadPokemonOptions = function(teamID) {
@@ -77,7 +81,7 @@ var receivedSelectPokemon = function(data) {
         console.log("[E] received select pokemon request");
     } else if (data.status == "info") {
         console.log("[i] opponent switched pokemon to " + data.entryID);
-        selectOpponentPokemon(data.pokemonID, data.entryID);
+        selectOpponentPokemon(data.pokemonID, data.entryID, data.hp, data.maxhp);
     } else if (data.status == "accept") {
         acceptSelectPokemon(data.pokemonID, data.entryID);
     } else if (data.status == "reject") {
@@ -204,9 +208,12 @@ var deactivatePokemonOptions = function() {
     $(".optionCoverPokemon").addClass('disabled').html("");
 }
 
-var selectOpponentPokemon = function(pokemonID, entryID) {
+var selectOpponentPokemon = function(pokemonID, entryID, hp, maxhp) {
     getPokemon(pokemonID, function(pokemon) {
         switchPokemon("pokemon-opponent", pokemon.sprites.frontDefault, pokemon.name);
+        $("#health-opponent").attr('name', "pokemon-"+entryID+"-health");
+        $("#health-opponent").innerHTML = "";
+        $("#health-opponent").append(createHealth(hp, maxhp));
     });
     opponentCurrentPokemon = pokemonID;
     if(myCurrentPokemon != undefined) {
@@ -219,6 +226,7 @@ var acceptSelectPokemon = function(pokemonID, entryID) {
     deactivatePokemonOptions();
     getPokemon(pokemonID, function(pokemon) {
         switchPokemon("pokemon-me", pokemon.sprites.backDefault, pokemon.name);
+        $("#health-me").attr('name', "pokemon-"+entryID+"-health");
     });
     myCurrentPokemon = pokemonID;
     if(extraPokemonChooseAction == true) {
@@ -269,14 +277,38 @@ var receivedFightResult = function(data) {
         this.innerHTML = "";
         this.appendChild(createHealth(data.hp, data.maxhp));
     });
-    if(hp == "0" && data.entryID == myCurrentPokemon) {
-        switchPokemon("pokemon-me", "");
-        extraPokemonChooseAction = true;
-        myCurrentPokemon = undefined;
-        $("#arenaMovesTab").innerHTML = "";
+    if(hp == "0") {
+        if(data.entryID == myCurrentPokemon) {
+            switchPokemon("pokemon-me", "");
+            extraPokemonChooseAction = true;
+            myCurrentPokemon = undefined;
+            $("#arenaMovesTab").innerHTML = "";
+        }
+        if(data.entryID == opponentCurrentPokemon){
+            switchPokemon("pokemon-opponent", "");
+            opponentCurrentPokemon = undefined;
+        }
+    } else {
+        if(data.entryID == myCurrentPokemon) {
+            $("#pokemon-me").addClass("shake");
+            setTimeout(function(){
+                $("#pokemon-me").removeClass("shake");
+            }, 1000);
+        }
+        if(data.entryID == opponentCurrentPokemon){
+            $("#pokemon-opponent").addClass("shake");
+            setTimeout(function(){
+                $("#pokemon-opponent").removeClass("shake");
+            }, 1000);
+        }
     }
-    if(hp == "0" && data.entryID == opponentCurrentPokemon) {
-        switchPokemon("pokemon-opponent", "");
-        opponentCurrentPokemon = undefined;
+}
+
+var receivedArenaResult = function(data) {
+    if(data.winner == currentUserId) {
+        showNotification("You won!", 3500);
+    } else {
+        showNotification("You lost!", 3500);
     }
+    leaveArena();
 }

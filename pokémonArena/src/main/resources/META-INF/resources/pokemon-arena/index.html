@@ -89,10 +89,16 @@
     </div>
 </nav>
 <div id="arena-area" class="animated forward fadeOut" style="display: none">
-    <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1;">
+    <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1; max-width: 50rem">
         <div id="fight-area">
-            <div id="fighter-me" class="fighter"><img id="pokemon-me" class="animated forward zoomIn"></div>
-            <div id="fighter-opponent" class="fighter"><img id="pokemon-opponent" class="animated forward zoomIn"></div>
+            <div id="fighter-me" class="fighter">
+                <img id="pokemon-me" class="animated forward zoomIn">
+                <div id="health-me"></div>
+            </div>
+            <div id="fighter-opponent" class="fighter">
+                <img id="pokemon-opponent" class="animated forward zoomIn">
+                <div id="health-opponent"></div>
+            </div>
         </div>
         <div id="arena-options-area">
             <div id="arena-option-tab">
