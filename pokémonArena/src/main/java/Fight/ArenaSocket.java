@@ -90,13 +90,13 @@ public class ArenaSocket extends Arena {
                 PokemonJson[] pokemonList = objectMapper.readValue(json,PokemonJson[].class);
                 List<Integer> entryList = new ArrayList<>();
                 for(PokemonJson p : pokemonList){
-                    entryList.add(p.EntryID);
-                    pokeID.put(p.EntryID,p.pokemonID);
+                    entryList.add(p.entryID);
+                    pokeID.put(p.entryID,p.pokemonID);
                     List<Integer> moveID = new ArrayList<>();
                     for(Integer i : p.attacks){
                         moveID.add(i);
                     }
-                    moveIDList.put(p.EntryID,moveID);
+                    moveIDList.put(p.entryID,moveID);
                 }
                 entryIDMap.put(username,entryList);
 

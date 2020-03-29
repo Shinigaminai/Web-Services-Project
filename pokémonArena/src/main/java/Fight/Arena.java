@@ -182,6 +182,63 @@ public class Arena {
             if (move.component21().component1().equals(p.component2().component1())){
                 multiplicator=multiplicator*0.5;
             }
+            if(p.component2().component1().equals("normal")){
+                if(move.component21().component1().equals("fight")){
+                    multiplicator=multiplicator*2;
+                }
+                if(move.component21().component1().equals("ghost")){
+                    multiplicator=multiplicator*0;
+                }
+            }
+            if(p.component2().component1().equals("fire")){
+                if(move.component21().component1().equals("fire")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("water")){
+                    multiplicator=multiplicator*2;
+                }
+                if(move.component21().component1().equals("grass")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("ice")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("ground")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("bug")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("rock")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("steel")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("fairy")){
+                    multiplicator*=0.5;
+                }
+            }
+            if(p.component2().component1().equals("water")){
+                if(move.component21().component1().equals("fire")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("water")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("grass")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("electric")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("ice")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("steel")){
+                    multiplicator*=0.5;
+                }
+            }
         }
 
         multiplicator = multiplicator * randomDmg;

@@ -1,7 +1,7 @@
 package Fight;
 
 public class PokemonJson {
-    Integer pokemonID;
-    Integer EntryID;
-    Integer[] attacks;
+    public Integer pokemonID;
+    public Integer entryID;
+    public Integer[] attacks;
 }
