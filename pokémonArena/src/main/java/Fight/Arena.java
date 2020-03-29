@@ -87,7 +87,12 @@ public class Arena {
 
     protected void sendSurrender(String user){
         String UserOpponent = opponent.get(user);
-        send(UserOpponent,createMessage("surrender",Map.of("name",user)));
+        send(UserOpponent,createMessage("surrender",
+                new HashMap<String, String>(){{
+                    put("name",user);
+                }}
+                //Map.of("name",user)
+        ));
     }
 
     protected void sendSelectPokemon(JsonEvent event, String from){
@@ -97,18 +102,63 @@ public class Arena {
         Pokemon currentpkm = currentPkm.get(from);
         if(currentpkm==null){
             currentPkm.put(from,pokemon);
-            send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(),"status", "accept")));
-            send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(),"status", "info")));
+            send(from, createMessage("selectPokemon",
+                    new HashMap<String, String>(){{
+                        put("entryID",pkm.toString());
+                        put("pokemonID",pokemon.getPokemonID().toString());
+                        put("maxhp",pokemon.getHp().toString());
+                        put("hp",pokemon.getCurrentHp().toString());
+                        put("status","accept");
+                    }}
+                    //Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(),"status", "accept")
+            ));
+            send(opponent.get(from), createMessage("selectPokemon",
+                    new HashMap<String, String>(){{
+                        put("entryID",pkm.toString());
+                        put("pokemonID",pokemon.getPokemonID().toString());
+                        put("maxhp",pokemon.getHp().toString());
+                        put("hp",pokemon.getCurrentHp().toString());
+                        put("status","info");
+                    }}
+                   // Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(),"status", "info")
+            ));
         }else {
             if (pokemon.getCurrentHp() > 0) {
                 allPkm.replace(currentPkm.get(from).getEntryID(), currentPkm.get(from));
                 currentPkm.replace(from, pokemon);
-                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(), "status", "accept")));
+                send(from, createMessage("selectPokemon",
+                        new HashMap<String, String>(){{
+                            put("entryID",pkm.toString());
+                            put("pokemonID",pokemon.getPokemonID().toString());
+                            put("maxhp",pokemon.getHp().toString());
+                            put("hp",pokemon.getCurrentHp().toString());
+                            put("status","accept");
+                        }}
+                        //Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(), "status", "accept")
+                ));
                 if (currentpkm.getCurrentHp() <= 0) {
-                    send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(), "status", "info")));
+                    send(opponent.get(from), createMessage("selectPokemon",
+                            new HashMap<String, String>(){{
+                                put("entryID",pkm.toString());
+                                put("pokemonID",pokemon.getPokemonID().toString());
+                                put("maxhp",pokemon.getHp().toString());
+                                put("hp",pokemon.getCurrentHp().toString());
+                                put("status","info");
+                            }}
+                            //Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(), "status", "info")
+                    ));
                 }
             } else {
-                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString() ,"status", "reject")));
+                send(from, createMessage("selectPokemon",
+                        new HashMap<String, String>(){{
+                            put("entryID",pkm.toString());
+                            put("pokemonID",pokemon.getPokemonID().toString());
+                            put("maxhp",pokemon.getHp().toString());
+                            put("hp",pokemon.getCurrentHp().toString());
+                            put("status","reject");
+                        }}
+                        //Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString() ,"status", "reject")
+                        ));
             }
         }
     }
@@ -646,8 +696,18 @@ if(move.component3()!=null) {
             }
         }
         if(beaten) {
-            send(Fighter1, createMessage("arenaResult", Map.of("winner", opponent.get(user))));
-            send(Fighter2, createMessage("arenaResult", Map.of("winner", opponent.get(user))));
+            send(Fighter1, createMessage("arenaResult",
+                    new HashMap<String, String>(){{
+                        put("winner",opponent.get(user));
+                    }}
+                    //Map.of("winner", opponent.get(user))
+            ));
+            send(Fighter2, createMessage("arenaResult",
+                    new HashMap<String, String>(){{
+                        put("entryID",opponent.get(user));
+                    }}
+                   // Map.of("winner", opponent.get(user))
+            ));
         }
     }
 
@@ -657,13 +717,45 @@ if(move.component3()!=null) {
         System.out.println(currentPkm.get(Fighter1).getHp().toString());
         System.out.println(currentPkm.get(Fighter1).getCurrentHp().toString());
         System.out.println(FirstLast.get(Fighter1));
-        send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-        send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
-        send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
-        send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
+        send(Fighter1,createMessage("fightResult",
+                new HashMap<String, String>(){{
+                    put("entryID",currentPkm.get(Fighter1).getEntryID().toString());
+                    put("hp",currentPkm.get(Fighter1).getCurrentHp().toString());
+                    put("maxhp",currentPkm.get(Fighter1).getHp().toString());
+                    put("fightOrder",FirstLast.get(Fighter1));
+                }}
+               // Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
+               // "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))
+        ));
+        send(Fighter2,createMessage("fightResult",
+                new HashMap<String, String>(){{
+                    put("entryID",currentPkm.get(Fighter1).getEntryID().toString());
+                    put("hp",currentPkm.get(Fighter1).getCurrentHp().toString());
+                    put("maxhp",currentPkm.get(Fighter1).getHp().toString());
+                    put("fightOrder",FirstLast.get(Fighter1));
+                }}
+                //Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
+                //"hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))
+                ));
+        send(Fighter1,createMessage("fightResult",
+                new HashMap<String, String>(){{
+                    put("entryID",currentPkm.get(Fighter2).getEntryID().toString());
+                    put("hp",currentPkm.get(Fighter2).getCurrentHp().toString());
+                    put("maxhp",currentPkm.get(Fighter2).getHp().toString());
+                    put("fightOrder",FirstLast.get(Fighter2));
+                }}
+               // Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
+               // "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter2))
+        ));
+        send(Fighter2,createMessage("fightResult",
+                new HashMap<String, String>(){{
+                    put("entryID",currentPkm.get(Fighter2).getEntryID().toString());
+                    put("hp",currentPkm.get(Fighter2).getCurrentHp().toString());
+                    put("maxhp",currentPkm.get(Fighter2).getHp().toString());
+                    put("fightOrder",FirstLast.get(Fighter2));
+                }}
+              //  Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
+              //  "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter2))
+        ));
     }
 }

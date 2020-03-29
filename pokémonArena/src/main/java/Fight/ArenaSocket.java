@@ -26,21 +26,39 @@ public class ArenaSocket extends Arena {
     public void onOpen(Session session, @PathParam("username") String username) {
         System.out.println("[i][Fight.Arena] User connect: " + username);
         sessions.put(username, session);
-        broadcast(createMessage("userconnect", Map.of("user", username, "action", "joined")));
+        broadcast(createMessage("userconnect",
+                new HashMap<String, String>(){{
+            put("user",username);
+            put("action","joined");
+                }}
+                //Map.of("user", username, "action", "joined")
+        ));
     }
 
     @OnClose
     public void onClose(Session session, @PathParam("username") String username) {
         System.out.println("[i][Fight.Arena] User disconnect: " + username);
         sessions.remove(username);
-        broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
+        broadcast(createMessage("userconnect",
+                new HashMap<String, String>(){{
+                    put("user",username);
+                    put("action","left");
+                }}
+                //Map.of("user", username, "action", "left")
+                ));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
         System.out.println("[E][Fight.Arena] User error [" + username + "] : " + throwable.toString());
         sessions.remove(username);
-        broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
+        broadcast(createMessage("userconnect",
+                new HashMap<String, String>(){{
+                    put("user",username);
+                    put("action","left");
+                }}
+                //Map.of("user", username, "action", "left")
+        ));
         LOG.error("onError", throwable);
     }
 
@@ -54,19 +72,36 @@ public class ArenaSocket extends Arena {
             if (event.getEvent().equals("getChallengers")) {
                 System.out.println("load challengers");
                 sessions.keySet().forEach(user -> {
-                    send(username, createMessage("userconnect", Map.of("user", user, "action", "joined")));
+                    send(username, createMessage("userconnect",
+                            new HashMap<String, String>(){{
+                                put("user",user);
+                                put("action","joined");
+                            }}
+                            //Map.of("user", user, "action", "joined")
+                    ));
                 });
             }
             if (event.getEvent().equals("challenge")) {
                 System.out.println("new Challenge");
                 String user = event.getData().get("to");
-                send(user, createMessage("challenge", Map.of("from", username)));
+                send(user, createMessage("challenge",
+                        new HashMap<String, String>(){{
+                            put("from",username);
+                        }}
+                        //Map.of("from", username)
+                ));
             }
             if (event.getEvent().equals("answerChallenge")) {
                 System.out.println("Challenge answered");
                 String user = event.getData().get("to");
                 String answer = event.getData().get("value");
-                send(user, createMessage("answerChallenge", Map.of("from", username, "value", answer)));
+                send(user, createMessage("answerChallenge",
+                        new HashMap<String, String>(){{
+                            put("from",username);
+                            put("value",answer);
+                        }}
+                       // Map.of("from", username, "value", answer)
+                ));
                 if(answer.equals("accept")){
                     createRoom(user, username);
                 }
@@ -74,7 +109,12 @@ public class ArenaSocket extends Arena {
             if (event.getEvent().equals("cancelChallenge")) {
                 System.out.println("Challenge canceled");
                 String user = event.getData().get("to");
-                send(user, createMessage("cancelChallenge", Map.of("from", username)));
+                send(user, createMessage("cancelChallenge",
+                        new HashMap<String, String>(){{
+                            put("from",username);
+                        }}
+                        //Map.of("from", username)
+                ));
             }
             if(event.getEvent().equals("selectPokemon")){
                 arenas.get(username).sendSelectPokemon(event,username);
@@ -128,13 +168,30 @@ public class ArenaSocket extends Arena {
         arenas.put(key, arena);
         arenas.put(user1,arena);
         arenas.put(user2,arena);
-        String message = createMessage("assignedArena", Map.of("arena", key));
+        String message = createMessage("assignedArena",
+                new HashMap<String, String>(){{
+                    put("arena",key);
+                }}
+               // Map.of("arena", key)
+        );
         arena.send(user1, message);
         arena.send(user2, message);
         sessions.remove(user1);
         sessions.remove(user2);
-        broadcast(createMessage("userconnect", Map.of("user", user1, "action", "fight")));
-        broadcast(createMessage("userconnect", Map.of("user", user2, "action", "fight")));
+        broadcast(createMessage("userconnect",
+                new HashMap<String, String>(){{
+                    put("user",user1);
+                    put("action","fight");
+                }}
+               // Map.of("user", user1, "action", "fight")
+        ));
+        broadcast(createMessage("userconnect",
+                new HashMap<String, String>(){{
+                    put("user",user2);
+                    put("action","fight");
+                }}
+               // Map.of("user", user2, "action", "fight")
+        ));
     }
 
     private void setUserInformation(String arenaKey,String user) {
