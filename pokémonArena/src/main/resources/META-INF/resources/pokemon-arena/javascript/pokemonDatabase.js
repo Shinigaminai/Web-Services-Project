@@ -103,9 +103,7 @@ var addToTeam = function (id) {
                 if (teamlist == null) {
                     console.log("[E] Pokémon in Team konnten nicht geladen werden");
                 }
-                if (checkPokemonInTeamlist(id, teamlist)) {
-                    alert("[!] Dieses Pokémon ist bereits in deinem Team");
-                } else if (teamlist.length > 5) {
+                if (teamlist.length > 5) {
                     alert("[!] Dein Pokémon-Team ist voll");
                 } else {
                     getPokemon(id, function(pokemon) {
@@ -143,15 +141,6 @@ var removeFromTeam = function ( buttonElement, pokemonEntryId ) {
         console.log("[i] remove "+pokemonEntryId+" from team");
         buttonElement.parentElement.parentElement.remove();
     });
-}
-
-var checkPokemonInTeamlist = function(pokemonId, entryIds) {
-    for(i in entryIds) {
-        if(entryIds[i].pokemonID == pokemonId) {
-            return true;
-        }
-    }
-    return false;
 }
 
 var createMovesSelect = function(moves, entryId, selectedMoves) {

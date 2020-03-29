@@ -64,6 +64,13 @@ public class UserManageResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("pokemon/{entryID}")
+    public Response getPokemonInfos(@PathParam Integer entryID) {
+        return Response.ok(toJSON(service.getPokemonInfos(entryID))).status(200).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("attacks/{entryID}")
     public Response getAttacksFromPokemon(@PathParam Integer entryID) {
         return Response.ok(toJSON(service.getAttacksFromPokemon(entryID))).status(200).build();

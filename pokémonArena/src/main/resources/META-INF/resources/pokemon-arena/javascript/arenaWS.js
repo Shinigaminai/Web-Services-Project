@@ -38,6 +38,8 @@ jQuery(function() {
 
             socketArena.bind('assignedArena', function(data){setArena(data.arena);});
             socketArena.bind('assignedArena', enterArena);
+            socketArena.bind('assignedArena', sendMyInfoToArena);
+            socketArena.bind('requestInfo', sendMyInfoToArena);
             socketArena.bind('opponentInfo', receivedOpponentInfo);
             socketArena.bind('selectPokemon', receivedSelectPokemon);
         }
