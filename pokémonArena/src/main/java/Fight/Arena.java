@@ -93,6 +93,7 @@ public class Arena {
     protected void sendSelectPokemon(JsonEvent event, String from){
         Integer pkm = Integer.parseInt(event.getData().get("entryID"));
         Pokemon pokemon = allPkm.get(pkm);
+        System.out.println(pokemon.getHp()); //1
         Pokemon currentpkm = currentPkm.get(from);
         if(currentpkm==null){
             currentPkm.put(from,pokemon);
@@ -118,23 +119,23 @@ public class Arena {
             List<PokemonStat> allStats = getPokeService.getPokemon(v.getPokemonID()).component14();
             for(PokemonStat s : allStats){
                if(s.component1().component1().equals("hp")){
-                   v.setHp(s.component1().component3());
-                   v.setCurrentHp(s.component1().component3());
+                   v.setHp(s.component3());
+                   v.setCurrentHp(s.component3());
                }
                if(s.component1().component1().equals("attack")){
-                   v.setAttk(s.component1().component3());
+                   v.setAttk(s.component3());
                }
                if(s.component1().component1().equals("special-attack")){
-                   v.setSpAttk(s.component1().component3());
+                   v.setSpAttk(s.component3());
                }
                if(s.component1().component1().equals("defense")){
-                   v.setDef(s.component1().component3());
+                   v.setDef(s.component3());
                }
                if(s.component1().component1().equals("special-defense")){
-                   v.setSpDef(s.component1().component3());
+                   v.setSpDef(s.component3());
                }
                if(s.component1().component1().equals("speed")){
-                   v.setInit(s.component1().component3());
+                   v.setInit(s.component3());
                }
             }
             v.setMoves();
@@ -150,7 +151,7 @@ public class Arena {
     }
     private void executeFight(){
         System.out.println(currentPkm);
-        if(currentPkm.get(Fighter1).getInit()>currentPkm.get(Fighter2).getInit()){
+        if(currentPkm.get(Fighter1).getInit()<currentPkm.get(Fighter2).getInit()){
             FirstLast.put(Fighter2,"First");
             FirstLast.put(Fighter1,"Last");
             executeMove(Fighter2);

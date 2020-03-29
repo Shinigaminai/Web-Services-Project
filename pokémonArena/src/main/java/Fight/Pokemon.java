@@ -23,7 +23,7 @@ public class Pokemon {
     private String state;
 
     private Integer hp;
-    private int currentHp;
+    private Integer currentHp;
     private int attk;
     private int SpAttk;
     private int def;
@@ -34,11 +34,11 @@ public class Pokemon {
     List<Integer> attackIDList = new ArrayList<>();
     Map<Integer, Move> moves = new HashMap<>();
 
-    public void setHp(int hp) {
+    public void setHp(Integer hp) {
         this.hp = hp;
     }
 
-    public void setCurrentHp(int currentHp) {
+    public void setCurrentHp(Integer currentHp) {
         this.currentHp = currentHp;
     }
 
