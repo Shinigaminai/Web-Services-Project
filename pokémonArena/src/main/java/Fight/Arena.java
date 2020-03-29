@@ -85,17 +85,27 @@ public class Arena {
     }
     protected void sendSelectPokemon(JsonEvent event, String from){
         Integer pkm = Integer.parseInt(event.getData().get("entryID"));
+        System.out.println(pkm);
+        System.out.println(allPkm);
         Pokemon pokemon = allPkm.get(pkm);
         Pokemon currentpkm = currentPkm.get(from);
-        if(pokemon.getCurrentHp()>0){
-            allPkm.replace(currentPkm.get(from).getEntryID(),currentPkm.get(from));
+        System.out.println(pokemon);
+        System.out.println(currentpkm);
+        if(currentpkm==null){
             currentPkm.replace(from,pokemon);
-            send(from,createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","accept")));
-            if(currentpkm.getCurrentHp()<=0) {
-                send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "info")));
+            send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "accept")));
+            send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "info")));
+        }else {
+            if (pokemon.getCurrentHp() > 0) {
+                allPkm.replace(currentPkm.get(from).getEntryID(), currentPkm.get(from));
+                currentPkm.replace(from, pokemon);
+                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "accept")));
+                if (currentpkm.getCurrentHp() <= 0) {
+                    send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "info")));
+                }
+            } else {
+                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "reject")));
             }
-            }else{
-            send(from,createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","reject")));
         }
     }
     protected void loadAllPokemonData(){
