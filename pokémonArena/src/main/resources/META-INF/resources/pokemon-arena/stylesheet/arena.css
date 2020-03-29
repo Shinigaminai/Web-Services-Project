@@ -103,3 +103,11 @@
 .optionCover:hover {
   opacity: 100%;
 }
+#fight-area img {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 25%);
+    image-rendering: pixelated;
+    width: 100%;
+}

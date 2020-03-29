@@ -91,15 +91,15 @@
 <div id="arena-area" class="animated forward fadeOut" style="display: none">
     <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1;">
         <div id="fight-area">
-            <div id="fighter-me" class="fighter"><img id="pokemon-me"></div>
-            <div id="fighter-opponent" class="fighter"><img id="pokemon-opponent"></div>
+            <div id="fighter-me" class="fighter"><img id="pokemon-me" class="animated forward zoomIn"></div>
+            <div id="fighter-opponent" class="fighter"><img id="pokemon-opponent" class="animated forward zoomIn"></div>
         </div>
         <div id="arena-options-area">
             <div id="arena-option-tab">
-                <div id="defaultOption" class="tablink" onclick="openArenaOptionTab(event, 'arenaPokemonTab')">Pokémon</div>
-                <div class="tablink" onclick="openArenaOptionTab(event, 'arenaMovesTab')">Moves</div>
-                <div class="tablink" onclick="openArenaOptionTab(event, 'arenaEmojiTab')">Emoji</div>
-                <div class="tablink" onclick="openArenaOptionTab(event, 'arenaActionsTab')">X</div>
+                <div id="defaultOption" class="tablink" onclick="openArenaOptionTab(this, 'arenaPokemonTab')">Pokémon</div>
+                <div class="tablink" onclick="openArenaOptionTab(this, 'arenaMovesTab')">Moves</div>
+                <div class="tablink" onclick="openArenaOptionTab(this, 'arenaEmojiTab')">Emoji</div>
+                <div class="tablink" onclick="openArenaOptionTab(this, 'arenaActionsTab')">X</div>
             </div>
             <!-- Tab content -->
             <div id="arenaPokemonTab" class="tabcontent"></div>

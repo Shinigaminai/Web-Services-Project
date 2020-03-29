@@ -10,11 +10,11 @@ var setArena = function(key) {
     arenaKey = key;
 }
 
-var openArenaOptionTab = function(evt, tabId) {
+var openArenaOptionTab = function(element, tabId) {
     $(".tabcontent").css("display", "none");
     $(".tablink").removeClass("active");
     document.getElementById(tabId).style.display = "flex";
-    evt.currentTarget.classList.add("active");
+    element.classList.add("active");
 }
 
 var enterArena = function() {
@@ -22,8 +22,7 @@ var enterArena = function() {
     $("#tabs-menu").removeClass("slideInUp").addClass("slideOutDown");
     $("header").removeClass("slideInDown").addClass("slideOutUp");
 
-    $("#defaultOption").addClass("active");
-    $("#arenaPokemonTab").css("display", "flex");
+    $("#defaultOption").click();
 
     getUserTeams(currentUserId, function(teams) {
         loadPokemonOptions(teams[0]);
@@ -73,6 +72,7 @@ var receivedSelectPokemon = function(data) {
         console.log("[E] received select pokemon request");
     } else if (data.status == "info") {
         console.log("[i] opponent switched pokemon to " + data.entryID);
+        selectOpponentPokemon(data.pokemonID, data.entryID);
     } else if (data.status == "accept") {
         acceptSelectPokemon(data.pokemonID, data.entryID);
     } else if (data.status == "reject") {
@@ -89,9 +89,11 @@ var surrender = function() {
 }
 
 var sendMyInfoToArena = function() {
+    console.log("try send my info to arena");
     getUserTeams(currentUserId, function(teams) {
         getUserTeam(teams[0], function(pokemonEntries) {
-            var team = [];
+            myTeam = [];
+            console.log("create team for info to arena");
             for(i in pokemonEntries) {
                 getUserPokemon(pokemonEntries[i].entryID, function(pokemon){
                     let attacks = [];
@@ -101,9 +103,8 @@ var sendMyInfoToArena = function() {
                     attacks.push(pokemon.attackNumber4);
                     pokeInfos = {"pokemonID": pokemon.pokemonID, "entryID": pokemon.entryID, "attacks": attacks};
                     myTeam.push(pokeInfos);
-                    if(team.length >= pokemonEntries.length) {
-                        socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId, "arena": arenaKey, "team": JSON.stringify(team) });
-                        myTeam = team;
+                    if(myTeam.length >= pokemonEntries.length) {
+                        socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId, "arena": arenaKey, "team": JSON.stringify(myTeam) });
                     }
                 });
             }
@@ -193,11 +194,17 @@ var deactivatePokemonOptions = function() {
     $(".optionCoverPokemon").addClass('disabled').html("");
 }
 
+var selectOpponentPokemon = function(pokemonID, entryID) {
+    getPokemon(pokemonID, function(pokemon) {
+        switchPokemon("pokemon-opponent", pokemon.sprites.frontDefault, pokemon.name);
+    });
+}
+
 var acceptSelectPokemon = function(pokemonID, entryID) {
     activateOptions();
     deactivatePokemonOptions();
     getPokemon(pokemonID, function(pokemon) {
-        $("#pokemon-me").prop("src", pokemon.sprites.backDefault).prop("alt", pokemon.name);
+        switchPokemon("pokemon-me", pokemon.sprites.backDefault, pokemon.name);
     });
     if(extraPokemonChooseAction == true) {
         extraPokemonChooseAction = false;
@@ -206,6 +213,16 @@ var acceptSelectPokemon = function(pokemonID, entryID) {
         deactivateMoveOptions();
     }
     loadMovesOptions(entryID);
+}
+
+var switchPokemon = function(elementID, newSource, alt) {
+    $("#"+elementID).removeClass("zoomIn");
+    $("#"+elementID).addClass("zoomOut");
+    setTimeout(function(){
+        $("#"+elementID).prop("src", newSource).prop("alt", alt);
+        $("#"+elementID).removeClass("zoomOut");
+        $("#"+elementID).addClass("zoomIn");
+    }, 1000);
 }
 
 var rejectSelectPokemon = function() {
