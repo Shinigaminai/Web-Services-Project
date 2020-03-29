@@ -79,8 +79,8 @@ public class ArenaSocket extends Arena {
             if(event.getEvent().equals("selectPokemon")){
                 arenas.get(username).sendSelectPokemon(event,username);
             }
-            if(event.getEvent().equals("selectMove")){
-                arenas.get(username).setCurrentMove(event.getData().get("move"),username);
+            if(event.getEvent().equals("selectMove")) {
+                arenas.get(username).setCurrentMove(event.getData().get("moveID"), username);
             }
             if(event.getEvent().equals("userInfo")){
                 user.put(username,Integer.valueOf(event.getData().get("userID")));;

@@ -23,7 +23,7 @@ public class Arena {
     protected GetPokeService getPokeService = new GetPokeService();
     private Map<String,String> opponent = new HashMap<>();
 
-    private Map<String,String> roundMoves = new HashMap<>(); //User, Move
+    private Map<String,Integer> roundMoves = new HashMap<>(); //User, Move
     private Map<String,String> FirstLast = new HashMap<>(); //user, FirstOrLast
 
     private int roundState = 0;
@@ -95,19 +95,19 @@ public class Arena {
         Pokemon pokemon = allPkm.get(pkm);
         Pokemon currentpkm = currentPkm.get(from);
         if(currentpkm==null){
-            currentPkm.replace(from,pokemon);
-            send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"status", "accept")));
-            send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"status", "info")));
+            currentPkm.put(from,pokemon);
+            send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(),"status", "accept")));
+            send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(),"status", "info")));
         }else {
             if (pokemon.getCurrentHp() > 0) {
                 allPkm.replace(currentPkm.get(from).getEntryID(), currentPkm.get(from));
                 currentPkm.replace(from, pokemon);
-                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(), "status", "accept")));
+                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(), "status", "accept")));
                 if (currentpkm.getCurrentHp() <= 0) {
-                    send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(), "status", "info")));
+                    send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString(), "status", "info")));
                 }
             } else {
-                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString() ,"status", "reject")));
+                send(from, createMessage("selectPokemon", Map.of("entryID", pkm.toString(),"pokemonID",pokemon.getPokemonID().toString(),"maxhp",pokemon.getHp().toString(),"hp",pokemon.getCurrentHp().toString() ,"status", "reject")));
             }
         }
     }
@@ -141,16 +141,18 @@ public class Arena {
         });
     }
     protected void setCurrentMove(String moveID,String user){
-        roundMoves.put(user,moveID);
+        System.out.println(moveID);
+        roundMoves.put(user,Integer.valueOf(moveID));
         roundState++;
         if(roundState==2){
             executeFight();
         }
     }
     private void executeFight(){
+        System.out.println(currentPkm);
         if(currentPkm.get(Fighter1).getInit()>currentPkm.get(Fighter2).getInit()){
-            FirstLast.replace(Fighter2,"First");
-            FirstLast.replace(Fighter1,"Last");
+            FirstLast.put(Fighter2,"First");
+            FirstLast.put(Fighter1,"Last");
             executeMove(Fighter2);
             if(currentPkm.get(Fighter1).getCurrentHp()<=0){
                 checkIfBeaten(Fighter1);
@@ -162,8 +164,8 @@ public class Arena {
             }
 
         } else {
-            FirstLast.replace(Fighter1,"First");
-            FirstLast.replace(Fighter2,"Last");
+            FirstLast.put(Fighter1,"First");
+            FirstLast.put(Fighter2,"Last");
             executeMove(Fighter1);
             if(currentPkm.get(Fighter2).getCurrentHp()<=0){
                 checkIfBeaten(Fighter2);
@@ -181,14 +183,17 @@ public class Arena {
     private void executeMove(String user){
         Pokemon attacker = currentPkm.get(user);
         Pokemon defender = currentPkm.get(opponent.get(user));
-        Move move = attacker.moves.get(roundMoves.get(user));
+        Integer moveID = roundMoves.get(user);
+        System.out.println(moveID);
+        Move move = attacker.moves.get(moveID);
 
         Random random = new Random();
 
         int damage = 0;
         double multiplicator = 1;
         double randomDmg = (random.nextInt(16)+85)/100;
-
+        System.out.println(move);
+        System.out.println(attacker.getType());
         for(PokemonType p : attacker.getType()) {
             if (move.component21().component1().equals(p.component2().component1())){
                 multiplicator=multiplicator*2;
@@ -612,16 +617,19 @@ public class Arena {
         multiplicator = multiplicator * randomDmg;
 
         int result = random.nextInt(100)+1;
-
-        if(result<=move.component3()){ //Hit
-            if(move.component12().component1().equals("physical")){
-                damage = (int)Math.round((((12*move.component7()*(attacker.getAttk()/defender.getDef()))/50)+2)*multiplicator);
-            }else{
-                damage = (int) Math.round((((12*move.component7()*(attacker.getSpAttk()/defender.getSpDef()))/50)+2)*multiplicator);
-            }
-        }else{
-
+System.out.println(move.component3());
+System.out.println(result);
+if(move.component3()!=null) {
+    if (result <= move.component3()) { //Hit
+        if (move.component12().component1().equals("physical")) {
+            damage = (int) Math.round((((12 * move.component7() * (attacker.getAttk() / defender.getDef())) / 50) + 2) * multiplicator);
+        } else {
+            damage = (int) Math.round((((12 * move.component7() * (attacker.getSpAttk() / defender.getSpDef())) / 50) + 2) * multiplicator);
         }
+    } else {
+
+    }
+}
         defender.setCurrentHp(defender.getCurrentHp()-damage);
         currentPkm.replace(user,attacker);
         currentPkm.replace(opponent.get(user),defender);
@@ -643,6 +651,11 @@ public class Arena {
     }
 
     private void sendResult(){
+        System.out.println("----------------------");
+        System.out.println(currentPkm.get(Fighter1).getEntryID().toString());
+        System.out.println(currentPkm.get(Fighter1).getHp().toString());
+        System.out.println(currentPkm.get(Fighter1).getCurrentHp().toString());
+        System.out.println(FirstLast.get(Fighter1));
         send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
                 "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
         send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
