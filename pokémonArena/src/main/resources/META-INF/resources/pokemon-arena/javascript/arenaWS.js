@@ -42,6 +42,7 @@ jQuery(function() {
             socketArena.bind('requestInfo', sendMyInfoToArena);
             socketArena.bind('opponentInfo', receivedOpponentInfo);
             socketArena.bind('selectPokemon', receivedSelectPokemon);
+            socketArena.bind('surrender', function(){showNotification("Dein Gegner hat aufgegeben"); leaveArena();});
         }
     });
 });
