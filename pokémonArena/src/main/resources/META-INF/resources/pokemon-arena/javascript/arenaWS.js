@@ -43,6 +43,9 @@ jQuery(function() {
             socketArena.bind('opponentInfo', receivedOpponentInfo);
             socketArena.bind('selectPokemon', receivedSelectPokemon);
             socketArena.bind('surrender', function(){showNotification("Dein Gegner hat aufgegeben"); leaveArena();});
+
+            socketArena.bind('fightResult', receivedFightResult);
+            socketArena.bind('arenaResult', receivedArenaResult);
         }
     });
 });

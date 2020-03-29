@@ -121,3 +121,16 @@
     image-rendering: crisp-edges;
     width: 100%;
 }
+
+.healthContainer {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 0.25em;
+    border: 1px solid black;
+}
+.healthContainer > div:first-child {
+    background-color: lightblue;
+}
+.healthContainer > div:last-child {
+    background-color: white;
+}

@@ -6,6 +6,9 @@ var arenaKey;
 var extraPokemonChooseAction = false;
 var myTeam = [];
 
+var myCurrentPokemon;
+var opponentCurrentPokemon;
+
 var setArena = function(key) {
     arenaKey = key;
 }
@@ -139,7 +142,8 @@ var createPokemonOption = function(pokemon, entryID) {
     sprite.src = pokemon.sprites.frontDefault;
     sprite.alt = "Sprite";
     let health = document.createElement("DIV");
-    health.name = "pokemon-"+entryID+"-health";
+    health.appendChild(createHealth(pokemon.stats.find(element => element.stat.name == "hp").baseStat));
+    health.setAttribute("name", "pokemon-"+entryID+"-health");
     let name = document.createElement("DIV");
     name.innerHTML = pokemon.name;
     option.appendChild(sprite);
@@ -154,8 +158,12 @@ var createMoveOptionField = function(moveID) {
         let cover = document.createElement("DIV");
         cover.classList.add("optionCover", "optionCoverMove");
         cover.setAttribute("onclick", "selectMove("+moveID+")");
-        cover.innerHTML = "choose";
         let entry = document.createElement("DIV");
+        if(opponentCurrentPokemon == undefined) {
+            cover.classList.add("disabled");
+        } else {
+            cover.innerHTML = "choose";
+        }
         entry.appendChild(option);
         entry.appendChild(cover);
         entry.style.position = "relative";
@@ -200,6 +208,10 @@ var selectOpponentPokemon = function(pokemonID, entryID) {
     getPokemon(pokemonID, function(pokemon) {
         switchPokemon("pokemon-opponent", pokemon.sprites.frontDefault, pokemon.name);
     });
+    opponentCurrentPokemon = pokemonID;
+    if(myCurrentPokemon != undefined) {
+        activateMoveOptions();
+    }
 }
 
 var acceptSelectPokemon = function(pokemonID, entryID) {
@@ -208,6 +220,7 @@ var acceptSelectPokemon = function(pokemonID, entryID) {
     getPokemon(pokemonID, function(pokemon) {
         switchPokemon("pokemon-me", pokemon.sprites.backDefault, pokemon.name);
     });
+    myCurrentPokemon = pokemonID;
     if(extraPokemonChooseAction == true) {
         extraPokemonChooseAction = false;
         activateMoveOptions();
@@ -233,5 +246,37 @@ var rejectSelectPokemon = function() {
 }
 
 var selectMove = function(moveID) {
-    socketArena.send("selectMove", {"moveID": moveID});
+    if(myCurrentPokemon != undefined && opponentCurrentPokemon != undefined) {
+        socketArena.send("selectMove", {"moveID": moveID});
+        deactivateMoveOptions();
+    }
+}
+
+var createHealth = function(curHealth, maxHealth = curHealth) {
+    var container = document.createElement("DIV");
+    container.classList.add("healthContainer");
+    var c = document.createElement("DIV");
+    var m = document.createElement("DIV");
+    c.style.flex = curHealth;
+    m.style.flex = maxHealth - curHealth;
+    container.appendChild(c);
+    container.appendChild(m);
+    return container;
+}
+
+var receivedFightResult = function(data) {
+    $("div[name=pokemon-"+entryID+"-health]").each(function(){
+        this.innerHTML = "";
+        this.appendChild(createHealth(data.hp, data.maxhp));
+    });
+    if(hp == "0" && data.entryID == myCurrentPokemon) {
+        switchPokemon("pokemon-me", "");
+        extraPokemonChooseAction = true;
+        myCurrentPokemon = undefined;
+        $("#arenaMovesTab").innerHTML = "";
+    }
+    if(hp == "0" && data.entryID == opponentCurrentPokemon) {
+        switchPokemon("pokemon-opponent", "");
+        opponentCurrentPokemon = undefined;
+    }
 }
