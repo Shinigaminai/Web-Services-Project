@@ -63,13 +63,13 @@
 
 .fighter {
     padding-top: 55%;
-    width: 55%;
+    width: 45%;
 }
 
 #fighter-me {
     position: absolute;
     left: 5%;
-    bottom: 10%;
+    bottom: 5%;
 }
 
 #fighter-opponent {
@@ -89,6 +89,10 @@
   background-color: bisque;
   border-radius: 0.2em;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5em;
 }
 
 .optionCover {

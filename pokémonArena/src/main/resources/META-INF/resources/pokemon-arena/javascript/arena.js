@@ -85,7 +85,7 @@ var receivedSelectPokemon = function(data) {
 }
 
 var surrender = function() {
-    socketArena.send("surrender", {"name": currentUserName});
+    socketArena.send("surrender", {"name": currentUserName, "arena": arenaKey});
     leaveArena();
     showNotification("Du hast aufgegeben");
 }
@@ -230,4 +230,8 @@ var switchPokemon = function(elementID, newSource, alt) {
 var rejectSelectPokemon = function() {
     showNotification("Du kannst dieses Pokémon nicht auswählen", 2500);
     activateOptions();
+}
+
+var selectMove = function(moveID) {
+    socketArena.send("selectMove", {"moveID": moveID});
 }
