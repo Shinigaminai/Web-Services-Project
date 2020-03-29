@@ -1,9 +1,11 @@
 package PokeKotlinAPI;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.sargunvohra.lib.pokekotlin.client.PokeApi;
 import me.sargunvohra.lib.pokekotlin.client.PokeApiClient;
 import me.sargunvohra.lib.pokekotlin.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class

@@ -17,9 +17,8 @@ import java.util.Random;
 public class Arena {
     protected Map<String, Session> sessions = new HashMap<>(); //user, session
     protected ObjectMapper mapper = new ObjectMapper();
-    private Map<String,Pokemon> currentPkm = new HashMap<>(); //user, currentPkm
-    protected Map<Integer,Pokemon> allPkm = new HashMap<>(); //entryID, Pokemon
-    protected UserManageService userManageService = new UserManageService();
+    private Map<String, Pokemon> currentPkm = new HashMap<>(); //user, currentPkm
+    protected Map<Integer, Pokemon> allPkm = new HashMap<>(); //entryID, Pokemon
     protected GetPokeService getPokeService = new GetPokeService();
     private Map<String,String> opponent = new HashMap<>();
 
@@ -74,17 +73,15 @@ public class Arena {
             return null;
         }
     }
-    protected void sendOpponentInfo(String username){
+    protected String setOpponentInfo(String username){
         String opponent ="";
         for(String u : sessions.keySet()){
-            if(u!=username){
+            if(!u.equals(username)){
                 opponent = u;
                 this.opponent.put(username,opponent);
             }
         }
-       Users user = userManageService.getSingleUserByName(opponent);
-        send(username, createMessage("opponentInfo", Map.of("name",opponent,"userID", user.getUserID().toString(),
-                "teamID",user.getPokeTeamList().get(0).getPokeTeamID().toString())));
+     return opponent;
     }
     protected void sendSelectPokemon(JsonEvent event, String from){
         Integer pkm = Integer.parseInt(event.getData().get("entryID"));
@@ -101,7 +98,7 @@ public class Arena {
     protected void loadAllPokemonData(){
         allPkm.forEach((k,v)->{
             v.setType(getPokeService.getPokemon(v.getPokemonID()).component15());
-            v.setAttackIDList(userManageService.getAttacksFromPokemon(k));
+            v.setAttackIDList(ArenaSocket.moveIDList.get(k));
             List<PokemonStat> allStats = getPokeService.getPokemon(v.getPokemonID()).component14();
             for(PokemonStat s : allStats){
                if(s.component1().component1().equals("hp")){
@@ -173,29 +170,29 @@ public class Arena {
         Random random = new Random();
 
         int damage = 0;
-        double multiplikator = 1;
+        double multiplicator = 1;
         double randomDmg = (random.nextInt(16)+85)/100;
 
         for(PokemonType p : attacker.getType()) {
             if (move.component21().component1().equals(p.component2().component1())){
-                multiplikator=multiplikator*2;
+                multiplicator=multiplicator*2;
             }
         }
         for(PokemonType p : defender.getType()) {
             if (move.component21().component1().equals(p.component2().component1())){
-                multiplikator=multiplikator*0.5;
+                multiplicator=multiplicator*0.5;
             }
         }
 
-        multiplikator = multiplikator * randomDmg;
+        multiplicator = multiplicator * randomDmg;
 
         int result = random.nextInt(100)+1;
 
-        if(result<=move.component3()){ //Getroffen
+        if(result<=move.component3()){ //Hit
             if(move.component12().component1().equals("physical")){
-                damage = (int)Math.round((((12*move.component7()*(attacker.getAttk()/defender.getDef()))/50)+2)*multiplikator);
+                damage = (int)Math.round((((12*move.component7()*(attacker.getAttk()/defender.getDef()))/50)+2)*multiplicator);
             }else{
-                damage = (int) Math.round((((12*move.component7()*(attacker.getSpAttk()/defender.getSpDef()))/50)+2)*multiplikator);
+                damage = (int) Math.round((((12*move.component7()*(attacker.getSpAttk()/defender.getSpDef()))/50)+2)*multiplicator);
             }
         }else{
 
@@ -206,8 +203,18 @@ public class Arena {
     }
 
     private void checkIfBeaten(String user){
-        send(Fighter1,createMessage("arenaResult",Map.of("winner",opponent.get(user))));
-        send(Fighter2,createMessage("arenaResult",Map.of("winner",opponent.get(user))));
+        boolean beaten = true;
+        for(Pokemon p : allPkm.values()){
+            if(p.getOwner().equals(user)){
+                if(p.getCurrentHp()>0){
+                    beaten=false;
+                }
+            }
+        }
+        if(beaten) {
+            send(Fighter1, createMessage("arenaResult", Map.of("winner", opponent.get(user))));
+            send(Fighter2, createMessage("arenaResult", Map.of("winner", opponent.get(user))));
+        }
     }
 
     private void sendResult(){

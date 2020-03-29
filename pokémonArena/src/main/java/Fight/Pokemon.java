@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class Pokemon {
     GetPokeService getPokeService = new GetPokeService();
-    public Pokemon(Integer entryID,String owner,Integer pokemonID){
+    public Pokemon(Integer entryID, String owner, Integer pokemonID){
         this.entryID=entryID;
         this.owner = owner;
         this.pokemonID = pokemonID;
@@ -113,5 +113,9 @@ public class Pokemon {
 
     public int getSpDef() {
         return SpDef;
+    }
+
+    public String getOwner() {
+        return owner;
     }
 }

@@ -1,14 +1,17 @@
 package Fight;
 
-import UserAPI.UserAPI.UserManageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.json.Json;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
@@ -79,40 +82,77 @@ public class ArenaSocket extends Arena {
             if(event.getEvent().equals("selectMove")){
                 arenas.get(username).setCurrentMove(event.getData().get("move"),username);
             }
+            if(event.getEvent().equals("userInfo")){
+                user.put(username,Integer.valueOf(event.getData().get("userID")));;
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                String json = event.getData().get("team");
+                PokemonJson[] pokemonList = objectMapper.readValue(json,PokemonJson[].class);
+                List<Integer> entryList = new ArrayList<>();
+                for(PokemonJson p : pokemonList){
+                    entryList.add(p.EntryID);
+                    pokeID.put(p.EntryID,p.pokemonID);
+                    List<Integer> moveID = new ArrayList<>();
+                    for(Integer i : p.attacks){
+                        moveID.add(i);
+                    }
+                    moveIDList.put(p.EntryID,moveID);
+                }
+                entryIDMap.put(username,entryList);
+
+                String arenaKey = event.getData().get("arena");
+                setUserInformation(arenaKey);
+                String opponent = setOpponentInfo(username);
+                send(opponent,createMessage("opponentInfo",event.getData()));
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }
 
+    public static Map<String,Integer> user = new HashMap<>(); //username,UserID
+    public static Map<String,List<Integer>> entryIDMap = new HashMap<>(); //username, PkmEntryID
+    public static Map<Integer,Integer> pokeID = new HashMap<>(); //PkmEntryID, PokeID
+    public static Map<Integer, List<Integer>> moveIDList = new HashMap<>(); //entryID, MoveIDList
 
-    private void createRoom(String user1, String user2){
+    private void createRoom(String user1, String user2) {
         Arena arena = new Arena();
         String key = user1 + "-arena-" + user2;
-        arena.sessions.put(user1,sessions.get(user1));
-        arena.sessions.put(user2,sessions.get(user2));
-        arenas.put(key,arena);
-        String message = createMessage("assignedArena", Map.of("arena",key));
+        arena.sessions.put(user1, sessions.get(user1));
+        arena.sessions.put(user2, sessions.get(user2));
+        arenas.put(key, arena);
+        String message = createMessage("assignedArena", Map.of("arena", key));
         arena.send(user1, message);
         arena.send(user2, message);
         sessions.remove(user1);
         sessions.remove(user2);
         broadcast(createMessage("userconnect", Map.of("user", user1, "action", "fight")));
         broadcast(createMessage("userconnect", Map.of("user", user2, "action", "fight")));
-        arena.sendOpponentInfo(user1);
-        arena.sendOpponentInfo(user2);
-        Integer userI1 = userManageService.getSingleUserByName(user1).getUserID();
-        Integer pokeTeam1 = userManageService.getPokeTeamFromUser(userI1).get(0);
-        Integer userI2 = userManageService.getSingleUserByName(user2).getUserID();
-        Integer pokeTeam2 = userManageService.getPokeTeamFromUser(userI2).get(0);
+    }
 
-        for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam1)){
-         arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user1,p.get("pokemonID")));
+    private void setUserInformation(String arenaKey) {
+        Arena arena = arenas.get(arenaKey);
+        List<String> users = new ArrayList<>();
+        for (String user : arena.sessions.keySet()) {
+            users.add(user);
         }
-        for(Map<String,Integer> p : userManageService.getPokeTeam(pokeTeam2)){
-            arena.allPkm.put(p.get("entryID"),new Pokemon(p.get("entryID"),user2,p.get("pokemonID")));
+
+        for (Integer p : pokeID.keySet()) {
+            for (Integer i : entryIDMap.get(users.get(0))) {
+                if (p.equals(i)) {
+                    arena.allPkm.put(p, new Pokemon(p, users.get(0), pokeID.get(p)));
+                }
+            }
+        }
+        for (Integer p : pokeID.keySet()) {
+            for (Integer i : entryIDMap.get(users.get(1))) {
+                if (p.equals(i)) {
+                    arena.allPkm.put(p, new Pokemon(p, users.get(1), pokeID.get(p)));
+                }
+            }
         }
         arena.loadAllPokemonData();
-        arena.setFighter1(user1);
-        arena.setFighter2(user2);
+        arena.setFighter1(users.get(0));
+        arena.setFighter2(users.get(1));
     }
-}
+    }
