@@ -22,6 +22,15 @@ var enterArena = function() {
 
     $("#defaultOption").addClass("active");
     $("#arenaPokemonTab").css("display", "block");
+
+    getUserTeams(currentUserId, function(teams) {
+        getUserTeam(teams[0], function(pokemonEntries) {
+            let team = [];
+            for(i in pokemonEntries) {
+                createPokemonOptionField(pokemonEntries[i]);
+            }
+        });
+    });
 }
 
 var leaveArena = function() {
@@ -66,13 +75,15 @@ var surrender = function() {
 var sendMyInfoToArena = function() {
     getUserTeams(currentUserId, function(teams) {
         getUserTeam(teams[0], function(pokemonEntries) {
-            socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId,
-                "teamID": teams[0], "team": pokemonEntries});
+            let team = [];
             for(i in pokemonEntries) {
                 getUserPokemon(pokemonEntries[i].entryID, function(pokemon){
                     sendPokemonInfoToArena(pokemon);
                 });
+                team.push(pokemonEntries[i].entryID);
             }
+            socketArena.send("userInfo", {  "name": currentUserName, "userID": currentUserId,
+                "teamID": teams[0], "team": team});
         });
     });
 }
@@ -87,4 +98,35 @@ var sendPokemonInfoToArena = function(pokemon) {
                                      "entryID": pokemon.entryID,
                                      "attacks": attacks
     });
+}
+
+var createPokemonOptionField = function(userPokemon) {
+    getPokemon(userPokemon.pokemonID, function(pokemon) {
+        let option = createPokemonOption(pokemon, userPokemon.entryID);
+        let cover = document.createElement("DIV");
+        cover.classList.add("optionCover");
+        cover.setAttribute("onclick", "selectPokemon("+userPokemon.pokemonID+","+userPokemon.entryID+")");
+        cover.innerHTML = "choose";
+        let entry = document.createElement("DIV");
+        entry.appendChild(option);
+        entry.appendChild(cover);
+        entry.style.position = "relative";
+        $("#arenaPokemonTab").append(entry);
+    });
+}
+
+var createPokemonOption = function(pokemon, entryID) {
+    let option = document.createElement("DIV");
+    option.classList.add = "pokemonOption";
+    let sprite = document.createElement("IMG");
+    sprite.src = pokemon.sprites.frontDefault;
+    sprite.alt = "Sprite";
+    let health = document.createElement("DIV");
+    health.name = "pokemon-"+entryID+"-health";
+    let name = document.createElement("DIV");
+    name.innerHTML = pokemon.name;
+    option.appendChild(sprite);
+    option.appendChild(health);
+    option.appendChild(name);
+    return option;
 }

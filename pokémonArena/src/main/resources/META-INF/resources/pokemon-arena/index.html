@@ -88,8 +88,11 @@
     </div>
 </nav>
 <div id="arena-area" class="animated forward fadeOut" style="display: none">
-    <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1; max-width: 40rem;">
-        <div id="fight-area"></div>
+    <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1;">
+        <div id="fight-area">
+            <div id="fighter-me" class="fighter"></div>
+            <div id="fighter-opponent" class="fighter"></div>
+        </div>
         <div id="arena-options-area">
             <div id="arena-option-tab">
                 <div id="defaultOption" class="tablink" onclick="openArenaOptionTab(event, 'arenaPokemonTab')">Pokémon</div>
