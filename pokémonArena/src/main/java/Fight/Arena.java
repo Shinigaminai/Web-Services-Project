@@ -183,7 +183,7 @@ public class Arena {
                 multiplicator=multiplicator*0.5;
             }
             if(p.component2().component1().equals("normal")){
-                if(move.component21().component1().equals("fight")){
+                if(move.component21().component1().equals("fighting")){
                     multiplicator=multiplicator*2;
                 }
                 if(move.component21().component1().equals("ghost")){
@@ -237,6 +237,35 @@ public class Arena {
                 }
                 if(move.component21().component1().equals("steel")){
                     multiplicator*=0.5;
+                }
+            }
+            if(p.component2().component1().equals("grass")){
+                if(move.component21().component1().equals("fire")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("water")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("grass")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("electric")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("ice")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("poison")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("ground")){
+                    multiplicator*=0.5;
+                }
+                if(move.component21().component1().equals("flying")){
+                    multiplicator*=2;
+                }
+                if(move.component21().component1().equals("bug")){
+                    multiplicator*=2;
                 }
             }
         }

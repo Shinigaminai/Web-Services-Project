@@ -101,7 +101,7 @@ public class ArenaSocket extends Arena {
                 entryIDMap.put(username,entryList);
 
                 String arenaKey = event.getData().get("arena");
-                setUserInformation(arenaKey);
+                setUserInformation(arenaKey,username);
                 String opponent = setOpponentInfo(username);
                 send(opponent,createMessage("opponentInfo",event.getData()));
             }
@@ -114,6 +114,7 @@ public class ArenaSocket extends Arena {
     public static Map<String,List<Integer>> entryIDMap = new HashMap<>(); //username, PkmEntryID
     public static Map<Integer,Integer> pokeID = new HashMap<>(); //PkmEntryID, PokeID
     public static Map<Integer, List<Integer>> moveIDList = new HashMap<>(); //entryID, MoveIDList
+    private static Map<String,String> userInformationSet = new HashMap<>(); //user, ArenaKey
 
     private void createRoom(String user1, String user2) {
         Arena arena = new Arena();
@@ -130,29 +131,30 @@ public class ArenaSocket extends Arena {
         broadcast(createMessage("userconnect", Map.of("user", user2, "action", "fight")));
     }
 
-    private void setUserInformation(String arenaKey) {
+    private void setUserInformation(String arenaKey,String user) {
         Arena arena = arenas.get(arenaKey);
-        List<String> users = new ArrayList<>();
-        for (String user : arena.sessions.keySet()) {
-            users.add(user);
+        userInformationSet.put(arenaKey,user);
+        Integer numberOfInformationSet = 0;
+        for(String users : userInformationSet.keySet()){
+            if(userInformationSet.get(user).equals(arenaKey)){
+                numberOfInformationSet++;
+            }
         }
 
         for (Integer p : pokeID.keySet()) {
-            for (Integer i : entryIDMap.get(users.get(0))) {
+            for (Integer i : entryIDMap.get(user)) {
                 if (p.equals(i)) {
-                    arena.allPkm.put(p, new Pokemon(p, users.get(0), pokeID.get(p)));
+                    arena.allPkm.put(p, new Pokemon(p, user, pokeID.get(p)));
                 }
             }
         }
-        for (Integer p : pokeID.keySet()) {
-            for (Integer i : entryIDMap.get(users.get(1))) {
-                if (p.equals(i)) {
-                    arena.allPkm.put(p, new Pokemon(p, users.get(1), pokeID.get(p)));
-                }
-            }
+
+        if(numberOfInformationSet==2){
+            arena.loadAllPokemonData();
+            arena.setFighter2(user);
         }
-        arena.loadAllPokemonData();
-        arena.setFighter1(users.get(0));
-        arena.setFighter2(users.get(1));
+        if(numberOfInformationSet==1) {
+            arena.setFighter1(user);
+        }
     }
     }

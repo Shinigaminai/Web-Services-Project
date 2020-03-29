@@ -20,5 +20,17 @@ Example {
         System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.println(species);
         System.out.println("----------------------------------------------------------------------------------------");
+  /*      try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonString = "[{\"pokemonID\":2,\"entryID\":20,\"attacks\":[14,14,14,14]},{\"pokemonID\":1,\"entryID\":11,\"attacks\":[33,73,13,22]},{\"pokemonID\":2,\"entryID\":21,\"attacks\":[14,14,45,14]},{\"pokemonID\":3,\"entryID\":15,\"attacks\":[14,14,14,14]},{\"pokemonID\":2,\"entryID\":19,\"attacks\":[14,14,14,14]},{\"pokemonID\":24,\"entryID\":17,\"attacks\":[20,20,20,20]}]";
+            PokemonJson[] pokemonList = objectMapper.readValue(jsonString, PokemonJson[].class);
+            for (PokemonJson p : pokemonList) {
+                for(Integer i: p.attacks){
+                    System.out.println(i);
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        } */
     }
 }
