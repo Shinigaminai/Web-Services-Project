@@ -4,6 +4,7 @@ import PokeKotlinAPI.GetPokeService;
 import UserAPI.UserAPI.UserManageService;
 import UserAPI.UserAPI.Users;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.vertx.ext.auth.User;
 import me.sargunvohra.lib.pokekotlin.model.Move;
 import me.sargunvohra.lib.pokekotlin.model.PokemonStat;
 import me.sargunvohra.lib.pokekotlin.model.PokemonType;
@@ -83,6 +84,12 @@ public class Arena {
         }
      return opponent;
     }
+
+    protected void sendSurrender(String user){
+        String UserOpponent = opponent.get(user);
+        send(UserOpponent,createMessage("surrender",Map.of("name",user)));
+    }
+
     protected void sendSelectPokemon(JsonEvent event, String from){
         Integer pkm = Integer.parseInt(event.getData().get("entryID"));
         Pokemon pokemon = allPkm.get(pkm);
