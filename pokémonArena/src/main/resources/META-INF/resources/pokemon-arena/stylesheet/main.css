@@ -119,3 +119,9 @@ button.loading::before {
     background-color: bisque;
     z-index: 5;
 }
+
+.disabled {
+    pointer: default;
+    pointer-events: none;
+    opacity: 80% !important;
+}

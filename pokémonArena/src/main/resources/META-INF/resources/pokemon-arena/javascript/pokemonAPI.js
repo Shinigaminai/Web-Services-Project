@@ -20,3 +20,10 @@ var getPokemon = function ( id, callback) {
         console.log( "[E] failed to load pokemon: " + id );
       });
 }
+
+var getMove = function ( id, callback) {
+    $.get("http://" + location.host + "/" + root + "/move/" + id, callback)
+      .fail(function() {
+        console.log( "[E] failed to load move: " + id );
+      });
+}
