@@ -5,6 +5,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,7 +22,11 @@ public class ChatSocket {
             send(session,"{\"event\":\"okToConnect\",\"data\":{}}");
             System.out.println("[i][Chat] User connect: " + username);
             sessions.put(username, session);
-            broadcast(createMessage("userconnect", Map.of("user", username, "action", "joined")));
+            Map<String, String> data  = new HashMap<String, String>() {{
+                put("user", username);
+                put("action", "joined");
+            }};
+            broadcast(createMessage("userconnect", data));
         } else {
             send(session,"{\"event\":\"blockedConnect\",\"data\":{}}");
         }
@@ -31,14 +36,22 @@ public class ChatSocket {
     public void onClose(Session session, @PathParam("username") String username) {
         System.out.println("[i][Arena] User disconnect: " + username);
         sessions.remove(username);
-        broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
+        Map<String, String> data  = new HashMap<String, String>() {{
+            put("user", username);
+            put("action", "left");
+        }};
+        broadcast(createMessage("userconnect", data));
     }
 
     @OnError
     public void onError(Session session, @PathParam("username") String username, Throwable throwable) {
         System.out.println("[E][Arena] User error: " + username);
         sessions.remove(username);
-        broadcast(createMessage("userconnect", Map.of("user", username, "action", "left")));
+        Map<String, String> data  = new HashMap<String, String>() {{
+            put("user", username);
+            put("action", "left");
+        }};
+        broadcast(createMessage("userconnect", data));
     }
 
     @OnMessage
