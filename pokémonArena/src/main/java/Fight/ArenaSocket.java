@@ -102,8 +102,11 @@ public class ArenaSocket extends Arena {
 
                 String arenaKey = event.getData().get("arena");
                 setUserInformation(arenaKey,username);
-                String opponent = setOpponentInfo(username);
-                send(opponent,createMessage("opponentInfo",event.getData()));
+                Arena arena = arenas.get(arenaKey);
+                System.out.println(arena.sessions.keySet());
+                String opponent = arena.setOpponentInfo(username);
+                System.out.println(opponent);
+                arena.send(opponent,createMessage("opponentInfo",event.getData()));
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
@@ -122,6 +125,8 @@ public class ArenaSocket extends Arena {
         arena.sessions.put(user1, sessions.get(user1));
         arena.sessions.put(user2, sessions.get(user2));
         arenas.put(key, arena);
+        arenas.put(user1,arena);
+        arenas.put(user2,arena);
         String message = createMessage("assignedArena", Map.of("arena", key));
         arena.send(user1, message);
         arena.send(user2, message);
@@ -133,10 +138,10 @@ public class ArenaSocket extends Arena {
 
     private void setUserInformation(String arenaKey,String user) {
         Arena arena = arenas.get(arenaKey);
-        userInformationSet.put(arenaKey,user);
+        userInformationSet.put(user,arenaKey);
         Integer numberOfInformationSet = 0;
         for(String users : userInformationSet.keySet()){
-            if(userInformationSet.get(user).equals(arenaKey)){
+            if(userInformationSet.get(users).equals(arenaKey)){
                 numberOfInformationSet++;
             }
         }

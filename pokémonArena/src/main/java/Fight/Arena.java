@@ -86,12 +86,15 @@ public class Arena {
     protected void sendSelectPokemon(JsonEvent event, String from){
         Integer pkm = Integer.parseInt(event.getData().get("entryID"));
         Pokemon pokemon = allPkm.get(pkm);
+        Pokemon currentpkm = currentPkm.get(from);
         if(pokemon.getCurrentHp()>0){
             allPkm.replace(currentPkm.get(from).getEntryID(),currentPkm.get(from));
             currentPkm.replace(from,pokemon);
             send(from,createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","accept")));
-            send(opponent.get(from),createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","info")));
-        }else{
+            if(currentpkm.getCurrentHp()<=0) {
+                send(opponent.get(from), createMessage("selectPokemon", Map.of("entryID", pkm.toString(), "status", "info")));
+            }
+            }else{
             send(from,createMessage("selectPokemon",Map.of("entryID",pkm.toString(),"status","reject")));
         }
     }
@@ -266,6 +269,329 @@ public class Arena {
                 }
                 if(move.component21().component1().equals("bug")){
                     multiplicator*=2;
+                }
+            }
+            if(p.component2().component1().equals("fairy")){
+                if(move.component21().component1().equals("fighting")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("poison")){
+                    multiplicator=multiplicator*2;
+                }
+                if(move.component21().component1().equals("bug")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("dragon")){
+                    multiplicator=multiplicator*0;
+                }
+                if(move.component21().component1().equals("dark")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("steel")){
+                    multiplicator=multiplicator*2;
+                }
+            }
+
+            if(p.component2().component1().equals("steel")){
+                if(move.component21().component1().equals("normal")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("fire")){
+                    multiplicator=multiplicator*2;
+                }
+                if(move.component21().component1().equals("grass")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("ice")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("fighting")){
+                    multiplicator=multiplicator*2;
+                }
+                if(move.component21().component1().equals("poison")){
+                    multiplicator=multiplicator*0;
+                }
+                if(move.component21().component1().equals("ground")){
+                    multiplicator=multiplicator*2;
+                }
+                if(move.component21().component1().equals("flying")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("psychic")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("bug")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("rock")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("dragon")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("steel")){
+                    multiplicator=multiplicator*0.5;
+                }
+                if(move.component21().component1().equals("fairy")){
+                    multiplicator=multiplicator*0.5;
+                }
+            }
+
+            if(p.component2().component1().equals("dark")) {
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("psychic")) {
+                    multiplicator = multiplicator * 0;
+                }
+                if (move.component21().component1().equals("bug")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("ghost")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("dark")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fairy")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("dragon")) {
+                if (move.component21().component1().equals("fire")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("water")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("grass")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("electric")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ice")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("dragon")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("fairy")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("ghost")) {
+                if (move.component21().component1().equals("normal")) {
+                    multiplicator = multiplicator * 0;
+                }
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 0;
+                }
+                if (move.component21().component1().equals("poison")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("bug")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ghost")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("dark")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("rock")) {
+                if (move.component21().component1().equals("normal")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fire")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("water")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("grass")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("poison")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ground")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("flying")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("steel")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("bug")) {
+                if (move.component21().component1().equals("fire")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("grass")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ground")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("flying")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("rock")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("psychic")) {
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("psychic")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("bug")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("ghost")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("dark")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("flying")) {
+                if (move.component21().component1().equals("grass")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("electric")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("ice")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ground")) {
+                    multiplicator = multiplicator * 0;
+                }
+                if (move.component21().component1().equals("bug")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("rock")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("ground")) {
+                if (move.component21().component1().equals("water")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("grass")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("electric")) {
+                    multiplicator = multiplicator * 0;
+                }
+                if (move.component21().component1().equals("ice")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("poison")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("rock")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+            }
+
+            if(p.component2().component1().equals("poison")) {
+                if (move.component21().component1().equals("grass")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("poison")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ground")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("psychic")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("bug")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fairy")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+            }
+
+            if(p.component2().component1().equals("fighting")) {
+                if (move.component21().component1().equals("flying")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("psychic")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("bug")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("rock")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("dark")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fairy")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("ice")) {
+                if (move.component21().component1().equals("fire")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("ice")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("fighting")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("rock")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("steel")) {
+                    multiplicator = multiplicator * 2;
+                }
+            }
+
+            if(p.component2().component1().equals("electric")) {
+                if (move.component21().component1().equals("electric")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("ground")) {
+                    multiplicator = multiplicator * 2;
+                }
+                if (move.component21().component1().equals("flying")) {
+                    multiplicator = multiplicator * 0.5;
+                }
+                if (move.component21().component1().equals("steel")) {
+                    multiplicator = multiplicator * 0.5;
                 }
             }
         }
