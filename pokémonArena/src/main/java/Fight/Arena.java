@@ -644,12 +644,12 @@ public class Arena {
 
     private void sendResult(){
         send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
+                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
         send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter1).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
+                "hp",currentPkm.get(Fighter1).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter1))));
         send(Fighter1,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
+                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
         send(Fighter2,createMessage("fightResult",Map.of("entryID",currentPkm.get(Fighter2).getEntryID().toString(),
-                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
+                "hp",currentPkm.get(Fighter2).getCurrentHp().toString(),"maxhp",currentPkm.get(Fighter1).getHp().toString(),"fightOrder",FirstLast.get(Fighter2))));
     }
 }
