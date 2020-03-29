@@ -22,7 +22,7 @@ public class Pokemon {
 
     private String state;
 
-    private int hp;
+    private Integer hp;
     private int currentHp;
     private int attk;
     private int SpAttk;
@@ -117,5 +117,9 @@ public class Pokemon {
 
     public String getOwner() {
         return owner;
+    }
+
+    public Integer getHp() {
+        return hp;
     }
 }
