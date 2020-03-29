@@ -106,6 +106,9 @@ public class ArenaSocket extends Arena {
                 String opponent = arena.setOpponentInfo(username);
                 arena.send(opponent,createMessage("opponentInfo",event.getData()));
             }
+            if(event.getEvent().equals("surrender")){
+                arenas.get(username).sendSurrender(username);
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
