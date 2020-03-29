@@ -64,7 +64,8 @@ var loadMovesOptions = function(entryID) {
 var receivedOpponentInfo = function(data) {
     opponentName = data.name;
     opponentId = data.userID;
-    opponentTeam = data.team;
+    opponentTeam = JSON.parse(data.team);
+    console.log("[i] loaded opponent info");
 }
 
 var receivedSelectPokemon = function(data) {
