@@ -21,6 +21,7 @@ var connectToChat = function(callback) {
         });
         socketChat.bind('okToConnect', callback);
         socketChat.bind('blockedConnect', function(){
+            $("#login-button").removeClass("loading");
             showNotification('This user is already connected');
             connectedToChat = false;
             socketChat = undefined;

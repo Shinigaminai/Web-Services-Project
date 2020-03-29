@@ -33,22 +33,26 @@ var login = function() {
         showNotification("Username ist leer");
         return;
     }
-    connectToChat(function(){
+    $("#login-button").addClass("loading");
+    connectToChat(function() {
         getUserId(currentUserName,
             function(m) {
                 currentUserId = m.userID;
                 connectToServices();
+                $("#login-button").removeClass("loading");
                 loginAnimation();
             },
             function(m) {
                 registerUser(currentUserName,
                     function(m) {
                         currentUserId = m.userID;
+                        $("#login-button").removeClass("loading");
                         showNotification("Neuer Benutzer angelegt");
                         connectToServices();
                         loginAnimation();
                     },
                     function() {
+                        $("#login-button").removeClass("loading");
                         showNotification("Benutzer konnte nicht angelegt werden");
                     }
                 );
