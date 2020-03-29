@@ -53,8 +53,9 @@ var loadPokemonOptions = function(teamID) {
 var loadMovesOptions = function(entryID) {
     for (i in myTeam) {
         if (myTeam[i].entryID == entryID) {
+            $("#arenaMovesTab").html("");
             for(j in myTeam[i].attacks) {
-                createMoveOptionField(opponentTeam[i].attacks[j]);
+                createMoveOptionField(myTeam[i].attacks[j]);
             }
             return;
         }
@@ -148,8 +149,8 @@ var createPokemonOption = function(pokemon, entryID) {
 }
 
 var createMoveOptionField = function(moveID) {
-    getMove(moveID, function(pokemon) {
-        let option = createMoveOption(pokemon, userPokemon.entryID);
+    getMove(moveID, function(move) {
+        let option = createMoveOption(move, moveID);
         let cover = document.createElement("DIV");
         cover.classList.add("optionCover", "optionCoverMove");
         cover.setAttribute("onclick", "selectMove("+moveID+")");
@@ -158,7 +159,7 @@ var createMoveOptionField = function(moveID) {
         entry.appendChild(option);
         entry.appendChild(cover);
         entry.style.position = "relative";
-        $("#arenaPokemonTab").append(entry);
+        $("#arenaMovesTab").append(entry);
     });
 }
 

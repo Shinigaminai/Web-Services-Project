@@ -85,6 +85,12 @@
   border-radius: 0.2em;
   text-align: center;
 }
+#arenaMovesTab > div {
+  background-color: bisque;
+  border-radius: 0.2em;
+  text-align: center;
+}
+
 .optionCover {
   position: absolute;
   top: 0;
