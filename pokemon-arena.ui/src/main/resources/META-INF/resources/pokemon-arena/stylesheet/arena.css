@@ -1,0 +1,148 @@
+
+#arena-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    background-color: lightgrey;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+    justify-content: center;
+    flex: 1
+}
+
+#fight-area {
+    flex: 1;
+    position: relative;
+}
+
+#arena-options-area {
+    padding: 0.2rem;
+    box-shadow: 0.3rem 0.3rem 0.5rem;
+    margin: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #db6b6bb0;
+}
+
+#arena-option-tab {
+    display: flex;
+    flex-flow: row;
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    height: 8rem;
+    flex-flow: row wrap;
+    overflow: auto;
+}
+
+.tablink {
+    padding: 0.5rem;
+}
+.tablink:hover {
+    cursor: pointer;
+    background-color: crimson;
+}
+.tablink.active {
+    background-color: #bb1919;
+}
+
+.fighter::before {
+    position: absolute;
+    bottom: 5%;
+    height: 30%;
+    width: 100%;
+    border-radius: 50%;
+    background-color: green;
+    content: "";
+}
+
+.fighter {
+    padding-top: 55%;
+    width: 45%;
+}
+
+#fighter-me {
+    position: absolute;
+    left: 5%;
+    bottom: 5%;
+}
+
+#fighter-opponent {
+    position: absolute;
+    right: 5%;
+    bottom: 15%;
+    transform: scale(0.7);
+    transform-origin: right;
+}
+
+#arenaPokemonTab > div {
+  background-color: bisque;
+  border-radius: 0.2em;
+  text-align: center;
+}
+#arenaMovesTab > div {
+  background-color: bisque;
+  border-radius: 0.2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 5em;
+}
+
+.optionCover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0%;
+  transition: 0.2s;
+  background-color: #a52a2ac7;
+  cursor: pointer;
+  border-radius: 0.2em;
+}
+.optionCover:hover {
+  opacity: 100%;
+}
+#fight-area img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    width: 100%;
+}
+
+.healthContainer {
+    display: flex;
+    flex-flow: row nowrap;
+    height: 0.25em;
+    border: 1px solid black;
+}
+.healthContainer > div:first-child {
+    background-color: lightblue;
+}
+.healthContainer > div:last-child {
+    background-color: white;
+}
+#health-opponent {
+    position: absolute;
+    top: -1em;
+    right: 1em;
+    left: 1em;
+}
+#health-me {
+    position: absolute;
+    top: -1em;
+    left: 1em;
+    right: 1em;
+}

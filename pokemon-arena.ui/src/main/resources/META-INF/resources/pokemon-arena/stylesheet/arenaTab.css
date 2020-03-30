@@ -1,0 +1,58 @@
+#challenge-area {
+    display: flex;
+    flex-direction: column;
+    max-width: 40rem;
+    padding: 0.2rem;
+    flex: 1;
+    box-shadow: 0.3rem 0.3rem 0.5rem;
+    margin: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #db6b6bb0;
+}
+
+#challenge-list-container {
+    flex: 1 1 0;
+    position: relative;
+}
+
+#challenge-list {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.challenge-entry {
+    padding: 0.2em 1.5em;
+    display: flex;
+    flex-flow: row nowrap;
+}
+.challenge-entry > span {
+    flex: 1;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+#challenging-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #51515182;
+    border-radius: 0.2rem;
+}
+
+challenging-title {
+    padding: 0.1em;
+    font: bold;
+}

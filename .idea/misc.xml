@@ -4,6 +4,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pokémonArena/pom.xml" />
+        <option value="$PROJECT_DIR$/pokemon-arena.ui/pom.xml" />
       </list>
     </option>
   </component>

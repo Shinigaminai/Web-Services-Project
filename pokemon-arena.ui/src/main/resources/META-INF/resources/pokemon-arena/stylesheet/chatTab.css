@@ -1,0 +1,73 @@
+#chat-tab {
+}
+
+#chat-area {
+    display: flex;
+    flex-direction: column;
+    max-width: 40rem;
+    padding: 0.2rem;
+    flex: 1;
+    box-shadow: 0.3rem 0.3rem 0.5rem;
+    margin: 1.8rem;
+    border-radius: 0.4rem;
+    background-color: #db6b6bb0;
+}
+
+#chat {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    flex: 1;
+}
+
+#chat > div {
+    padding: 0.2em 1.5em;
+}
+#chat > div > span {
+    border-radius: 0.2em;
+    padding: 0.25em;
+    display: inline-flex;
+}
+
+.out-message {
+    text-align: right;
+    margin-left: 2rem;
+}
+.out-message .sender {
+    display: none;
+}
+.in-message {
+    text-align: left
+    margin-right: 2rem;
+}
+.in-message .sender {
+    padding-right: 0.5em;
+}
+.connect-message {
+    text-align: center;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+.status-message {
+    text-align: center;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.out-message > span {
+    background-color: crimson;
+}
+.in-message > span {
+    background-color: indianred;
+}
+.connect-message > span {
+    background-color: #816eec;
+}
+.status-message > span {
+    background-color: darkgray;
+    border: 2px solid darkgred;
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Pokémon Arena</title>
+    <link rel="shortcut icon" type="image/x-icon" href="svgs/favicon.svg">
+
+    <!--<link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet">-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
+    <link href="stylesheet/main.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/header.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/tabs.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/chatTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/arenaTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/pokemonTab.css" rel="stylesheet" type="text/css">
+    <link href="stylesheet/arena.css" rel="stylesheet" type="text/css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/patternfly/3.24.0/js/patternfly.min.js"></script>
+    <script src="javascript/fancyWebsocket.js"></script>
+    <script src="javascript/chat.js"></script>
+    <script src="javascript/login.js"></script>
+    <script src="javascript/pokemonAPI.js"></script>
+    <script src="javascript/usersAPI.js"></script>
+    <script src="javascript/pokemonDatabase.js"></script>
+    <script src="javascript/arenaWS.js"></script>
+    <script src="javascript/arenaTab.js"></script>
+    <script src="javascript/arena.js"></script>
+</head>
+<body>
+<embed src="sounds/music-normal.mid" autostart="true" loop="true" hidden="true" height="0" width="0">
+<header class="animated forward slideInDown">
+    <h1>Pokémon Arena</h1>
+</header>
+<div id="content-area">
+    <div id="tabs-area" style="visibility: hidden" data-tab="0">
+        <div id="chat-tab" class="tab">
+            <div style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: center; flex: 1">
+                <div id="chat-area">
+                    <div style="flex: 1 1 0; position: relative">
+                        <div id="chat"></div>
+                    </div>
+                    <div style="display: flex">
+                        <input id="msg" placeholder="enter your message" type="text" style="flex: 1 1 auto">
+                        <button class="col-md-1 btn btn-primary" disabled id="send" type="button">send</button>
+                    </div>
+                </div>
+            </div>
+        </div><!--
+     --><div id="arena-tab" class="tab">
+            <div style="display: flex; flex-flow: row nowrap; width: 100%; justify-content: center; flex: 1">
+                <div id="challenge-area">
+                    <div id="challenge-list-container">
+                        <div id="challenge-list"></div>
+                        <div id="challenging-overlay" class="hidden">
+                            <div style="display: inline-flex; background-color: bisque; padding: 1rem; border-radius: 0.4rem">
+                                <div style="padding: 0.2em">
+                                    Challenging
+                                    <span id="challenging-title"></span>
+                                </div>
+                                <button id="challenging-cancel">cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="readyToFight">ready to fight</button>
+                </div>
+            </div>
+        </div><!--
+     --><div id="pokemon-tab" class="tab">
+            <div id="pokemon-team">
+                <div id="pokemon-team-header">Dein Team</div>
+                <div id="pokemon-team-list" class="list"></div>
+            </div>
+            <div id="pokemon-list" class="list"></div>
+        </div>
+    </div>
+</div>
+<nav id="tabs-menu" style="visibility: hidden" data-tab="0">
+    <div class="tab-button">
+        Chat
+    </div>
+    <div class="tab-button">
+        Arena
+    </div>
+    <div class="tab-button">
+        Pokédex
+    </div>
+</nav>
+<div id="arena-area" class="animated forward fadeOut" style="display: none">
+    <div style="display: flex; flex-flow: column nowrap; justify-content: center; flex: 1; max-width: 50rem">
+        <div id="fight-area">
+            <div id="fighter-me" class="fighter">
+                <img id="pokemon-me" class="animated forward zoomIn">
+                <div id="health-me"></div>
+            </div>
+            <div id="fighter-opponent" class="fighter">
+                <img id="pokemon-opponent" class="animated forward zoomIn">
+                <div id="health-opponent"></div>
+            </div>
+        </div>
+        <div id="arena-options-area">
+            <div id="arena-option-tab">
+                <div id="defaultOption" class="tablink" onclick="openArenaOptionTab(this, 'arenaPokemonTab')">Pokémon</div>
+                <div class="tablink" onclick="openArenaOptionTab(this, 'arenaMovesTab')">Moves</div>
+                <div class="tablink" onclick="openArenaOptionTab(this, 'arenaEmojiTab')">Emoji</div>
+                <div class="tablink" onclick="openArenaOptionTab(this, 'arenaActionsTab')">X</div>
+            </div>
+            <!-- Tab content -->
+            <div id="arenaPokemonTab" class="tabcontent"></div>
+            <div id="arenaMovesTab" class="tabcontent"></div>
+            <div id="arenaEmojiTab" class="tabcontent">
+                fuck emojis
+            </div>
+            <div id="arenaActionsTab" class="tabcontent">
+                <button onclick="surrender()">Aufgeben</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="animated forward slideInUp" id="login-area">
+    <div id="login-menu">
+        <input id="username-input" placeholder="your name" type="text"/>
+        <button id="login-button">connect</button>
+    </div>
+</div>
+<div id="notification-banner" class="animated forward fadeOut" style="display: none">Wellcome</div>
+</body>
+</html>
