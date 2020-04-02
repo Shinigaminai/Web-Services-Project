@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="pokémonArena" />
+        <module name="pokemon-arena.chat" />
         <module name="pokemon-arena.ui" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="pokemon-arena.chat" target="8" />
       <module name="pokemon-arena.ui" target="8" />
       <module name="pokémonArena" target="8" />
       <module name="pokémonContainer" target="1.5" />
