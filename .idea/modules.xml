@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Web-Services-Project.iml" filepath="$PROJECT_DIR$/Web-Services-Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pokemon-arena.arena/pokemon-arena.arena.iml" filepath="$PROJECT_DIR$/pokemon-arena.arena/pokemon-arena.arena.iml" />
       <module fileurl="file://$PROJECT_DIR$/pokemon-arena.chat/pokemon-arena.chat.iml" filepath="$PROJECT_DIR$/pokemon-arena.chat/pokemon-arena.chat.iml" />
       <module fileurl="file://$PROJECT_DIR$/pokemon-arena.ui/pokemon-arena.ui.iml" filepath="$PROJECT_DIR$/pokemon-arena.ui/pokemon-arena.ui.iml" />
       <module fileurl="file://$PROJECT_DIR$/pokémonArena/pokémonArena.iml" filepath="$PROJECT_DIR$/pokémonArena/pokémonArena.iml" />
