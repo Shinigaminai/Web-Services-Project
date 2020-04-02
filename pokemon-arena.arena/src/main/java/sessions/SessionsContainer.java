@@ -10,14 +10,17 @@ public class SessionsContainer {
     private Map<String, Session> sessions = new HashMap<>();
     private ObjectMapper mapper = new ObjectMapper();
 
-    public void addSession(String key, Session session) {
+    public void add(String key, Session session) {
         this.sessions.put(key, session);
     }
-    public Session getSession(String key) {
+    public Session get(String key) {
         return sessions.get(key);
     }
-    public void removeSession(String key) {
+    public void remove(String key) {
         sessions.remove(key);
+    }
+    public Map<String, Session> get() {
+        return sessions;
     }
 
     public void send(String username, String message) {
